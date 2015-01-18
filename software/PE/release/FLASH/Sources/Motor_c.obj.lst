@@ -1,0 +1,493 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Motor.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	Dead
+  18              		.section	.bss.Dead,"aw",%nobits
+  19              		.align	2
+  22              	Dead:
+  23 0000 00000000 		.space	4
+  24              		.global	Over
+  25              		.section	.bss.Over,"aw",%nobits
+  26              		.align	2
+  29              	Over:
+  30 0000 00000000 		.space	4
+  31              		.comm	AntiShake_Buff,800,4
+  32              		.global	AntiShake_Pointer
+  33              		.section	.data.AntiShake_Pointer,"aw",%progbits
+  34              		.align	2
+  37              	AntiShake_Pointer:
+  38 0000 02000000 		.word	2
+  39              		.global	AntiShake_Pos_L
+  40              		.section	.bss.AntiShake_Pos_L,"aw",%nobits
+  41              		.align	2
+  44              	AntiShake_Pos_L:
+  45 0000 00000000 		.space	4
+  46              		.global	AntiShake_Pos_R
+  47              		.section	.bss.AntiShake_Pos_R,"aw",%nobits
+  48              		.align	2
+  51              	AntiShake_Pos_R:
+  52 0000 00000000 		.space	4
+  53              		.section	.text.Set_Motors_Mono,"ax",%progbits
+  54              		.align	2
+  55              		.global	Set_Motors_Mono
+  56              		.code	16
+  57              		.thumb_func
+  59              	Set_Motors_Mono:
+  60              	.LFB0:
+  61              		.file 1 "../Sources/Motor.c"
+   1:../Sources/Motor.c **** /*
+   2:../Sources/Motor.c ****  * Motor.c
+   3:../Sources/Motor.c ****  *
+   4:../Sources/Motor.c ****  *  Created on: Apr 22, 2013
+   5:../Sources/Motor.c ****  *      Author: chenty
+   6:../Sources/Motor.c ****  */
+   7:../Sources/Motor.c **** #include "PE_Types.h"
+   8:../Sources/Motor.c **** #include "MotorRight_PTA4.h"
+   9:../Sources/Motor.c **** #include "MotorLeft_PTE31.h"
+  10:../Sources/Motor.c **** #include "MotorLeft_PTE30.h"
+  11:../Sources/Motor.c **** #include "MotorRight_PTA5.h"
+  12:../Sources/Motor.c **** #define Death_Range 0
+  13:../Sources/Motor.c **** #define Enhanced 500
+  14:../Sources/Motor.c **** #define k4 1 //0.5
+  15:../Sources/Motor.c **** #define Over_Range 50000
+  16:../Sources/Motor.c **** #define Anti_Shake_Freq 100
+  17:../Sources/Motor.c **** 
+  18:../Sources/Motor.c **** int Dead = 0;
+  19:../Sources/Motor.c **** int Over = 0;
+  20:../Sources/Motor.c **** int AntiShake_Buff[Anti_Shake_Freq][2],AntiShake_Pointer = 3-1;
+  21:../Sources/Motor.c **** int AntiShake_Pos_L = 0,AntiShake_Pos_R = 0;
+  22:../Sources/Motor.c **** extern int32_t SpeedL_Integral;
+  23:../Sources/Motor.c **** extern int32_t SpeedR_Integral;
+  24:../Sources/Motor.c **** 
+  25:../Sources/Motor.c **** void Set_Motors_Mono(int32_t Left,int32_t Right){
+  62              		.loc 1 25 0
+  63              		.cfi_startproc
+  64 0000 80B5     		push	{r7, lr}
+  65              	.LCFI0:
+  66              		.cfi_def_cfa_offset 8
+  67              		.cfi_offset 7, -8
+  68              		.cfi_offset 14, -4
+  69 0002 82B0     		sub	sp, sp, #8
+  70              	.LCFI1:
+  71              		.cfi_def_cfa_offset 16
+  72 0004 00AF     		add	r7, sp, #0
+  73              	.LCFI2:
+  74              		.cfi_def_cfa_register 7
+  75 0006 7860     		str	r0, [r7, #4]
+  76 0008 3960     		str	r1, [r7]
+  26:../Sources/Motor.c **** 	Set_Motors( (Left+Right) / 2, (Left+Right) / 2);
+  77              		.loc 1 26 0
+  78 000a 0B4A     		ldr	r2, .L4
+  79 000c 7968     		ldr	r1, [r7, #4]
+  80 000e 3B68     		ldr	r3, [r7]
+  81 0010 CB18     		add	r3, r1, r3
+  82 0012 002B     		cmp	r3, #0
+  83 0014 00DA     		bge	.L2
+  84 0016 0133     		add	r3, r3, #1
+  85              	.L2:
+  86 0018 5B10     		asr	r3, r3, #1
+  87 001a 191C     		mov	r1, r3
+  88 001c 7868     		ldr	r0, [r7, #4]
+  89 001e 3B68     		ldr	r3, [r7]
+  90 0020 C318     		add	r3, r0, r3
+  91 0022 002B     		cmp	r3, #0
+  92 0024 00DA     		bge	.L3
+  93 0026 0133     		add	r3, r3, #1
+  94              	.L3:
+  95 0028 5B10     		asr	r3, r3, #1
+  96 002a 081C     		mov	r0, r1
+  97 002c 191C     		mov	r1, r3
+  98 002e 9047     		blx	r2
+  27:../Sources/Motor.c **** }
+  99              		.loc 1 27 0
+ 100 0030 BD46     		mov	sp, r7
+ 101 0032 02B0     		add	sp, sp, #8
+ 102              		@ sp needed for prologue
+ 103 0034 80BD     		pop	{r7, pc}
+ 104              	.L5:
+ 105 0036 C046     		.align	2
+ 106              	.L4:
+ 107 0038 00000000 		.word	Set_Motors
+ 108              		.cfi_endproc
+ 109              	.LFE0:
+ 111              		.section	.text.Set_Motors,"ax",%progbits
+ 112              		.align	2
+ 113              		.global	Set_Motors
+ 114              		.code	16
+ 115              		.thumb_func
+ 117              	Set_Motors:
+ 118              	.LFB1:
+  28:../Sources/Motor.c **** 
+  29:../Sources/Motor.c **** void Set_Motors(int32_t Left,int32_t Right){
+ 119              		.loc 1 29 0
+ 120              		.cfi_startproc
+ 121 0000 80B5     		push	{r7, lr}
+ 122              	.LCFI3:
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 7, -8
+ 125              		.cfi_offset 14, -4
+ 126 0002 82B0     		sub	sp, sp, #8
+ 127              	.LCFI4:
+ 128              		.cfi_def_cfa_offset 16
+ 129 0004 00AF     		add	r7, sp, #0
+ 130              	.LCFI5:
+ 131              		.cfi_def_cfa_register 7
+ 132 0006 7860     		str	r0, [r7, #4]
+ 133 0008 3960     		str	r1, [r7]
+  30:../Sources/Motor.c **** 	/* Motor Dead! */
+  31:../Sources/Motor.c **** 	//Right *= 1.19;
+  32:../Sources/Motor.c **** 	Dead = 0;
+ 134              		.loc 1 32 0
+ 135 000a 504B     		ldr	r3, .L19
+ 136 000c 0022     		mov	r2, #0
+ 137 000e 1A60     		str	r2, [r3]
+  33:../Sources/Motor.c **** 	Over = 0;
+ 138              		.loc 1 33 0
+ 139 0010 4F4B     		ldr	r3, .L19+4
+ 140 0012 0022     		mov	r2, #0
+ 141 0014 1A60     		str	r2, [r3]
+  34:../Sources/Motor.c **** 	if (abs(Left) < Death_Range){
+ 142              		.loc 1 34 0
+ 143 0016 7B68     		ldr	r3, [r7, #4]
+ 144 0018 D917     		asr	r1, r3, #31
+ 145 001a 5B18     		add	r3, r3, r1
+ 146 001c 4B40     		eor	r3, r1
+ 147 001e 0ED5     		bpl	.L7
+  35:../Sources/Motor.c **** 		MotorLeft_PTE30_SetRatio16(0);
+ 148              		.loc 1 35 0
+ 149 0020 4C4B     		ldr	r3, .L19+8
+ 150 0022 DB68     		ldr	r3, [r3, #12]
+ 151 0024 181C     		mov	r0, r3
+ 152 0026 0021     		mov	r1, #0
+ 153 0028 FFF7FEFF 		bl	PwmLdd3_SetRatio16
+  36:../Sources/Motor.c **** 		MotorLeft_PTE31_SetRatio16(0);
+ 154              		.loc 1 36 0
+ 155 002c 494B     		ldr	r3, .L19+8
+ 156 002e 5B69     		ldr	r3, [r3, #20]
+ 157 0030 181C     		mov	r0, r3
+ 158 0032 0021     		mov	r1, #0
+ 159 0034 FFF7FEFF 		bl	PwmLdd4_SetRatio16
+  37:../Sources/Motor.c **** 		Dead = 1;
+ 160              		.loc 1 37 0
+ 161 0038 444B     		ldr	r3, .L19
+ 162 003a 0122     		mov	r2, #1
+ 163 003c 1A60     		str	r2, [r3]
+ 164              	.L7:
+  38:../Sources/Motor.c **** 	}
+  39:../Sources/Motor.c **** 	if (abs(Right) < Death_Range){
+ 165              		.loc 1 39 0
+ 166 003e 3B68     		ldr	r3, [r7]
+ 167 0040 DA17     		asr	r2, r3, #31
+ 168 0042 9B18     		add	r3, r3, r2
+ 169 0044 5340     		eor	r3, r2
+ 170 0046 0ED5     		bpl	.L8
+  40:../Sources/Motor.c **** 		MotorRight_PTA5_SetRatio16(0);
+ 171              		.loc 1 40 0
+ 172 0048 424B     		ldr	r3, .L19+8
+ 173 004a 1B69     		ldr	r3, [r3, #16]
+ 174 004c 181C     		mov	r0, r3
+ 175 004e 0021     		mov	r1, #0
+ 176 0050 FFF7FEFF 		bl	PwmLdd2_SetRatio16
+  41:../Sources/Motor.c **** 		MotorRight_PTA4_SetRatio16(0);		
+ 177              		.loc 1 41 0
+ 178 0054 3F4B     		ldr	r3, .L19+8
+ 179 0056 9B69     		ldr	r3, [r3, #24]
+ 180 0058 181C     		mov	r0, r3
+ 181 005a 0021     		mov	r1, #0
+ 182 005c FFF7FEFF 		bl	PwmLdd1_SetRatio16
+  42:../Sources/Motor.c **** 		Dead = 1;
+ 183              		.loc 1 42 0
+ 184 0060 3A4B     		ldr	r3, .L19
+ 185 0062 0122     		mov	r2, #1
+ 186 0064 1A60     		str	r2, [r3]
+ 187              	.L8:
+  43:../Sources/Motor.c **** 	} 
+  44:../Sources/Motor.c **** 	if (Dead == 1) return;
+ 188              		.loc 1 44 0
+ 189 0066 394B     		ldr	r3, .L19
+ 190 0068 1B68     		ldr	r3, [r3]
+ 191 006a 012B     		cmp	r3, #1
+ 192 006c 6AD0     		beq	.L18
+ 193              	.L9:
+  45:../Sources/Motor.c **** 	
+  46:../Sources/Motor.c **** 	/* Motor Over Range */
+  47:../Sources/Motor.c **** 	if (abs(Left) > Over_Range){
+ 194              		.loc 1 47 0
+ 195 006e 7B68     		ldr	r3, [r7, #4]
+ 196 0070 D917     		asr	r1, r3, #31
+ 197 0072 5A18     		add	r2, r3, r1
+ 198 0074 4A40     		eor	r2, r1
+ 199 0076 384B     		ldr	r3, .L19+12
+ 200 0078 9A42     		cmp	r2, r3
+ 201 007a 07DD     		ble	.L11
+  48:../Sources/Motor.c **** 		if (Left > 0 ) Left = Over_Range;
+ 202              		.loc 1 48 0
+ 203 007c 7B68     		ldr	r3, [r7, #4]
+ 204 007e 002B     		cmp	r3, #0
+ 205 0080 02DD     		ble	.L12
+ 206              		.loc 1 48 0 is_stmt 0 discriminator 1
+ 207 0082 354B     		ldr	r3, .L19+12
+ 208 0084 7B60     		str	r3, [r7, #4]
+ 209 0086 01E0     		b	.L11
+ 210              	.L12:
+  49:../Sources/Motor.c **** 		else Left = - Over_Range;
+ 211              		.loc 1 49 0 is_stmt 1
+ 212 0088 344B     		ldr	r3, .L19+16
+ 213 008a 7B60     		str	r3, [r7, #4]
+ 214              	.L11:
+  50:../Sources/Motor.c **** 	}
+  51:../Sources/Motor.c **** 	if (abs(Right) > Over_Range){
+ 215              		.loc 1 51 0
+ 216 008c 3B68     		ldr	r3, [r7]
+ 217 008e D917     		asr	r1, r3, #31
+ 218 0090 5A18     		add	r2, r3, r1
+ 219 0092 4A40     		eor	r2, r1
+ 220 0094 304B     		ldr	r3, .L19+12
+ 221 0096 9A42     		cmp	r2, r3
+ 222 0098 07DD     		ble	.L13
+  52:../Sources/Motor.c **** 		if (Right > 0 ) Right = Over_Range;
+ 223              		.loc 1 52 0
+ 224 009a 3B68     		ldr	r3, [r7]
+ 225 009c 002B     		cmp	r3, #0
+ 226 009e 02DD     		ble	.L14
+ 227              		.loc 1 52 0 is_stmt 0 discriminator 1
+ 228 00a0 2D4B     		ldr	r3, .L19+12
+ 229 00a2 3B60     		str	r3, [r7]
+ 230 00a4 01E0     		b	.L13
+ 231              	.L14:
+  53:../Sources/Motor.c **** 		else Right = - Over_Range;
+ 232              		.loc 1 53 0 is_stmt 1
+ 233 00a6 2D4B     		ldr	r3, .L19+16
+ 234 00a8 3B60     		str	r3, [r7]
+ 235              	.L13:
+  54:../Sources/Motor.c **** 	}
+  55:../Sources/Motor.c **** 
+  56:../Sources/Motor.c **** 	/* Anti-Shake */
+  57:../Sources/Motor.c **** /*	AntiShake_Pos_L -= AntiShake_Buff[AntiShake_Pointer][0];
+  58:../Sources/Motor.c **** 	AntiShake_Pos_L += AntiShake_Buff[AntiShake_Pointer][0] = (Left >=0 ) ? 1:0;
+  59:../Sources/Motor.c **** 	AntiShake_Pos_R -= AntiShake_Buff[AntiShake_Pointer][1];
+  60:../Sources/Motor.c **** 	AntiShake_Pos_R += AntiShake_Buff[AntiShake_Pointer][1] = (Right >=0) ? 1:0;	
+  61:../Sources/Motor.c **** 	AntiShake_Pointer = (AntiShake_Pointer + 1) % Anti_Shake_Freq;
+  62:../Sources/Motor.c **** //	Left = (AntiShake_Pos_L > Anti_Shake_Freq / 2)  || (abs(Left) > 10000) ? Left : -Left;
+  63:../Sources/Motor.c **** //	Right = (AntiShake_Pos_R > Anti_Shake_Freq / 2) || (abs(Right) > 10000) ? Right : -Right;
+  64:../Sources/Motor.c **** */	
+  65:../Sources/Motor.c **** 	/* Motor Work! */
+  66:../Sources/Motor.c **** 	if (Left > 0){
+ 236              		.loc 1 66 0
+ 237 00aa 7B68     		ldr	r3, [r7, #4]
+ 238 00ac 002B     		cmp	r3, #0
+ 239 00ae 10DD     		ble	.L15
+  67:../Sources/Motor.c **** 		MotorLeft_PTE30_SetRatio16( (uint16_t)( k4 * (Left + Enhanced) ) );
+ 240              		.loc 1 67 0
+ 241 00b0 284B     		ldr	r3, .L19+8
+ 242 00b2 DA68     		ldr	r2, [r3, #12]
+ 243 00b4 7B68     		ldr	r3, [r7, #4]
+ 244 00b6 F533     		add	r3, r3, #245
+ 245 00b8 FF33     		add	r3, r3, #255
+ 246 00ba 9BB2     		uxth	r3, r3
+ 247 00bc 101C     		mov	r0, r2
+ 248 00be 191C     		mov	r1, r3
+ 249 00c0 FFF7FEFF 		bl	PwmLdd3_SetRatio16
+  68:../Sources/Motor.c **** 		MotorLeft_PTE31_SetRatio16(0);
+ 250              		.loc 1 68 0
+ 251 00c4 234B     		ldr	r3, .L19+8
+ 252 00c6 5B69     		ldr	r3, [r3, #20]
+ 253 00c8 181C     		mov	r0, r3
+ 254 00ca 0021     		mov	r1, #0
+ 255 00cc FFF7FEFF 		bl	PwmLdd4_SetRatio16
+ 256 00d0 11E0     		b	.L16
+ 257              	.L15:
+  69:../Sources/Motor.c **** 	}
+  70:../Sources/Motor.c **** 	else{
+  71:../Sources/Motor.c **** 		MotorLeft_PTE30_SetRatio16(0);
+ 258              		.loc 1 71 0
+ 259 00d2 204B     		ldr	r3, .L19+8
+ 260 00d4 DB68     		ldr	r3, [r3, #12]
+ 261 00d6 181C     		mov	r0, r3
+ 262 00d8 0021     		mov	r1, #0
+ 263 00da FFF7FEFF 		bl	PwmLdd3_SetRatio16
+  72:../Sources/Motor.c **** 		MotorLeft_PTE31_SetRatio16( (uint16_t)( -k4 * (Left - Enhanced) ) );		
+ 264              		.loc 1 72 0
+ 265 00de 1D4B     		ldr	r3, .L19+8
+ 266 00e0 5A69     		ldr	r2, [r3, #20]
+ 267 00e2 7B68     		ldr	r3, [r7, #4]
+ 268 00e4 F53B     		sub	r3, r3, #245
+ 269 00e6 FF3B     		sub	r3, r3, #255
+ 270 00e8 9BB2     		uxth	r3, r3
+ 271 00ea 5B42     		neg	r3, r3
+ 272 00ec 9BB2     		uxth	r3, r3
+ 273 00ee 101C     		mov	r0, r2
+ 274 00f0 191C     		mov	r1, r3
+ 275 00f2 FFF7FEFF 		bl	PwmLdd4_SetRatio16
+ 276              	.L16:
+  73:../Sources/Motor.c **** 	}
+  74:../Sources/Motor.c **** 	if (Right > 0){
+ 277              		.loc 1 74 0
+ 278 00f6 3B68     		ldr	r3, [r7]
+ 279 00f8 002B     		cmp	r3, #0
+ 280 00fa 10DD     		ble	.L17
+  75:../Sources/Motor.c **** 		MotorRight_PTA5_SetRatio16( (uint16_t)( k4 * (Right + Enhanced) ) );
+ 281              		.loc 1 75 0
+ 282 00fc 154B     		ldr	r3, .L19+8
+ 283 00fe 1A69     		ldr	r2, [r3, #16]
+ 284 0100 3B68     		ldr	r3, [r7]
+ 285 0102 F533     		add	r3, r3, #245
+ 286 0104 FF33     		add	r3, r3, #255
+ 287 0106 9BB2     		uxth	r3, r3
+ 288 0108 101C     		mov	r0, r2
+ 289 010a 191C     		mov	r1, r3
+ 290 010c FFF7FEFF 		bl	PwmLdd2_SetRatio16
+  76:../Sources/Motor.c **** 		MotorRight_PTA4_SetRatio16(0);
+ 291              		.loc 1 76 0
+ 292 0110 104B     		ldr	r3, .L19+8
+ 293 0112 9B69     		ldr	r3, [r3, #24]
+ 294 0114 181C     		mov	r0, r3
+ 295 0116 0021     		mov	r1, #0
+ 296 0118 FFF7FEFF 		bl	PwmLdd1_SetRatio16
+ 297 011c 13E0     		b	.L6
+ 298              	.L17:
+  77:../Sources/Motor.c **** 	}
+  78:../Sources/Motor.c **** 	else{
+  79:../Sources/Motor.c **** 		MotorRight_PTA5_SetRatio16(0);
+ 299              		.loc 1 79 0
+ 300 011e 0D4B     		ldr	r3, .L19+8
+ 301 0120 1B69     		ldr	r3, [r3, #16]
+ 302 0122 181C     		mov	r0, r3
+ 303 0124 0021     		mov	r1, #0
+ 304 0126 FFF7FEFF 		bl	PwmLdd2_SetRatio16
+  80:../Sources/Motor.c **** 		MotorRight_PTA4_SetRatio16( (uint16_t)( -k4 * (Right - Enhanced) ) );		
+ 305              		.loc 1 80 0
+ 306 012a 0A4B     		ldr	r3, .L19+8
+ 307 012c 9A69     		ldr	r2, [r3, #24]
+ 308 012e 3B68     		ldr	r3, [r7]
+ 309 0130 F53B     		sub	r3, r3, #245
+ 310 0132 FF3B     		sub	r3, r3, #255
+ 311 0134 9BB2     		uxth	r3, r3
+ 312 0136 5B42     		neg	r3, r3
+ 313 0138 9BB2     		uxth	r3, r3
+ 314 013a 101C     		mov	r0, r2
+ 315 013c 191C     		mov	r1, r3
+ 316 013e FFF7FEFF 		bl	PwmLdd1_SetRatio16
+ 317 0142 00E0     		b	.L6
+ 318              	.L18:
+  44:../Sources/Motor.c **** 	if (Dead == 1) return;
+ 319              		.loc 1 44 0
+ 320 0144 C046     		mov	r8, r8
+ 321              	.L6:
+  81:../Sources/Motor.c **** 	}
+  82:../Sources/Motor.c **** }
+ 322              		.loc 1 82 0
+ 323 0146 BD46     		mov	sp, r7
+ 324 0148 02B0     		add	sp, sp, #8
+ 325              		@ sp needed for prologue
+ 326 014a 80BD     		pop	{r7, pc}
+ 327              	.L20:
+ 328              		.align	2
+ 329              	.L19:
+ 330 014c 00000000 		.word	Dead
+ 331 0150 00000000 		.word	Over
+ 332 0154 00000000 		.word	PE_LDD_DeviceDataList
+ 333 0158 50C30000 		.word	50000
+ 334 015c B03CFFFF 		.word	-50000
+ 335              		.cfi_endproc
+ 336              	.LFE1:
+ 338              		.section	.text.Update_Speeder_Integral,"ax",%progbits
+ 339              		.align	2
+ 340              		.global	Update_Speeder_Integral
+ 341              		.code	16
+ 342              		.thumb_func
+ 344              	Update_Speeder_Integral:
+ 345              	.LFB2:
+  83:../Sources/Motor.c **** 
+  84:../Sources/Motor.c **** void Update_Speeder_Integral(){
+ 346              		.loc 1 84 0
+ 347              		.cfi_startproc
+ 348 0000 80B5     		push	{r7, lr}
+ 349              	.LCFI6:
+ 350              		.cfi_def_cfa_offset 8
+ 351              		.cfi_offset 7, -8
+ 352              		.cfi_offset 14, -4
+ 353 0002 00AF     		add	r7, sp, #0
+ 354              	.LCFI7:
+ 355              		.cfi_def_cfa_register 7
+  85:../Sources/Motor.c **** 	SpeedL_Integral = SpeedR_Integral = (SpeedL_Integral + SpeedR_Integral) / 2;
+ 356              		.loc 1 85 0
+ 357 0004 084B     		ldr	r3, .L23
+ 358 0006 1A68     		ldr	r2, [r3]
+ 359 0008 084B     		ldr	r3, .L23+4
+ 360 000a 1B68     		ldr	r3, [r3]
+ 361 000c D318     		add	r3, r2, r3
+ 362 000e 002B     		cmp	r3, #0
+ 363 0010 00DA     		bge	.L22
+ 364 0012 0133     		add	r3, r3, #1
+ 365              	.L22:
+ 366 0014 5B10     		asr	r3, r3, #1
+ 367 0016 1A1C     		mov	r2, r3
+ 368 0018 044B     		ldr	r3, .L23+4
+ 369 001a 1A60     		str	r2, [r3]
+ 370 001c 034B     		ldr	r3, .L23+4
+ 371 001e 1A68     		ldr	r2, [r3]
+ 372 0020 014B     		ldr	r3, .L23
+ 373 0022 1A60     		str	r2, [r3]
+  86:../Sources/Motor.c **** }
+ 374              		.loc 1 86 0
+ 375 0024 BD46     		mov	sp, r7
+ 376              		@ sp needed for prologue
+ 377 0026 80BD     		pop	{r7, pc}
+ 378              	.L24:
+ 379              		.align	2
+ 380              	.L23:
+ 381 0028 00000000 		.word	SpeedL_Integral
+ 382 002c 00000000 		.word	SpeedR_Integral
+ 383              		.cfi_endproc
+ 384              	.LFE2:
+ 386              		.text
+ 387              	.Letext0:
+ 388              		.file 2 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 389              		.file 3 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+ 390              		.file 4 "<built-in>"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Motor.c
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:22     .bss.Dead:00000000 Dead
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:19     .bss.Dead:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:29     .bss.Over:00000000 Over
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:26     .bss.Over:00000000 $d
+                            *COM*:00000320 AntiShake_Buff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:37     .data.AntiShake_Pointer:00000000 AntiShake_Pointer
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:34     .data.AntiShake_Pointer:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:44     .bss.AntiShake_Pos_L:00000000 AntiShake_Pos_L
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:41     .bss.AntiShake_Pos_L:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:51     .bss.AntiShake_Pos_R:00000000 AntiShake_Pos_R
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:48     .bss.AntiShake_Pos_R:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:54     .text.Set_Motors_Mono:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:59     .text.Set_Motors_Mono:00000000 Set_Motors_Mono
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:107    .text.Set_Motors_Mono:00000038 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:117    .text.Set_Motors:00000000 Set_Motors
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:112    .text.Set_Motors:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:330    .text.Set_Motors:0000014c $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:339    .text.Update_Speeder_Integral:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:344    .text.Update_Speeder_Integral:00000000 Update_Speeder_Integral
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchLawzQ.s:381    .text.Update_Speeder_Integral:00000028 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+PwmLdd3_SetRatio16
+PwmLdd4_SetRatio16
+PwmLdd2_SetRatio16
+PwmLdd1_SetRatio16
+PE_LDD_DeviceDataList
+SpeedL_Integral
+SpeedR_Integral

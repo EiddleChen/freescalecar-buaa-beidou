@@ -1,0 +1,782 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"ProcessorExpert.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	TU2_Ptr,4,4
+  18              		.comm	TU3_Ptr,4,4
+  19              		.global	State
+  20              		.section	.bss.State,"aw",%nobits
+  21              		.align	2
+  24              	State:
+  25 0000 00000000 		.space	4
+  26              		.section	.rodata
+  27              		.align	2
+  28              	.LC0:
+  29 0000 0A0A2A2D 		.ascii	"\012\012*----------------------------------------\000"
+  29      2D2D2D2D 
+  29      2D2D2D2D 
+  29      2D2D2D2D 
+  29      2D2D2D2D 
+  30              		.align	2
+  31              	.LC2:
+  32 002c 2A204672 		.ascii	"* Freescale car Project \000"
+  32      65657363 
+  32      616C6520 
+  32      63617220 
+  32      50726F6A 
+  33 0045 000000   		.align	2
+  34              	.LC4:
+  35 0048 2A2D2D2D 		.ascii	"*----------------------------------------\012\000"
+  35      2D2D2D2D 
+  35      2D2D2D2D 
+  35      2D2D2D2D 
+  35      2D2D2D2D 
+  36 0073 00       		.align	2
+  37              	.LC8:
+  38 0074 256300   		.ascii	"%c\000"
+  39              		.global	__aeabi_idiv
+  40 0077 00       		.align	2
+  41              	.LC16:
+  42 0078 25640925 		.ascii	"%d\011%d\011%d\011%d\012\000"
+  42      64092564 
+  42      0925640A 
+  42      00
+  43 0085 000000   		.section	.text.main,"ax",%progbits
+  44              		.align	2
+  45              		.global	main
+  46              		.code	16
+  47              		.thumb_func
+  49              	main:
+  50              	.LFB0:
+  51              		.file 1 "../Sources/ProcessorExpert.c"
+   1:../Sources/ProcessorExpert.c **** /** ###################################################################
+   2:../Sources/ProcessorExpert.c **** **     Filename    : ProcessorExpert.c
+   3:../Sources/ProcessorExpert.c **** **     Project     : ProcessorExpert
+   4:../Sources/ProcessorExpert.c **** **     Processor   : MKL25Z128VLK4
+   5:../Sources/ProcessorExpert.c **** **     Version     : Driver 01.01
+   6:../Sources/ProcessorExpert.c **** **     Compiler    : GNU C Compiler
+   7:../Sources/ProcessorExpert.c **** **     Date/Time   : 2013-03-28, 17:52, # CodeGen: 0
+   8:../Sources/ProcessorExpert.c **** **     Abstract    :
+   9:../Sources/ProcessorExpert.c **** **         Main module.
+  10:../Sources/ProcessorExpert.c **** **         This module contains user's application code.
+  11:../Sources/ProcessorExpert.c **** **     Settings    :
+  12:../Sources/ProcessorExpert.c **** **     Contents    :
+  13:../Sources/ProcessorExpert.c **** **         No public methods
+  14:../Sources/ProcessorExpert.c **** **
+  15:../Sources/ProcessorExpert.c **** ** ###################################################################*/
+  16:../Sources/ProcessorExpert.c **** /* MODULE ProcessorExpert */
+  17:../Sources/ProcessorExpert.c **** 
+  18:../Sources/ProcessorExpert.c **** 
+  19:../Sources/ProcessorExpert.c **** /* Including needed modules to compile this module/procedure */
+  20:../Sources/ProcessorExpert.c **** #include "Cpu.h"
+  21:../Sources/ProcessorExpert.c **** #include "Events.h"
+  22:../Sources/ProcessorExpert.c **** #include "CsIO1.h"
+  23:../Sources/ProcessorExpert.c **** #include "IO1.h"
+  24:../Sources/ProcessorExpert.c **** #include "I2C2.h"
+  25:../Sources/ProcessorExpert.c **** #include "MotorRight_PTA5.h"
+  26:../Sources/ProcessorExpert.c **** #include "PwmLdd2.h"
+  27:../Sources/ProcessorExpert.c **** #include "MotorLeft_PTE30.h"
+  28:../Sources/ProcessorExpert.c **** #include "PwmLdd3.h"
+  29:../Sources/ProcessorExpert.c **** #include "MotorLeft_PTE31.h"
+  30:../Sources/ProcessorExpert.c **** #include "PwmLdd4.h"
+  31:../Sources/ProcessorExpert.c **** #include "MotorRight_PTA4.h"
+  32:../Sources/ProcessorExpert.c **** #include "PwmLdd1.h"
+  33:../Sources/ProcessorExpert.c **** #include "TU1.h"
+  34:../Sources/ProcessorExpert.c **** #include "WAIT1.h"
+  35:../Sources/ProcessorExpert.c **** #include "CCD_CLK.h"
+  36:../Sources/ProcessorExpert.c **** #include "BitsIoLdd1.h"
+  37:../Sources/ProcessorExpert.c **** #include "CCD_SI.h"
+  38:../Sources/ProcessorExpert.c **** #include "BitsIoLdd2.h"
+  39:../Sources/ProcessorExpert.c **** #include "EInt1.h"
+  40:../Sources/ProcessorExpert.c **** #include "ExtIntLdd1.h"
+  41:../Sources/ProcessorExpert.c **** #include "EInt2.h"
+  42:../Sources/ProcessorExpert.c **** #include "ExtIntLdd2.h"
+  43:../Sources/ProcessorExpert.c **** #include "Bit1.h"
+  44:../Sources/ProcessorExpert.c **** #include "BitIoLdd1.h"
+  45:../Sources/ProcessorExpert.c **** #include "TU3.h"
+  46:../Sources/ProcessorExpert.c **** #include "Servo_Video1.h"
+  47:../Sources/ProcessorExpert.c **** #include "PwmLdd5.h"
+  48:../Sources/ProcessorExpert.c **** #include "TU2.h"
+  49:../Sources/ProcessorExpert.c **** #include "AD1.h"
+  50:../Sources/ProcessorExpert.c **** #include "AdcLdd1.h"
+  51:../Sources/ProcessorExpert.c **** /* Including shared modules, which are used for whole project */
+  52:../Sources/ProcessorExpert.c **** #include "PE_Types.h"
+  53:../Sources/ProcessorExpert.c **** #include "PE_Error.h"
+  54:../Sources/ProcessorExpert.c **** #include "PE_Const.h"
+  55:../Sources/ProcessorExpert.c **** #include "IO_Map.h"
+  56:../Sources/ProcessorExpert.c **** 
+  57:../Sources/ProcessorExpert.c **** /* User includes (#include below this line is not maintained by Processor Expert) */
+  58:../Sources/ProcessorExpert.c **** #include "stdio.h"
+  59:../Sources/ProcessorExpert.c **** #include "MMA8451.h"
+  60:../Sources/ProcessorExpert.c **** #include "CCD.h"
+  61:../Sources/ProcessorExpert.c **** #include "Motor.h"
+  62:../Sources/ProcessorExpert.c **** 
+  63:../Sources/ProcessorExpert.c **** /* Global value for TUx*/
+  64:../Sources/ProcessorExpert.c **** LDD_TDeviceData *TU2_Ptr,*TU3_Ptr;
+  65:../Sources/ProcessorExpert.c **** 
+  66:../Sources/ProcessorExpert.c **** /* Global value for MMA8451 */
+  67:../Sources/ProcessorExpert.c **** extern MMA845X mma845x;
+  68:../Sources/ProcessorExpert.c **** 
+  69:../Sources/ProcessorExpert.c **** /* Global value for AAC AR2 */
+  70:../Sources/ProcessorExpert.c **** extern int32_t Temp1,Temp2;
+  71:../Sources/ProcessorExpert.c **** 
+  72:../Sources/ProcessorExpert.c **** /* Global value for CCD */
+  73:../Sources/ProcessorExpert.c **** extern uint16_t Pixels[CCD_Pixels_Width][CCD_Channels];
+  74:../Sources/ProcessorExpert.c **** extern int		CCD_TW_Counter;
+  75:../Sources/ProcessorExpert.c **** extern int		TrackL_Diff;
+  76:../Sources/ProcessorExpert.c **** extern int		TrackR_Diff;
+  77:../Sources/ProcessorExpert.c **** 
+  78:../Sources/ProcessorExpert.c **** /* Global value for speed */
+  79:../Sources/ProcessorExpert.c **** extern uint32_t SpeedL_Edges;
+  80:../Sources/ProcessorExpert.c **** extern uint32_t SpeedR_Edges;
+  81:../Sources/ProcessorExpert.c **** extern uint32_t SpeedL_Integral,SpeedR_Integral;
+  82:../Sources/ProcessorExpert.c **** extern int32_t Motor_Speed_PWM,Motor_Speed_PWM2;
+  83:../Sources/ProcessorExpert.c **** extern int32_t Sag_Temp1;
+  84:../Sources/ProcessorExpert.c **** extern int32_t Sag_Temp2;
+  85:../Sources/ProcessorExpert.c **** extern int32_t Sag_Temp3;
+  86:../Sources/ProcessorExpert.c **** extern int32_t Integral_AAC_E,Integral_AAC_E2;
+  87:../Sources/ProcessorExpert.c **** extern int32_t	AAC_Z_Correct_Temp;
+  88:../Sources/ProcessorExpert.c **** extern int32_t DebugI,DebugI2;
+  89:../Sources/ProcessorExpert.c **** 
+  90:../Sources/ProcessorExpert.c **** /* Global value for Motor Control */
+  91:../Sources/ProcessorExpert.c **** extern int32_t MotorControlL,MotorControlR,Mono;
+  92:../Sources/ProcessorExpert.c **** extern int 	 TrackL_Finsh,TrackR_Finsh;
+  93:../Sources/ProcessorExpert.c **** 
+  94:../Sources/ProcessorExpert.c **** /* Globale value for Console IO */
+  95:../Sources/ProcessorExpert.c **** int State = 0;
+  96:../Sources/ProcessorExpert.c **** 
+  97:../Sources/ProcessorExpert.c **** /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
+  98:../Sources/ProcessorExpert.c **** 
+  99:../Sources/ProcessorExpert.c **** 
+ 100:../Sources/ProcessorExpert.c **** int main(void)
+ 101:../Sources/ProcessorExpert.c **** /*lint -restore Enable MISRA rule (6.3) checking. */
+ 102:../Sources/ProcessorExpert.c **** {
+  52              		.loc 1 102 0
+  53              		.cfi_startproc
+  54 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  55              	.LCFI0:
+  56              		.cfi_def_cfa_offset 20
+  57              		.cfi_offset 4, -20
+  58              		.cfi_offset 5, -16
+  59              		.cfi_offset 6, -12
+  60              		.cfi_offset 7, -8
+  61              		.cfi_offset 14, -4
+  62 0002 4746     		mov	r7, r8
+  63 0004 80B4     		push	{r7}
+  64              	.LCFI1:
+  65              		.cfi_def_cfa_offset 24
+  66              		.cfi_offset 8, -24
+  67 0006 82B0     		sub	sp, sp, #8
+  68              	.LCFI2:
+  69              		.cfi_def_cfa_offset 32
+  70 0008 02AF     		add	r7, sp, #8
+  71              	.LCFI3:
+  72              		.cfi_def_cfa 7, 24
+ 103:../Sources/ProcessorExpert.c ****   /* Write your local variable definition here */
+ 104:../Sources/ProcessorExpert.c **** 
+ 105:../Sources/ProcessorExpert.c ****   /*** Processor Expert internal initialization. DON'T REMOVE THIS CODE!!! ***/
+ 106:../Sources/ProcessorExpert.c ****   PE_low_level_init();
+  73              		.loc 1 106 0
+  74 000a FFF7FEFF 		bl	PE_low_level_init
+ 107:../Sources/ProcessorExpert.c ****   /*** End of Processor Expert internal initialization.                    ***/
+ 108:../Sources/ProcessorExpert.c **** 
+ 109:../Sources/ProcessorExpert.c ****   /* Write your code here */
+ 110:../Sources/ProcessorExpert.c ****   /* For example: for(;;) { } */
+ 111:../Sources/ProcessorExpert.c **** 
+ 112:../Sources/ProcessorExpert.c **** 
+ 113:../Sources/ProcessorExpert.c **** 
+ 114:../Sources/ProcessorExpert.c ****   
+ 115:../Sources/ProcessorExpert.c ****   printf("\n\n*----------------------------------------\n");
+  75              		.loc 1 115 0
+  76 000e 894B     		ldr	r3, .L23
+  77 0010 181C     		mov	r0, r3
+  78 0012 FFF7FEFF 		bl	puts
+ 116:../Sources/ProcessorExpert.c ****   printf("* Freescale car Project \n");
+  79              		.loc 1 116 0
+  80 0016 884B     		ldr	r3, .L23+4
+  81 0018 181C     		mov	r0, r3
+  82 001a FFF7FEFF 		bl	puts
+ 117:../Sources/ProcessorExpert.c ****   printf("*----------------------------------------\n\n");
+  83              		.loc 1 117 0
+  84 001e 874B     		ldr	r3, .L23+8
+  85 0020 181C     		mov	r0, r3
+  86 0022 FFF7FEFF 		bl	puts
+ 118:../Sources/ProcessorExpert.c ****   
+ 119:../Sources/ProcessorExpert.c ****   /* Internal Accelerometer initialization */
+ 120:../Sources/ProcessorExpert.c ****   //MMA845X_Init();
+ 121:../Sources/ProcessorExpert.c ****   
+ 122:../Sources/ProcessorExpert.c ****  
+ 123:../Sources/ProcessorExpert.c ****   /* Timer initialization after all Components init */
+ 124:../Sources/ProcessorExpert.c ****   TU3_Init(NULL);
+  87              		.loc 1 124 0
+  88 0026 0020     		mov	r0, #0
+  89 0028 FFF7FEFF 		bl	TU3_Init
+ 125:../Sources/ProcessorExpert.c ****   TU2_Init(NULL);
+  90              		.loc 1 125 0
+  91 002c 0020     		mov	r0, #0
+  92 002e FFF7FEFF 		bl	TU2_Init
+ 126:../Sources/ProcessorExpert.c ****   
+ 127:../Sources/ProcessorExpert.c ****   
+ 128:../Sources/ProcessorExpert.c ****   /* Default parameter for Car Control */
+ 129:../Sources/ProcessorExpert.c ****   Mono = 1;
+  93              		.loc 1 129 0
+  94 0032 834B     		ldr	r3, .L23+12
+  95 0034 0122     		mov	r2, #1
+  96 0036 1A60     		str	r2, [r3]
+ 130:../Sources/ProcessorExpert.c ****   
+ 131:../Sources/ProcessorExpert.c ****   /* Before Stand-up  */
+ 132:../Sources/ProcessorExpert.c ****   Servo_UP();
+  97              		.loc 1 132 0
+  98 0038 FFF7FEFF 		bl	Servo_UP
+ 133:../Sources/ProcessorExpert.c ****   WAIT1_Waitms(300);
+  99              		.loc 1 133 0
+ 100 003c 9623     		mov	r3, #150
+ 101 003e 5B00     		lsl	r3, r3, #1
+ 102 0040 181C     		mov	r0, r3
+ 103 0042 FFF7FEFF 		bl	WAIT1_Waitms
+ 134:../Sources/ProcessorExpert.c ****   Servo_PowerOFF();
+ 104              		.loc 1 134 0
+ 105 0046 FFF7FEFF 		bl	Servo_PowerOFF
+ 135:../Sources/ProcessorExpert.c ****   WAIT1_Waitms(300);
+ 106              		.loc 1 135 0
+ 107 004a 9623     		mov	r3, #150
+ 108 004c 5B00     		lsl	r3, r3, #1
+ 109 004e 181C     		mov	r0, r3
+ 110 0050 FFF7FEFF 		bl	WAIT1_Waitms
+ 136:../Sources/ProcessorExpert.c ****   PowerUp_Correction();
+ 111              		.loc 1 136 0
+ 112 0054 FFF7FEFF 		bl	PowerUp_Correction
+ 137:../Sources/ProcessorExpert.c ****   MotorRight_PTA5_SetRatio16(0);
+ 113              		.loc 1 137 0
+ 114 0058 7A4B     		ldr	r3, .L23+16
+ 115 005a 1B69     		ldr	r3, [r3, #16]
+ 116 005c 181C     		mov	r0, r3
+ 117 005e 0021     		mov	r1, #0
+ 118 0060 FFF7FEFF 		bl	PwmLdd2_SetRatio16
+ 138:../Sources/ProcessorExpert.c ****   MotorRight_PTA4_SetRatio16(0);
+ 119              		.loc 1 138 0
+ 120 0064 774B     		ldr	r3, .L23+16
+ 121 0066 9B69     		ldr	r3, [r3, #24]
+ 122 0068 181C     		mov	r0, r3
+ 123 006a 0021     		mov	r1, #0
+ 124 006c FFF7FEFF 		bl	PwmLdd1_SetRatio16
+ 139:../Sources/ProcessorExpert.c ****   MotorLeft_PTE30_SetRatio16(0);
+ 125              		.loc 1 139 0
+ 126 0070 744B     		ldr	r3, .L23+16
+ 127 0072 DB68     		ldr	r3, [r3, #12]
+ 128 0074 181C     		mov	r0, r3
+ 129 0076 0021     		mov	r1, #0
+ 130 0078 FFF7FEFF 		bl	PwmLdd3_SetRatio16
+ 140:../Sources/ProcessorExpert.c ****   MotorLeft_PTE31_SetRatio16(0);	
+ 131              		.loc 1 140 0
+ 132 007c 714B     		ldr	r3, .L23+16
+ 133 007e 5B69     		ldr	r3, [r3, #20]
+ 134 0080 181C     		mov	r0, r3
+ 135 0082 0021     		mov	r1, #0
+ 136 0084 FFF7FEFF 		bl	PwmLdd4_SetRatio16
+ 137 0088 00E0     		b	.L21
+ 138              	.L22:
+ 141:../Sources/ProcessorExpert.c **** 
+ 142:../Sources/ProcessorExpert.c ****   
+ 143:../Sources/ProcessorExpert.c ****   for(;;)
+ 144:../Sources/ProcessorExpert.c ****  {
+ 145:../Sources/ProcessorExpert.c **** 	 //MMA845X_Poll();
+ 146:../Sources/ProcessorExpert.c **** //	 printf("x-axis %d \ny-axis %d \nz-axis %d \n", mma845x.x, mma845x.y, mma845x.z);
+ 147:../Sources/ProcessorExpert.c **** //	 printf("\n");
+ 148:../Sources/ProcessorExpert.c **** 
+ 149:../Sources/ProcessorExpert.c **** //	 for (i = 0;i < CCD_Pixels_Width; i++) printf("%d,",CCDL(i) / 1000);
+ 150:../Sources/ProcessorExpert.c **** //	 printf("\n");
+ 151:../Sources/ProcessorExpert.c **** //	 for (i = 0;i < CCD_Pixels_Width; i++) printf("%d,",CCDR(i) / 1000);
+ 152:../Sources/ProcessorExpert.c **** //	 printf("\n\n");
+ 153:../Sources/ProcessorExpert.c **** //	 printf("Motor_Speed = %d\n",Motor_Speed_PWM);
+ 154:../Sources/ProcessorExpert.c **** //	 printf("%d\t%d\t%d\t\n",Motor_Speed_PWM,DebugI,DebugI2);
+ 155:../Sources/ProcessorExpert.c **** //	 WAIT1_Waitms(100);
+ 156:../Sources/ProcessorExpert.c **** 	  
+ 157:../Sources/ProcessorExpert.c **** 	 /* Polling ACC&Gyo */
+ 158:../Sources/ProcessorExpert.c **** //	prinmattf("Sag_Temp2 = %d\n\n",(int32_t)Sag_Temp2);
+ 159:../Sources/ProcessorExpert.c **** //	printf("Sag_Temp2 = %d\n\n",(int32_t)( Sag_Temp3 / 20 ));	
+ 160:../Sources/ProcessorExpert.c **** 
+ 161:../Sources/ProcessorExpert.c **** 	/* Polling Motor */
+ 162:../Sources/ProcessorExpert.c **** //	printf("%d,%d\n",(int32_t)Motor_Speed_PWM2,(int32_t)Motor_Speed_PWM);
+ 163:../Sources/ProcessorExpert.c **** //	printf("%d\n",Temp2 / 3800);
+ 164:../Sources/ProcessorExpert.c **** //	printf("%d\n",(int32_t)Integral_AAC_E);
+ 165:../Sources/ProcessorExpert.c **** //	printf("%d\t%d\t\n",Motor_Speed_PWM ,Integral_AAC_E * 0);
+ 166:../Sources/ProcessorExpert.c **** //	printf("%d\t%d\t\n",Sag_Temp3 / 128,Integral_AAC_E);
+ 167:../Sources/ProcessorExpert.c **** //	printf("\n");
+ 168:../Sources/ProcessorExpert.c **** 	
+ 169:../Sources/ProcessorExpert.c **** 	 /* Debug for Motor Control */ 
+ 170:../Sources/ProcessorExpert.c **** 	 int i;
+ 171:../Sources/ProcessorExpert.c **** /*	 for(i = 0; i < 10; i++) WAIT1_Waitms(1000);
+ 172:../Sources/ProcessorExpert.c **** 	 MotorControlL = 0;
+ 173:../Sources/ProcessorExpert.c **** 	 MotorControlR = 0;
+ 174:../Sources/ProcessorExpert.c **** 	 for(i = 0; i < 5; i++) WAIT1_Waitms(1000);
+ 175:../Sources/ProcessorExpert.c **** 	 MotorControlL = 30000;
+ 176:../Sources/ProcessorExpert.c **** 	 MotorControlR = 30000;
+ 177:../Sources/ProcessorExpert.c **** 	 for(i = 0; i < 5; i++) WAIT1_Waitms(1000);
+ 178:../Sources/ProcessorExpert.c **** 	 MotorControlL = -30000;
+ 179:../Sources/ProcessorExpert.c **** 	 MotorControlR = -30000;	
+ 180:../Sources/ProcessorExpert.c **** */	 
+ 181:../Sources/ProcessorExpert.c **** 
+ 182:../Sources/ProcessorExpert.c **** /*	 for(i = 0; i < 20; i++) WAIT1_Waitms(1000);
+ 183:../Sources/ProcessorExpert.c **** 	 MotorControlL = -1000;
+ 184:../Sources/ProcessorExpert.c **** 	 MotorControlR = 1000;	
+ 185:../Sources/ProcessorExpert.c **** 	 for(i = 0; i < 20; i++) WAIT1_Waitms(1000);
+ 186:../Sources/ProcessorExpert.c **** 	 MotorControlL = 0;
+ 187:../Sources/ProcessorExpert.c **** 	 MotorControlR = 0;	
+ 188:../Sources/ProcessorExpert.c **** */
+ 189:../Sources/ProcessorExpert.c **** 	 /* Debug for Speeder */
+ 190:../Sources/ProcessorExpert.c **** //	 printf("%d\t%d\n",SpeedL_Integral,SpeedR_Integral);
+ 191:../Sources/ProcessorExpert.c **** 	 
+ 192:../Sources/ProcessorExpert.c **** 	 /* Motor Controled by CCD */
+ 193:../Sources/ProcessorExpert.c **** 	 //printf("%c\t%c\n",TrackL_Finsh,TrackR_Finsh);
+ 194:../Sources/ProcessorExpert.c **** 	 
+ 195:../Sources/ProcessorExpert.c **** 	 /* Debug for Servo */
+ 196:../Sources/ProcessorExpert.c **** 
+ 197:../Sources/ProcessorExpert.c **** 	 /* Console IO */
+ 198:../Sources/ProcessorExpert.c **** 	 scanf("%c",&State);
+ 199:../Sources/ProcessorExpert.c **** 	 switch (State){
+ 200:../Sources/ProcessorExpert.c **** 	 	 case	'W':{ Processing_Interact(Integral_AAC_E / 1000,Temp2 / 1000,SpeedL_Integral * 10,SpeedR_I
+ 201:../Sources/ProcessorExpert.c **** 	 	 case 	'w':{ printf("%d\t%d\t%d\t%d\n",Integral_AAC_E / 1000,Temp2 / 1000,SpeedL_Integral * 10,S
+ 202:../Sources/ProcessorExpert.c **** 	 	 case	'0':{ MotorControlL = MotorControlR = 0; Mono = 1; break;}
+ 203:../Sources/ProcessorExpert.c **** 		 case	'1':{ if (Mono) Update_Speeder_Integral(); MotorControlL += 2; Mono = 0; break;}
+ 204:../Sources/ProcessorExpert.c **** 		 case 	'2':{ if (Mono) Update_Speeder_Integral(); MotorControlR += 2; Mono = 0; break;}
+ 205:../Sources/ProcessorExpert.c **** 		 case	'3':{ if (Mono) Update_Speeder_Integral(); MotorControlL -= 2; Mono = 0; break;}
+ 206:../Sources/ProcessorExpert.c **** 		 case 	'4':{ if (Mono) Update_Speeder_Integral(); MotorControlR -= 2; Mono = 0; break;} 
+ 207:../Sources/ProcessorExpert.c **** 		 case 	'5':{ MotorControlL = MotorControlR = (MotorControlL + MotorControlR)  / 2 + 5; Mono = 1; 
+ 208:../Sources/ProcessorExpert.c **** 		 case 	'6':{ MotorControlL = MotorControlR = (MotorControlL + MotorControlR)  / 2 - 10; Mono = 1;
+ 209:../Sources/ProcessorExpert.c **** 		 case	's':{ Stand_Up();break; }
+ 210:../Sources/ProcessorExpert.c **** 		 case	'l':{ Lay_Down();break; }
+ 211:../Sources/ProcessorExpert.c **** 	 }
+ 212:../Sources/ProcessorExpert.c ****   }
+ 139              		.loc 1 212 0
+ 140 008a C046     		mov	r8, r8
+ 141              	.L21:
+ 142              	.LBB2:
+ 198:../Sources/ProcessorExpert.c **** 	 scanf("%c",&State);
+ 143              		.loc 1 198 0
+ 144 008c 6E4A     		ldr	r2, .L23+20
+ 145 008e 6F4B     		ldr	r3, .L23+24
+ 146 0090 101C     		mov	r0, r2
+ 147 0092 191C     		mov	r1, r3
+ 148 0094 FFF7FEFF 		bl	scanf
+ 199:../Sources/ProcessorExpert.c **** 	 switch (State){
+ 149              		.loc 1 199 0
+ 150 0098 6C4B     		ldr	r3, .L23+24
+ 151 009a 1B68     		ldr	r3, [r3]
+ 152 009c 303B     		sub	r3, r3, #48
+ 153 009e 472B     		cmp	r3, #71
+ 154 00a0 F3D8     		bhi	.L22
+ 155 00a2 9A00     		lsl	r2, r3, #2
+ 156 00a4 6A4B     		ldr	r3, .L23+28
+ 157 00a6 D318     		add	r3, r2, r3
+ 158 00a8 1B68     		ldr	r3, [r3]
+ 159 00aa 9F46     		mov	pc, r3
+ 160              		.section	.rodata.main,"a",%progbits
+ 161              		.align	2
+ 162              	.L14:
+ 163 0000 46010000 		.word	.L3
+ 164 0004 5C010000 		.word	.L4
+ 165 0008 7A010000 		.word	.L5
+ 166 000c 98010000 		.word	.L6
+ 167 0010 B6010000 		.word	.L7
+ 168 0014 D4010000 		.word	.L8
+ 169 0018 FC010000 		.word	.L9
+ 170 001c 8A000000 		.word	.L22
+ 171 0020 8A000000 		.word	.L22
+ 172 0024 8A000000 		.word	.L22
+ 173 0028 8A000000 		.word	.L22
+ 174 002c 8A000000 		.word	.L22
+ 175 0030 8A000000 		.word	.L22
+ 176 0034 8A000000 		.word	.L22
+ 177 0038 8A000000 		.word	.L22
+ 178 003c 8A000000 		.word	.L22
+ 179 0040 8A000000 		.word	.L22
+ 180 0044 8A000000 		.word	.L22
+ 181 0048 8A000000 		.word	.L22
+ 182 004c 8A000000 		.word	.L22
+ 183 0050 8A000000 		.word	.L22
+ 184 0054 8A000000 		.word	.L22
+ 185 0058 8A000000 		.word	.L22
+ 186 005c 8A000000 		.word	.L22
+ 187 0060 8A000000 		.word	.L22
+ 188 0064 8A000000 		.word	.L22
+ 189 0068 8A000000 		.word	.L22
+ 190 006c 8A000000 		.word	.L22
+ 191 0070 8A000000 		.word	.L22
+ 192 0074 8A000000 		.word	.L22
+ 193 0078 8A000000 		.word	.L22
+ 194 007c 8A000000 		.word	.L22
+ 195 0080 8A000000 		.word	.L22
+ 196 0084 8A000000 		.word	.L22
+ 197 0088 8A000000 		.word	.L22
+ 198 008c 8A000000 		.word	.L22
+ 199 0090 8A000000 		.word	.L22
+ 200 0094 8A000000 		.word	.L22
+ 201 0098 8A000000 		.word	.L22
+ 202 009c AC000000 		.word	.L10
+ 203 00a0 8A000000 		.word	.L22
+ 204 00a4 8A000000 		.word	.L22
+ 205 00a8 8A000000 		.word	.L22
+ 206 00ac 8A000000 		.word	.L22
+ 207 00b0 8A000000 		.word	.L22
+ 208 00b4 8A000000 		.word	.L22
+ 209 00b8 8A000000 		.word	.L22
+ 210 00bc 8A000000 		.word	.L22
+ 211 00c0 8A000000 		.word	.L22
+ 212 00c4 8A000000 		.word	.L22
+ 213 00c8 8A000000 		.word	.L22
+ 214 00cc 8A000000 		.word	.L22
+ 215 00d0 8A000000 		.word	.L22
+ 216 00d4 8A000000 		.word	.L22
+ 217 00d8 8A000000 		.word	.L22
+ 218 00dc 8A000000 		.word	.L22
+ 219 00e0 8A000000 		.word	.L22
+ 220 00e4 8A000000 		.word	.L22
+ 221 00e8 8A000000 		.word	.L22
+ 222 00ec 8A000000 		.word	.L22
+ 223 00f0 2C020000 		.word	.L11
+ 224 00f4 8A000000 		.word	.L22
+ 225 00f8 8A000000 		.word	.L22
+ 226 00fc 8A000000 		.word	.L22
+ 227 0100 8A000000 		.word	.L22
+ 228 0104 8A000000 		.word	.L22
+ 229 0108 8A000000 		.word	.L22
+ 230 010c 26020000 		.word	.L12
+ 231 0110 8A000000 		.word	.L22
+ 232 0114 8A000000 		.word	.L22
+ 233 0118 8A000000 		.word	.L22
+ 234 011c F4000000 		.word	.L13
+ 235              		.section	.text.main
+ 236              	.L10:
+ 237              	.LBB3:
+ 200:../Sources/ProcessorExpert.c **** 	 	 case	'W':{ Processing_Interact(Integral_AAC_E / 1000,Temp2 / 1000,SpeedL_Integral * 10,SpeedR_I
+ 238              		.loc 1 200 0
+ 239 00ac 694B     		ldr	r3, .L23+32
+ 240 00ae 1B68     		ldr	r3, [r3]
+ 241 00b0 181C     		mov	r0, r3
+ 242 00b2 FA23     		mov	r3, #250
+ 243 00b4 9900     		lsl	r1, r3, #2
+ 244 00b6 FFF7FEFF 		bl	__aeabi_idiv
+ 245 00ba 031C     		mov	r3, r0
+ 246 00bc 1D1C     		mov	r5, r3
+ 247 00be 664B     		ldr	r3, .L23+36
+ 248 00c0 1B68     		ldr	r3, [r3]
+ 249 00c2 181C     		mov	r0, r3
+ 250 00c4 FA23     		mov	r3, #250
+ 251 00c6 9900     		lsl	r1, r3, #2
+ 252 00c8 FFF7FEFF 		bl	__aeabi_idiv
+ 253 00cc 031C     		mov	r3, r0
+ 254 00ce 191C     		mov	r1, r3
+ 255 00d0 624B     		ldr	r3, .L23+40
+ 256 00d2 1A68     		ldr	r2, [r3]
+ 257 00d4 131C     		mov	r3, r2
+ 258 00d6 9B00     		lsl	r3, r3, #2
+ 259 00d8 9B18     		add	r3, r3, r2
+ 260 00da 5B00     		lsl	r3, r3, #1
+ 261 00dc 1C1C     		mov	r4, r3
+ 262 00de 604B     		ldr	r3, .L23+44
+ 263 00e0 1A68     		ldr	r2, [r3]
+ 264 00e2 131C     		mov	r3, r2
+ 265 00e4 9B00     		lsl	r3, r3, #2
+ 266 00e6 9B18     		add	r3, r3, r2
+ 267 00e8 5B00     		lsl	r3, r3, #1
+ 268 00ea 281C     		mov	r0, r5
+ 269 00ec 221C     		mov	r2, r4
+ 270 00ee FFF7FEFF 		bl	Processing_Interact
+ 271 00f2 9EE0     		b	.L2
+ 272              	.L13:
+ 273              	.LBE3:
+ 201:../Sources/ProcessorExpert.c **** 	 	 case 	'w':{ printf("%d\t%d\t%d\t%d\n",Integral_AAC_E / 1000,Temp2 / 1000,SpeedL_Integral * 10,S
+ 274              		.loc 1 201 0
+ 275 00f4 5B4B     		ldr	r3, .L23+48
+ 276 00f6 9846     		mov	r8, r3
+ 277 00f8 564B     		ldr	r3, .L23+32
+ 278 00fa 1B68     		ldr	r3, [r3]
+ 279 00fc 181C     		mov	r0, r3
+ 280 00fe FA23     		mov	r3, #250
+ 281 0100 9900     		lsl	r1, r3, #2
+ 282 0102 FFF7FEFF 		bl	__aeabi_idiv
+ 283 0106 031C     		mov	r3, r0
+ 284 0108 1E1C     		mov	r6, r3
+ 285 010a 534B     		ldr	r3, .L23+36
+ 286 010c 1B68     		ldr	r3, [r3]
+ 287 010e 181C     		mov	r0, r3
+ 288 0110 FA23     		mov	r3, #250
+ 289 0112 9900     		lsl	r1, r3, #2
+ 290 0114 FFF7FEFF 		bl	__aeabi_idiv
+ 291 0118 031C     		mov	r3, r0
+ 292 011a 1D1C     		mov	r5, r3
+ 293 011c 4F4B     		ldr	r3, .L23+40
+ 294 011e 1A68     		ldr	r2, [r3]
+ 295 0120 131C     		mov	r3, r2
+ 296 0122 9B00     		lsl	r3, r3, #2
+ 297 0124 9B18     		add	r3, r3, r2
+ 298 0126 5B00     		lsl	r3, r3, #1
+ 299 0128 1C1C     		mov	r4, r3
+ 300 012a 4D4B     		ldr	r3, .L23+44
+ 301 012c 1A68     		ldr	r2, [r3]
+ 302 012e 131C     		mov	r3, r2
+ 303 0130 9B00     		lsl	r3, r3, #2
+ 304 0132 9B18     		add	r3, r3, r2
+ 305 0134 5B00     		lsl	r3, r3, #1
+ 306 0136 0093     		str	r3, [sp]
+ 307 0138 4046     		mov	r0, r8
+ 308 013a 311C     		mov	r1, r6
+ 309 013c 2A1C     		mov	r2, r5
+ 310 013e 231C     		mov	r3, r4
+ 311 0140 FFF7FEFF 		bl	printf
+ 312 0144 75E0     		b	.L2
+ 313              	.L3:
+ 202:../Sources/ProcessorExpert.c **** 	 	 case	'0':{ MotorControlL = MotorControlR = 0; Mono = 1; break;}
+ 314              		.loc 1 202 0
+ 315 0146 484B     		ldr	r3, .L23+52
+ 316 0148 0022     		mov	r2, #0
+ 317 014a 1A60     		str	r2, [r3]
+ 318 014c 464B     		ldr	r3, .L23+52
+ 319 014e 1A68     		ldr	r2, [r3]
+ 320 0150 464B     		ldr	r3, .L23+56
+ 321 0152 1A60     		str	r2, [r3]
+ 322 0154 3A4B     		ldr	r3, .L23+12
+ 323 0156 0122     		mov	r2, #1
+ 324 0158 1A60     		str	r2, [r3]
+ 325 015a 6AE0     		b	.L2
+ 326              	.L4:
+ 327              	.LBB4:
+ 203:../Sources/ProcessorExpert.c **** 		 case	'1':{ if (Mono) Update_Speeder_Integral(); MotorControlL += 2; Mono = 0; break;}
+ 328              		.loc 1 203 0
+ 329 015c 384B     		ldr	r3, .L23+12
+ 330 015e 1B68     		ldr	r3, [r3]
+ 331 0160 002B     		cmp	r3, #0
+ 332 0162 01D0     		beq	.L15
+ 203:../Sources/ProcessorExpert.c **** 		 case	'1':{ if (Mono) Update_Speeder_Integral(); MotorControlL += 2; Mono = 0; break;}
+ 333              		.loc 1 203 0 is_stmt 0 discriminator 1
+ 334 0164 FFF7FEFF 		bl	Update_Speeder_Integral
+ 335              	.L15:
+ 203:../Sources/ProcessorExpert.c **** 		 case	'1':{ if (Mono) Update_Speeder_Integral(); MotorControlL += 2; Mono = 0; break;}
+ 336              		.loc 1 203 0 discriminator 2
+ 337 0168 404B     		ldr	r3, .L23+56
+ 338 016a 1B68     		ldr	r3, [r3]
+ 339 016c 9A1C     		add	r2, r3, #2
+ 340 016e 3F4B     		ldr	r3, .L23+56
+ 341 0170 1A60     		str	r2, [r3]
+ 342 0172 334B     		ldr	r3, .L23+12
+ 343 0174 0022     		mov	r2, #0
+ 344 0176 1A60     		str	r2, [r3]
+ 345 0178 5BE0     		b	.L2
+ 346              	.L5:
+ 347              	.LBE4:
+ 348              	.LBB5:
+ 204:../Sources/ProcessorExpert.c **** 		 case 	'2':{ if (Mono) Update_Speeder_Integral(); MotorControlR += 2; Mono = 0; break;}
+ 349              		.loc 1 204 0 is_stmt 1
+ 350 017a 314B     		ldr	r3, .L23+12
+ 351 017c 1B68     		ldr	r3, [r3]
+ 352 017e 002B     		cmp	r3, #0
+ 353 0180 01D0     		beq	.L16
+ 204:../Sources/ProcessorExpert.c **** 		 case 	'2':{ if (Mono) Update_Speeder_Integral(); MotorControlR += 2; Mono = 0; break;}
+ 354              		.loc 1 204 0 is_stmt 0 discriminator 1
+ 355 0182 FFF7FEFF 		bl	Update_Speeder_Integral
+ 356              	.L16:
+ 204:../Sources/ProcessorExpert.c **** 		 case 	'2':{ if (Mono) Update_Speeder_Integral(); MotorControlR += 2; Mono = 0; break;}
+ 357              		.loc 1 204 0 discriminator 2
+ 358 0186 384B     		ldr	r3, .L23+52
+ 359 0188 1B68     		ldr	r3, [r3]
+ 360 018a 9A1C     		add	r2, r3, #2
+ 361 018c 364B     		ldr	r3, .L23+52
+ 362 018e 1A60     		str	r2, [r3]
+ 363 0190 2B4B     		ldr	r3, .L23+12
+ 364 0192 0022     		mov	r2, #0
+ 365 0194 1A60     		str	r2, [r3]
+ 366 0196 4CE0     		b	.L2
+ 367              	.L6:
+ 368              	.LBE5:
+ 369              	.LBB6:
+ 205:../Sources/ProcessorExpert.c **** 		 case	'3':{ if (Mono) Update_Speeder_Integral(); MotorControlL -= 2; Mono = 0; break;}
+ 370              		.loc 1 205 0 is_stmt 1
+ 371 0198 294B     		ldr	r3, .L23+12
+ 372 019a 1B68     		ldr	r3, [r3]
+ 373 019c 002B     		cmp	r3, #0
+ 374 019e 01D0     		beq	.L17
+ 205:../Sources/ProcessorExpert.c **** 		 case	'3':{ if (Mono) Update_Speeder_Integral(); MotorControlL -= 2; Mono = 0; break;}
+ 375              		.loc 1 205 0 is_stmt 0 discriminator 1
+ 376 01a0 FFF7FEFF 		bl	Update_Speeder_Integral
+ 377              	.L17:
+ 205:../Sources/ProcessorExpert.c **** 		 case	'3':{ if (Mono) Update_Speeder_Integral(); MotorControlL -= 2; Mono = 0; break;}
+ 378              		.loc 1 205 0 discriminator 2
+ 379 01a4 314B     		ldr	r3, .L23+56
+ 380 01a6 1B68     		ldr	r3, [r3]
+ 381 01a8 9A1E     		sub	r2, r3, #2
+ 382 01aa 304B     		ldr	r3, .L23+56
+ 383 01ac 1A60     		str	r2, [r3]
+ 384 01ae 244B     		ldr	r3, .L23+12
+ 385 01b0 0022     		mov	r2, #0
+ 386 01b2 1A60     		str	r2, [r3]
+ 387 01b4 3DE0     		b	.L2
+ 388              	.L7:
+ 389              	.LBE6:
+ 390              	.LBB7:
+ 206:../Sources/ProcessorExpert.c **** 		 case 	'4':{ if (Mono) Update_Speeder_Integral(); MotorControlR -= 2; Mono = 0; break;} 
+ 391              		.loc 1 206 0 is_stmt 1
+ 392 01b6 224B     		ldr	r3, .L23+12
+ 393 01b8 1B68     		ldr	r3, [r3]
+ 394 01ba 002B     		cmp	r3, #0
+ 395 01bc 01D0     		beq	.L18
+ 206:../Sources/ProcessorExpert.c **** 		 case 	'4':{ if (Mono) Update_Speeder_Integral(); MotorControlR -= 2; Mono = 0; break;} 
+ 396              		.loc 1 206 0 is_stmt 0 discriminator 1
+ 397 01be FFF7FEFF 		bl	Update_Speeder_Integral
+ 398              	.L18:
+ 206:../Sources/ProcessorExpert.c **** 		 case 	'4':{ if (Mono) Update_Speeder_Integral(); MotorControlR -= 2; Mono = 0; break;} 
+ 399              		.loc 1 206 0 discriminator 2
+ 400 01c2 294B     		ldr	r3, .L23+52
+ 401 01c4 1B68     		ldr	r3, [r3]
+ 402 01c6 9A1E     		sub	r2, r3, #2
+ 403 01c8 274B     		ldr	r3, .L23+52
+ 404 01ca 1A60     		str	r2, [r3]
+ 405 01cc 1C4B     		ldr	r3, .L23+12
+ 406 01ce 0022     		mov	r2, #0
+ 407 01d0 1A60     		str	r2, [r3]
+ 408 01d2 2EE0     		b	.L2
+ 409              	.L8:
+ 410              	.LBE7:
+ 207:../Sources/ProcessorExpert.c **** 		 case 	'5':{ MotorControlL = MotorControlR = (MotorControlL + MotorControlR)  / 2 + 5; Mono = 1; 
+ 411              		.loc 1 207 0 is_stmt 1
+ 412 01d4 254B     		ldr	r3, .L23+56
+ 413 01d6 1A68     		ldr	r2, [r3]
+ 414 01d8 234B     		ldr	r3, .L23+52
+ 415 01da 1B68     		ldr	r3, [r3]
+ 416 01dc D318     		add	r3, r2, r3
+ 417 01de 002B     		cmp	r3, #0
+ 418 01e0 00DA     		bge	.L19
+ 419 01e2 0133     		add	r3, r3, #1
+ 420              	.L19:
+ 421 01e4 5B10     		asr	r3, r3, #1
+ 422 01e6 5A1D     		add	r2, r3, #5
+ 423 01e8 1F4B     		ldr	r3, .L23+52
+ 424 01ea 1A60     		str	r2, [r3]
+ 425 01ec 1E4B     		ldr	r3, .L23+52
+ 426 01ee 1A68     		ldr	r2, [r3]
+ 427 01f0 1E4B     		ldr	r3, .L23+56
+ 428 01f2 1A60     		str	r2, [r3]
+ 429 01f4 124B     		ldr	r3, .L23+12
+ 430 01f6 0122     		mov	r2, #1
+ 431 01f8 1A60     		str	r2, [r3]
+ 432 01fa 1AE0     		b	.L2
+ 433              	.L9:
+ 208:../Sources/ProcessorExpert.c **** 		 case 	'6':{ MotorControlL = MotorControlR = (MotorControlL + MotorControlR)  / 2 - 10; Mono = 1;
+ 434              		.loc 1 208 0
+ 435 01fc 1B4B     		ldr	r3, .L23+56
+ 436 01fe 1A68     		ldr	r2, [r3]
+ 437 0200 194B     		ldr	r3, .L23+52
+ 438 0202 1B68     		ldr	r3, [r3]
+ 439 0204 D318     		add	r3, r2, r3
+ 440 0206 002B     		cmp	r3, #0
+ 441 0208 00DA     		bge	.L20
+ 442 020a 0133     		add	r3, r3, #1
+ 443              	.L20:
+ 444 020c 5B10     		asr	r3, r3, #1
+ 445 020e 1A1C     		mov	r2, r3
+ 446 0210 0A3A     		sub	r2, r2, #10
+ 447 0212 154B     		ldr	r3, .L23+52
+ 448 0214 1A60     		str	r2, [r3]
+ 449 0216 144B     		ldr	r3, .L23+52
+ 450 0218 1A68     		ldr	r2, [r3]
+ 451 021a 144B     		ldr	r3, .L23+56
+ 452 021c 1A60     		str	r2, [r3]
+ 453 021e 084B     		ldr	r3, .L23+12
+ 454 0220 0122     		mov	r2, #1
+ 455 0222 1A60     		str	r2, [r3]
+ 456 0224 05E0     		b	.L2
+ 457              	.L12:
+ 458              	.LBB8:
+ 209:../Sources/ProcessorExpert.c **** 		 case	's':{ Stand_Up();break; }
+ 459              		.loc 1 209 0
+ 460 0226 FFF7FEFF 		bl	Stand_Up
+ 461 022a 02E0     		b	.L2
+ 462              	.L11:
+ 463              	.LBE8:
+ 464              	.LBB9:
+ 210:../Sources/ProcessorExpert.c **** 		 case	'l':{ Lay_Down();break; }
+ 465              		.loc 1 210 0
+ 466 022c FFF7FEFF 		bl	Lay_Down
+ 467 0230 C046     		mov	r8, r8
+ 468              	.L2:
+ 469              	.LBE9:
+ 470              	.LBE2:
+ 471              		.loc 1 212 0
+ 472 0232 2AE7     		b	.L22
+ 473              	.L24:
+ 474              		.align	2
+ 475              	.L23:
+ 476 0234 00000000 		.word	.LC0
+ 477 0238 2C000000 		.word	.LC2
+ 478 023c 48000000 		.word	.LC4
+ 479 0240 00000000 		.word	Mono
+ 480 0244 00000000 		.word	PE_LDD_DeviceDataList
+ 481 0248 74000000 		.word	.LC8
+ 482 024c 00000000 		.word	State
+ 483 0250 00000000 		.word	.L14
+ 484 0254 00000000 		.word	Integral_AAC_E
+ 485 0258 00000000 		.word	Temp2
+ 486 025c 00000000 		.word	SpeedL_Integral
+ 487 0260 00000000 		.word	SpeedR_Integral
+ 488 0264 78000000 		.word	.LC16
+ 489 0268 00000000 		.word	MotorControlR
+ 490 026c 00000000 		.word	MotorControlL
+ 491              		.cfi_endproc
+ 492              	.LFE0:
+ 494              		.text
+ 495              	.Letext0:
+ 496              		.file 2 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 497              		.file 3 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 ProcessorExpert.c
+                            *COM*:00000004 TU2_Ptr
+                            *COM*:00000004 TU3_Ptr
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:24     .bss.State:00000000 State
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:21     .bss.State:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:27     .rodata:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:44     .text.main:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:49     .text.main:00000000 main
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:161    .rodata.main:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchoRVJh.s:476    .text.main:00000234 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__aeabi_idiv
+PE_low_level_init
+puts
+TU3_Init
+TU2_Init
+Servo_UP
+WAIT1_Waitms
+Servo_PowerOFF
+PowerUp_Correction
+PwmLdd2_SetRatio16
+PwmLdd1_SetRatio16
+PwmLdd3_SetRatio16
+PwmLdd4_SetRatio16
+scanf
+Processing_Interact
+printf
+Update_Speeder_Integral
+Stand_Up
+Lay_Down
+Mono
+PE_LDD_DeviceDataList
+Integral_AAC_E
+Temp2
+SpeedL_Integral
+SpeedR_Integral
+MotorControlR
+MotorControlL

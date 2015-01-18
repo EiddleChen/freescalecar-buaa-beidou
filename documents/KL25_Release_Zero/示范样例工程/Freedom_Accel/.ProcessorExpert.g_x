@@ -1,0 +1,45 @@
+<CodeGenerationInfo>
+  <ToolchainSettings>
+    <option>
+      <name>PE_G_4PEx_ToolChain_Compiler_SearchUserPaths</name>
+      <values lines_count="4">
+        <Line>"${ProcessorExpertPath}/lib/Kinetis/iofiles"</Line>
+        <Line>"${ProcessorExpertPath}/lib/Kinetis/pdd/inc"</Line>
+        <Line>"${ProjDirPath}/Sources"</Line>
+        <Line>"${ProjDirPath}/Generated_Code"</Line>
+      </values>
+    </option>
+  </ToolchainSettings>
+  <GeneratedFilesList>
+    <GeneratedByPE>
+      <File Name="Documentation\ProcessorExpert.txt" FileDate="2012-10-25, 01:23:13" FileAge="1351099393203" FileType="3072" />
+      <File Name="Generated_Code\Vectors.c" FileDate="2012-10-25, 01:23:12" FileAge="1351099392843" FileType="4411" CompNumb="2" />
+      <File Name="Generated_Code\LED3.c" FileDate="2012-10-25, 01:23:12" FileAge="1351099392828" FileType="4411" CompNumb="11" />
+      <File Name="Project_Settings\Debugger\MKL25Z128.mem" FileDate="2012-08-23, 07:09:46" FileAge="1345676986000" FileType="4411" CompNumb="2" />
+      <File Name="Generated_Code\PE_LDD.h" FileDate="2012-10-25, 01:23:12" FileAge="1351099392843" FileType="4411" CompNumb="2" />
+      <File Name="Generated_Code\Cpu.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" CompNumb="2" />
+      <File Name="Project_Settings\Linker_Files\ProcessorExpert.ld" FileDate="2012-08-23, 07:09:46" FileAge="1345676986000" FileType="4" CompNumb="2" />
+      <File Name="Sources\ProcessorExpert.c" FileDate="2012-10-25, 01:23:12" FileAge="1351099392828" FileType="128" />
+      <File Name="Generated_Code\PE_LDD.c" FileDate="2012-10-25, 01:23:12" FileAge="1351099392843" FileType="4411" CompNumb="2" />
+      <File Name="Generated_Code\Cpu.c" FileDate="2012-10-25, 01:23:12" FileAge="1351099392843" FileType="4411" CompNumb="2" />
+      <File Name="Documentation\ProcessorExpert_SIGNALS.txt" FileDate="2012-10-25, 01:30:37" FileAge="1351099837234" FileType="3072" />
+      <File Name="Generated_Code\LED2.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509937" FileType="4411" CompNumb="10" />
+      <File Name="Generated_Code\I2C2.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" CompNumb="14" />
+      <File Name="Generated_Code\GPIO1.h" FileDate="2012-10-25, 01:23:12" FileAge="1351099392812" FileType="4411" CompNumb="12" />
+      <File Name="Sources\Events.h" FileDate="2012-10-25, 01:23:12" FileAge="1351099392843" FileType="16896" />
+      <File Name="Generated_Code\PE_Const.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" />
+      <File Name="Generated_Code\LED2.c" FileDate="2012-10-25, 01:08:29" FileAge="1351098509937" FileType="4411" CompNumb="10" />
+      <File Name="Generated_Code\I2C2.c" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" CompNumb="14" />
+      <File Name="Sources\Events.c" FileDate="2012-09-21, 10:17:14" FileAge="1348193834000" FileType="16896" />
+      <File Name="Generated_Code\GPIO1.c" FileDate="2012-10-25, 01:23:12" FileAge="1351099392828" FileType="4411" CompNumb="12" />
+      <File Name="Generated_Code\PE_Types.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" />
+      <File Name="Generated_Code\LED1.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509937" FileType="4411" CompNumb="9" />
+      <File Name="Generated_Code\IO_Map.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" />
+      <File Name="Documentation\ProcessorExpert_Settings.xml" FileDate="2012-10-25, 01:23:12" FileAge="1351099392875" FileType="3072" />
+      <File Name="Generated_Code\LED3.h" FileDate="2012-10-25, 01:23:12" FileAge="1351099392828" FileType="4411" CompNumb="11" />
+      <File Name="Generated_Code\LED1.c" FileDate="2012-10-25, 01:08:29" FileAge="1351098509937" FileType="4411" CompNumb="9" />
+      <File Name="Generated_Code\PE_Error.h" FileDate="2012-10-25, 01:08:29" FileAge="1351098509921" FileType="4411" />
+    </GeneratedByPE>
+  </GeneratedFilesList>
+  <CodeGenReference>4</CodeGenReference>
+</CodeGenerationInfo>

@@ -1,0 +1,351 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Stand_Up.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	Correction_Before_Stand_Up
+  18              		.section	.bss.Correction_Before_Stand_Up,"aw",%nobits
+  19              		.align	2
+  22              	Correction_Before_Stand_Up:
+  23 0000 00000000 		.space	4
+  24              		.global	NotStand_Up
+  25              		.section	.data.NotStand_Up,"aw",%progbits
+  26              		.align	2
+  29              	NotStand_Up:
+  30 0000 01000000 		.word	1
+  31              		.section	.text.PowerUp_Correction,"ax",%progbits
+  32              		.align	2
+  33              		.global	PowerUp_Correction
+  34              		.code	16
+  35              		.thumb_func
+  37              	PowerUp_Correction:
+  38              	.LFB0:
+  39              		.file 1 "../Sources/Stand_Up.c"
+   1:../Sources/Stand_Up.c **** /*
+   2:../Sources/Stand_Up.c ****  * Stand_Up.c
+   3:../Sources/Stand_Up.c ****  *
+   4:../Sources/Stand_Up.c ****  *  Created on: May 25, 2013
+   5:../Sources/Stand_Up.c ****  *      Author: chenty
+   6:../Sources/Stand_Up.c ****  */
+   7:../Sources/Stand_Up.c **** #include "PE_LDD.h"
+   8:../Sources/Stand_Up.c **** #define Zero_AAC_Z -9300
+   9:../Sources/Stand_Up.c **** extern int	AAC_Z_Correct;
+  10:../Sources/Stand_Up.c **** extern int32_t SpeedL_Integral,SpeedR_Integral;
+  11:../Sources/Stand_Up.c **** int 		Correction_Before_Stand_Up = 0;
+  12:../Sources/Stand_Up.c **** int 		NotStand_Up = 1;
+  13:../Sources/Stand_Up.c **** 
+  14:../Sources/Stand_Up.c **** void PowerUp_Correction(){
+  40              		.loc 1 14 0
+  41              		.cfi_startproc
+  42 0000 80B5     		push	{r7, lr}
+  43              	.LCFI0:
+  44              		.cfi_def_cfa_offset 8
+  45              		.cfi_offset 7, -8
+  46              		.cfi_offset 14, -4
+  47 0002 00AF     		add	r7, sp, #0
+  48              	.LCFI1:
+  49              		.cfi_def_cfa_register 7
+  15:../Sources/Stand_Up.c **** 	Correction_Before_Stand_Up = 1;
+  50              		.loc 1 15 0
+  51 0004 064B     		ldr	r3, .L2
+  52 0006 0122     		mov	r2, #1
+  53 0008 1A60     		str	r2, [r3]
+  16:../Sources/Stand_Up.c **** 	WAIT1_Waitms(60);
+  54              		.loc 1 16 0
+  55 000a 3C20     		mov	r0, #60
+  56 000c FFF7FEFF 		bl	WAIT1_Waitms
+  17:../Sources/Stand_Up.c **** 	Correction_Before_Stand_Up = 0;
+  57              		.loc 1 17 0
+  58 0010 034B     		ldr	r3, .L2
+  59 0012 0022     		mov	r2, #0
+  60 0014 1A60     		str	r2, [r3]
+  18:../Sources/Stand_Up.c **** 	AAC_Z_Correct = Zero_AAC_Z;
+  61              		.loc 1 18 0
+  62 0016 034B     		ldr	r3, .L2+4
+  63 0018 034A     		ldr	r2, .L2+8
+  64 001a 1A60     		str	r2, [r3]
+  19:../Sources/Stand_Up.c **** }
+  65              		.loc 1 19 0
+  66 001c BD46     		mov	sp, r7
+  67              		@ sp needed for prologue
+  68 001e 80BD     		pop	{r7, pc}
+  69              	.L3:
+  70              		.align	2
+  71              	.L2:
+  72 0020 00000000 		.word	Correction_Before_Stand_Up
+  73 0024 00000000 		.word	AAC_Z_Correct
+  74 0028 ACDBFFFF 		.word	-9300
+  75              		.cfi_endproc
+  76              	.LFE0:
+  78              		.section	.text.Stand_Up,"ax",%progbits
+  79              		.align	2
+  80              		.global	Stand_Up
+  81              		.code	16
+  82              		.thumb_func
+  84              	Stand_Up:
+  85              	.LFB1:
+  20:../Sources/Stand_Up.c **** 
+  21:../Sources/Stand_Up.c **** void Stand_Up(){
+  86              		.loc 1 21 0
+  87              		.cfi_startproc
+  88 0000 80B5     		push	{r7, lr}
+  89              	.LCFI2:
+  90              		.cfi_def_cfa_offset 8
+  91              		.cfi_offset 7, -8
+  92              		.cfi_offset 14, -4
+  93 0002 00AF     		add	r7, sp, #0
+  94              	.LCFI3:
+  95              		.cfi_def_cfa_register 7
+  22:../Sources/Stand_Up.c **** 	/* Motor Reset */
+  23:../Sources/Stand_Up.c **** 	MotorRight_PTA5_SetRatio16(0);
+  96              		.loc 1 23 0
+  97 0004 164B     		ldr	r3, .L5
+  98 0006 1B69     		ldr	r3, [r3, #16]
+  99 0008 181C     		mov	r0, r3
+ 100 000a 0021     		mov	r1, #0
+ 101 000c FFF7FEFF 		bl	PwmLdd2_SetRatio16
+  24:../Sources/Stand_Up.c **** 	MotorRight_PTA4_SetRatio16(0);
+ 102              		.loc 1 24 0
+ 103 0010 134B     		ldr	r3, .L5
+ 104 0012 9B69     		ldr	r3, [r3, #24]
+ 105 0014 181C     		mov	r0, r3
+ 106 0016 0021     		mov	r1, #0
+ 107 0018 FFF7FEFF 		bl	PwmLdd1_SetRatio16
+  25:../Sources/Stand_Up.c **** 	MotorLeft_PTE30_SetRatio16(0);
+ 108              		.loc 1 25 0
+ 109 001c 104B     		ldr	r3, .L5
+ 110 001e DB68     		ldr	r3, [r3, #12]
+ 111 0020 181C     		mov	r0, r3
+ 112 0022 0021     		mov	r1, #0
+ 113 0024 FFF7FEFF 		bl	PwmLdd3_SetRatio16
+  26:../Sources/Stand_Up.c **** 	MotorLeft_PTE31_SetRatio16(0);
+ 114              		.loc 1 26 0
+ 115 0028 0D4B     		ldr	r3, .L5
+ 116 002a 5B69     		ldr	r3, [r3, #20]
+ 117 002c 181C     		mov	r0, r3
+ 118 002e 0021     		mov	r1, #0
+ 119 0030 FFF7FEFF 		bl	PwmLdd4_SetRatio16
+  27:../Sources/Stand_Up.c **** 	
+  28:../Sources/Stand_Up.c **** 	/* Power-up Correction Enable */
+  29:../Sources/Stand_Up.c **** 	Servo_PowerOFF();
+ 120              		.loc 1 29 0
+ 121 0034 FFF7FEFF 		bl	Servo_PowerOFF
+  30:../Sources/Stand_Up.c **** 	
+  31:../Sources/Stand_Up.c **** 	/* Stand-up */
+  32:../Sources/Stand_Up.c **** 	Servo_Down();
+ 122              		.loc 1 32 0
+ 123 0038 FFF7FEFF 		bl	Servo_Down
+  33:../Sources/Stand_Up.c **** 	WAIT1_Waitms(300);
+ 124              		.loc 1 33 0
+ 125 003c 9623     		mov	r3, #150
+ 126 003e 5B00     		lsl	r3, r3, #1
+ 127 0040 181C     		mov	r0, r3
+ 128 0042 FFF7FEFF 		bl	WAIT1_Waitms
+  34:../Sources/Stand_Up.c **** 	SpeedL_Integral = 0;
+ 129              		.loc 1 34 0
+ 130 0046 074B     		ldr	r3, .L5+4
+ 131 0048 0022     		mov	r2, #0
+ 132 004a 1A60     		str	r2, [r3]
+  35:../Sources/Stand_Up.c **** 	SpeedR_Integral = 0;
+ 133              		.loc 1 35 0
+ 134 004c 064B     		ldr	r3, .L5+8
+ 135 004e 0022     		mov	r2, #0
+ 136 0050 1A60     		str	r2, [r3]
+  36:../Sources/Stand_Up.c **** 	NotStand_Up = 0;
+ 137              		.loc 1 36 0
+ 138 0052 064B     		ldr	r3, .L5+12
+ 139 0054 0022     		mov	r2, #0
+ 140 0056 1A60     		str	r2, [r3]
+  37:../Sources/Stand_Up.c **** 	Servo_UP();
+ 141              		.loc 1 37 0
+ 142 0058 FFF7FEFF 		bl	Servo_UP
+  38:../Sources/Stand_Up.c **** }
+ 143              		.loc 1 38 0
+ 144 005c BD46     		mov	sp, r7
+ 145              		@ sp needed for prologue
+ 146 005e 80BD     		pop	{r7, pc}
+ 147              	.L6:
+ 148              		.align	2
+ 149              	.L5:
+ 150 0060 00000000 		.word	PE_LDD_DeviceDataList
+ 151 0064 00000000 		.word	SpeedL_Integral
+ 152 0068 00000000 		.word	SpeedR_Integral
+ 153 006c 00000000 		.word	NotStand_Up
+ 154              		.cfi_endproc
+ 155              	.LFE1:
+ 157              		.section	.text.Lay_Down,"ax",%progbits
+ 158              		.align	2
+ 159              		.global	Lay_Down
+ 160              		.code	16
+ 161              		.thumb_func
+ 163              	Lay_Down:
+ 164              	.LFB2:
+  39:../Sources/Stand_Up.c **** 
+  40:../Sources/Stand_Up.c **** void Lay_Down(){
+ 165              		.loc 1 40 0
+ 166              		.cfi_startproc
+ 167 0000 80B5     		push	{r7, lr}
+ 168              	.LCFI4:
+ 169              		.cfi_def_cfa_offset 8
+ 170              		.cfi_offset 7, -8
+ 171              		.cfi_offset 14, -4
+ 172 0002 00AF     		add	r7, sp, #0
+ 173              	.LCFI5:
+ 174              		.cfi_def_cfa_register 7
+  41:../Sources/Stand_Up.c **** 	/* Stand-up */
+  42:../Sources/Stand_Up.c **** 	Servo_Down2();
+ 175              		.loc 1 42 0
+ 176 0004 FFF7FEFF 		bl	Servo_Down2
+  43:../Sources/Stand_Up.c **** 	WAIT1_Waitms(300);
+ 177              		.loc 1 43 0
+ 178 0008 9623     		mov	r3, #150
+ 179 000a 5B00     		lsl	r3, r3, #1
+ 180 000c 181C     		mov	r0, r3
+ 181 000e FFF7FEFF 		bl	WAIT1_Waitms
+  44:../Sources/Stand_Up.c **** 	MotorRight_PTA5_SetRatio16(0x0FFF);
+ 182              		.loc 1 44 0
+ 183 0012 234B     		ldr	r3, .L8
+ 184 0014 1A69     		ldr	r2, [r3, #16]
+ 185 0016 234B     		ldr	r3, .L8+4
+ 186 0018 101C     		mov	r0, r2
+ 187 001a 191C     		mov	r1, r3
+ 188 001c FFF7FEFF 		bl	PwmLdd2_SetRatio16
+  45:../Sources/Stand_Up.c **** 	MotorLeft_PTE30_SetRatio16(0x0FFF);
+ 189              		.loc 1 45 0
+ 190 0020 1F4B     		ldr	r3, .L8
+ 191 0022 DA68     		ldr	r2, [r3, #12]
+ 192 0024 1F4B     		ldr	r3, .L8+4
+ 193 0026 101C     		mov	r0, r2
+ 194 0028 191C     		mov	r1, r3
+ 195 002a FFF7FEFF 		bl	PwmLdd3_SetRatio16
+  46:../Sources/Stand_Up.c **** 	MotorRight_PTA4_SetRatio16(0);
+ 196              		.loc 1 46 0
+ 197 002e 1C4B     		ldr	r3, .L8
+ 198 0030 9B69     		ldr	r3, [r3, #24]
+ 199 0032 181C     		mov	r0, r3
+ 200 0034 0021     		mov	r1, #0
+ 201 0036 FFF7FEFF 		bl	PwmLdd1_SetRatio16
+  47:../Sources/Stand_Up.c **** 	MotorLeft_PTE31_SetRatio16(0);	
+ 202              		.loc 1 47 0
+ 203 003a 194B     		ldr	r3, .L8
+ 204 003c 5B69     		ldr	r3, [r3, #20]
+ 205 003e 181C     		mov	r0, r3
+ 206 0040 0021     		mov	r1, #0
+ 207 0042 FFF7FEFF 		bl	PwmLdd4_SetRatio16
+  48:../Sources/Stand_Up.c **** 	SpeedL_Integral = 0;
+ 208              		.loc 1 48 0
+ 209 0046 184B     		ldr	r3, .L8+8
+ 210 0048 0022     		mov	r2, #0
+ 211 004a 1A60     		str	r2, [r3]
+  49:../Sources/Stand_Up.c **** 	SpeedR_Integral = 0;
+ 212              		.loc 1 49 0
+ 213 004c 174B     		ldr	r3, .L8+12
+ 214 004e 0022     		mov	r2, #0
+ 215 0050 1A60     		str	r2, [r3]
+  50:../Sources/Stand_Up.c **** 	NotStand_Up = 1;
+ 216              		.loc 1 50 0
+ 217 0052 174B     		ldr	r3, .L8+16
+ 218 0054 0122     		mov	r2, #1
+ 219 0056 1A60     		str	r2, [r3]
+  51:../Sources/Stand_Up.c **** 	Servo_UP2();
+ 220              		.loc 1 51 0
+ 221 0058 FFF7FEFF 		bl	Servo_UP2
+  52:../Sources/Stand_Up.c **** 	WAIT1_Waitms(300);
+ 222              		.loc 1 52 0
+ 223 005c 9623     		mov	r3, #150
+ 224 005e 5B00     		lsl	r3, r3, #1
+ 225 0060 181C     		mov	r0, r3
+ 226 0062 FFF7FEFF 		bl	WAIT1_Waitms
+  53:../Sources/Stand_Up.c **** 	Servo_PowerOFF();
+ 227              		.loc 1 53 0
+ 228 0066 FFF7FEFF 		bl	Servo_PowerOFF
+  54:../Sources/Stand_Up.c **** 	MotorRight_PTA5_SetRatio16(0);
+ 229              		.loc 1 54 0
+ 230 006a 0D4B     		ldr	r3, .L8
+ 231 006c 1B69     		ldr	r3, [r3, #16]
+ 232 006e 181C     		mov	r0, r3
+ 233 0070 0021     		mov	r1, #0
+ 234 0072 FFF7FEFF 		bl	PwmLdd2_SetRatio16
+  55:../Sources/Stand_Up.c **** 	MotorRight_PTA4_SetRatio16(0);
+ 235              		.loc 1 55 0
+ 236 0076 0A4B     		ldr	r3, .L8
+ 237 0078 9B69     		ldr	r3, [r3, #24]
+ 238 007a 181C     		mov	r0, r3
+ 239 007c 0021     		mov	r1, #0
+ 240 007e FFF7FEFF 		bl	PwmLdd1_SetRatio16
+  56:../Sources/Stand_Up.c **** 	MotorLeft_PTE30_SetRatio16(0);
+ 241              		.loc 1 56 0
+ 242 0082 074B     		ldr	r3, .L8
+ 243 0084 DB68     		ldr	r3, [r3, #12]
+ 244 0086 181C     		mov	r0, r3
+ 245 0088 0021     		mov	r1, #0
+ 246 008a FFF7FEFF 		bl	PwmLdd3_SetRatio16
+  57:../Sources/Stand_Up.c **** 	MotorLeft_PTE31_SetRatio16(0);	
+ 247              		.loc 1 57 0
+ 248 008e 044B     		ldr	r3, .L8
+ 249 0090 5B69     		ldr	r3, [r3, #20]
+ 250 0092 181C     		mov	r0, r3
+ 251 0094 0021     		mov	r1, #0
+ 252 0096 FFF7FEFF 		bl	PwmLdd4_SetRatio16
+  58:../Sources/Stand_Up.c **** }
+ 253              		.loc 1 58 0
+ 254 009a BD46     		mov	sp, r7
+ 255              		@ sp needed for prologue
+ 256 009c 80BD     		pop	{r7, pc}
+ 257              	.L9:
+ 258 009e C046     		.align	2
+ 259              	.L8:
+ 260 00a0 00000000 		.word	PE_LDD_DeviceDataList
+ 261 00a4 FF0F0000 		.word	4095
+ 262 00a8 00000000 		.word	SpeedL_Integral
+ 263 00ac 00000000 		.word	SpeedR_Integral
+ 264 00b0 00000000 		.word	NotStand_Up
+ 265              		.cfi_endproc
+ 266              	.LFE2:
+ 268              		.text
+ 269              	.Letext0:
+ 270              		.file 2 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+ 271              		.file 3 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Stand_Up.c
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:22     .bss.Correction_Before_Stand_Up:00000000 Correction_Before_Stand_Up
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:19     .bss.Correction_Before_Stand_Up:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:29     .data.NotStand_Up:00000000 NotStand_Up
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:26     .data.NotStand_Up:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:32     .text.PowerUp_Correction:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:37     .text.PowerUp_Correction:00000000 PowerUp_Correction
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:72     .text.PowerUp_Correction:00000020 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:79     .text.Stand_Up:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:84     .text.Stand_Up:00000000 Stand_Up
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:150    .text.Stand_Up:00000060 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:158    .text.Lay_Down:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:163    .text.Lay_Down:00000000 Lay_Down
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccxoSzti.s:260    .text.Lay_Down:000000a0 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+WAIT1_Waitms
+AAC_Z_Correct
+PwmLdd2_SetRatio16
+PwmLdd1_SetRatio16
+PwmLdd3_SetRatio16
+PwmLdd4_SetRatio16
+Servo_PowerOFF
+Servo_Down
+Servo_UP
+PE_LDD_DeviceDataList
+SpeedL_Integral
+SpeedR_Integral
+Servo_Down2
+Servo_UP2

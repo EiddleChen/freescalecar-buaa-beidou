@@ -1,0 +1,503 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"MMA8451.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	DataReceivedFlg
+  18              		.section	.bss.DataReceivedFlg,"aw",%nobits
+  21              	DataReceivedFlg:
+  22 0000 00       		.space	1
+  23              		.global	DataTransmittedFlg
+  24              		.section	.bss.DataTransmittedFlg,"aw",%nobits
+  27              	DataTransmittedFlg:
+  28 0000 00       		.space	1
+  29              		.global	OutData
+  30              		.section	.data.OutData,"aw",%progbits
+  31              		.align	2
+  34              	OutData:
+  35 0000 2A       		.byte	42
+  36 0001 01       		.byte	1
+  37              		.comm	InData,6,4
+  38              		.comm	Error,2,2
+  39              		.comm	MyI2CPtr,4,4
+  40              		.comm	mma845x,8,4
+  41              		.comm	mma845_tmp,2,2
+  42 0002 0000     		.section	.bss.measuring,"aw",%nobits
+  45              	measuring:
+  46 0000 00       		.space	1
+  47              		.section	.data.measuring_last,"aw",%progbits
+  50              	measuring_last:
+  51 0000 02       		.byte	2
+  52              		.section	.text.Timer_Interrupt_CB,"ax",%progbits
+  53              		.align	2
+  54              		.global	Timer_Interrupt_CB
+  55              		.code	16
+  56              		.thumb_func
+  58              	Timer_Interrupt_CB:
+  59              	.LFB0:
+  60              		.file 1 "../Sources/MMA8451.c"
+   1:../Sources/MMA8451.c **** /*
+   2:../Sources/MMA8451.c ****  * MMA8451.c
+   3:../Sources/MMA8451.c ****  *
+   4:../Sources/MMA8451.c ****  *  Created on: Mar 28, 2013
+   5:../Sources/MMA8451.c ****  *      Author: Chenty
+   6:../Sources/MMA8451.c ****  */
+   7:../Sources/MMA8451.c **** 
+   8:../Sources/MMA8451.c **** #include "PE_Types.h"
+   9:../Sources/MMA8451.c **** #include "PE_Error.h"
+  10:../Sources/MMA8451.c **** #include "PE_Const.h"
+  11:../Sources/MMA8451.c **** #include "IO_Map.h"
+  12:../Sources/MMA8451.c **** #include "stdio.h"
+  13:../Sources/MMA8451.c **** #include "MMA8451.h"
+  14:../Sources/MMA8451.c **** #include "I2C2.h"
+  15:../Sources/MMA8451.c **** 
+  16:../Sources/MMA8451.c **** #define delay 6 //us
+  17:../Sources/MMA8451.c **** 
+  18:../Sources/MMA8451.c **** volatile bool DataReceivedFlg = FALSE;
+  19:../Sources/MMA8451.c **** volatile bool DataTransmittedFlg = FALSE;
+  20:../Sources/MMA8451.c **** 
+  21:../Sources/MMA8451.c **** uint8_t OutData[2] = {0x2A, 0x01};                /* Initialization of output data buffer */
+  22:../Sources/MMA8451.c **** uint8_t InData[MMA845X_BUFFER_SIZE];
+  23:../Sources/MMA8451.c **** LDD_TError Error;
+  24:../Sources/MMA8451.c **** 
+  25:../Sources/MMA8451.c **** LDD_TDeviceData *MyI2CPtr;
+  26:../Sources/MMA8451.c **** 
+  27:../Sources/MMA8451.c **** 
+  28:../Sources/MMA8451.c **** MMA845X mma845x;
+  29:../Sources/MMA8451.c **** int16_t mma845_tmp;
+  30:../Sources/MMA8451.c **** 
+  31:../Sources/MMA8451.c **** volatile bool DataTransmittedFlg;
+  32:../Sources/MMA8451.c **** volatile bool DataReceivedFlg;
+  33:../Sources/MMA8451.c **** 
+  34:../Sources/MMA8451.c **** static MMA845_STATE measuring = IDLE;
+  35:../Sources/MMA8451.c **** static MMA845_STATE measuring_last = RECEIVE;
+  36:../Sources/MMA8451.c **** 
+  37:../Sources/MMA8451.c **** 
+  38:../Sources/MMA8451.c **** /**************************************************************************//*!
+  39:../Sources/MMA8451.c **** * @brief    Timer Interrupt CallBack function
+  40:../Sources/MMA8451.c **** ******************************************************************************/
+  41:../Sources/MMA8451.c **** void Timer_Interrupt_CB(void)
+  42:../Sources/MMA8451.c **** {
+  61              		.loc 1 42 0
+  62              		.cfi_startproc
+  63 0000 80B5     		push	{r7, lr}
+  64              	.LCFI0:
+  65              		.cfi_def_cfa_offset 8
+  66              		.cfi_offset 7, -8
+  67              		.cfi_offset 14, -4
+  68 0002 00AF     		add	r7, sp, #0
+  69              	.LCFI1:
+  70              		.cfi_def_cfa_register 7
+  43:../Sources/MMA8451.c ****   if(measuring == IDLE)
+  71              		.loc 1 43 0
+  72 0004 0A4B     		ldr	r3, .L4
+  73 0006 1B78     		ldrb	r3, [r3]
+  74 0008 002B     		cmp	r3, #0
+  75 000a 0ED1     		bne	.L1
+  44:../Sources/MMA8451.c ****   {
+  45:../Sources/MMA8451.c ****     if(measuring_last == TRANSMIT)
+  76              		.loc 1 45 0
+  77 000c 094B     		ldr	r3, .L4+4
+  78 000e 1B78     		ldrb	r3, [r3]
+  79 0010 012B     		cmp	r3, #1
+  80 0012 03D1     		bne	.L3
+  46:../Sources/MMA8451.c ****       measuring = RECEIVE; 
+  81              		.loc 1 46 0
+  82 0014 064B     		ldr	r3, .L4
+  83 0016 0222     		mov	r2, #2
+  84 0018 1A70     		strb	r2, [r3]
+  85 001a 06E0     		b	.L1
+  86              	.L3:
+  47:../Sources/MMA8451.c ****     else if(measuring_last == RECEIVE)
+  87              		.loc 1 47 0
+  88 001c 054B     		ldr	r3, .L4+4
+  89 001e 1B78     		ldrb	r3, [r3]
+  90 0020 022B     		cmp	r3, #2
+  91 0022 02D1     		bne	.L1
+  48:../Sources/MMA8451.c ****       measuring = TRANSMIT;
+  92              		.loc 1 48 0
+  93 0024 024B     		ldr	r3, .L4
+  94 0026 0122     		mov	r2, #1
+  95 0028 1A70     		strb	r2, [r3]
+  96              	.L1:
+  49:../Sources/MMA8451.c ****   }
+  50:../Sources/MMA8451.c **** }
+  97              		.loc 1 50 0
+  98 002a BD46     		mov	sp, r7
+  99              		@ sp needed for prologue
+ 100 002c 80BD     		pop	{r7, pc}
+ 101              	.L5:
+ 102 002e C046     		.align	2
+ 103              	.L4:
+ 104 0030 00000000 		.word	measuring
+ 105 0034 00000000 		.word	measuring_last
+ 106              		.cfi_endproc
+ 107              	.LFE0:
+ 109              		.section	.text.MMA845X_Init,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	MMA845X_Init
+ 112              		.code	16
+ 113              		.thumb_func
+ 115              	MMA845X_Init:
+ 116              	.LFB1:
+  51:../Sources/MMA8451.c **** 
+  52:../Sources/MMA8451.c **** /**************************************************************************//*!
+  53:../Sources/MMA8451.c **** * @brief    The IIC Initialization for MMA845x
+  54:../Sources/MMA8451.c **** ******************************************************************************/
+  55:../Sources/MMA8451.c **** void MMA845X_Init(void)
+  56:../Sources/MMA8451.c **** {
+ 117              		.loc 1 56 0
+ 118              		.cfi_startproc
+ 119 0000 80B5     		push	{r7, lr}
+ 120              	.LCFI2:
+ 121              		.cfi_def_cfa_offset 8
+ 122              		.cfi_offset 7, -8
+ 123              		.cfi_offset 14, -4
+ 124 0002 00AF     		add	r7, sp, #0
+ 125              	.LCFI3:
+ 126              		.cfi_def_cfa_register 7
+  57:../Sources/MMA8451.c **** 	// IIC initialization
+  58:../Sources/MMA8451.c **** 	MyI2CPtr = I2C2_Init(NULL);
+ 127              		.loc 1 58 0
+ 128 0004 0020     		mov	r0, #0
+ 129 0006 FFF7FEFF 		bl	I2C2_Init
+ 130 000a 021C     		mov	r2, r0
+ 131 000c 1C4B     		ldr	r3, .L7
+ 132 000e 1A60     		str	r2, [r3]
+  59:../Sources/MMA8451.c **** 	 
+  60:../Sources/MMA8451.c **** 
+  61:../Sources/MMA8451.c **** 	/* Configure I2C BUS device(e.g. RTC) - Write Operation */
+  62:../Sources/MMA8451.c **** 	Error = I2C2_MasterSendBlock(MyI2CPtr, &OutData, 2, LDD_I2C_NO_SEND_STOP); /* Send OutData (4 byte
+ 133              		.loc 1 62 0
+ 134 0010 1B4B     		ldr	r3, .L7
+ 135 0012 1A68     		ldr	r2, [r3]
+ 136 0014 1B4B     		ldr	r3, .L7+4
+ 137 0016 101C     		mov	r0, r2
+ 138 0018 191C     		mov	r1, r3
+ 139 001a 0222     		mov	r2, #2
+ 140 001c 0023     		mov	r3, #0
+ 141 001e FFF7FEFF 		bl	I2C2_MasterSendBlock
+ 142 0022 031C     		mov	r3, r0
+ 143 0024 1A1C     		mov	r2, r3
+ 144 0026 184B     		ldr	r3, .L7+8
+ 145 0028 1A80     		strh	r2, [r3]
+  63:../Sources/MMA8451.c **** 	WAIT1_Waitus(delay);
+ 146              		.loc 1 63 0
+ 147 002a 9020     		mov	r0, #144
+ 148 002c FFF7FEFF 		bl	WAIT1_WaitCycles
+  64:../Sources/MMA8451.c **** 	//while (!DataTransmittedFlg); 
+  65:../Sources/MMA8451.c **** 	DataTransmittedFlg = FALSE;
+ 149              		.loc 1 65 0
+ 150 0030 164B     		ldr	r3, .L7+12
+ 151 0032 0022     		mov	r2, #0
+ 152 0034 1A70     		strb	r2, [r3]
+  66:../Sources/MMA8451.c ****   
+  67:../Sources/MMA8451.c **** 	OutData[0] = MMA845X_DEVICE_ID; 
+ 153              		.loc 1 67 0
+ 154 0036 134B     		ldr	r3, .L7+4
+ 155 0038 1D22     		mov	r2, #29
+ 156 003a 1A70     		strb	r2, [r3]
+  68:../Sources/MMA8451.c **** 
+  69:../Sources/MMA8451.c **** 	Error = I2C2_MasterSendBlock(MyI2CPtr, &OutData, 1, LDD_I2C_NO_SEND_STOP);
+ 157              		.loc 1 69 0
+ 158 003c 104B     		ldr	r3, .L7
+ 159 003e 1A68     		ldr	r2, [r3]
+ 160 0040 104B     		ldr	r3, .L7+4
+ 161 0042 101C     		mov	r0, r2
+ 162 0044 191C     		mov	r1, r3
+ 163 0046 0122     		mov	r2, #1
+ 164 0048 0023     		mov	r3, #0
+ 165 004a FFF7FEFF 		bl	I2C2_MasterSendBlock
+ 166 004e 031C     		mov	r3, r0
+ 167 0050 1A1C     		mov	r2, r3
+ 168 0052 0D4B     		ldr	r3, .L7+8
+ 169 0054 1A80     		strh	r2, [r3]
+  70:../Sources/MMA8451.c **** 	WAIT1_Waitus(delay);
+ 170              		.loc 1 70 0
+ 171 0056 9020     		mov	r0, #144
+ 172 0058 FFF7FEFF 		bl	WAIT1_WaitCycles
+  71:../Sources/MMA8451.c **** 	//while (!DataTransmittedFlg);  
+  72:../Sources/MMA8451.c **** 	//DataTransmittedFlg = FALSE;
+  73:../Sources/MMA8451.c ****   
+  74:../Sources/MMA8451.c **** 	Error = I2C2_MasterReceiveBlock(MyI2CPtr, &mma845x.id, 1, LDD_I2C_SEND_STOP);
+ 173              		.loc 1 74 0
+ 174 005c 084B     		ldr	r3, .L7
+ 175 005e 1A68     		ldr	r2, [r3]
+ 176 0060 0B4B     		ldr	r3, .L7+16
+ 177 0062 101C     		mov	r0, r2
+ 178 0064 191C     		mov	r1, r3
+ 179 0066 0122     		mov	r2, #1
+ 180 0068 0123     		mov	r3, #1
+ 181 006a FFF7FEFF 		bl	I2C2_MasterReceiveBlock
+ 182 006e 031C     		mov	r3, r0
+ 183 0070 1A1C     		mov	r2, r3
+ 184 0072 054B     		ldr	r3, .L7+8
+ 185 0074 1A80     		strh	r2, [r3]
+  75:../Sources/MMA8451.c **** 	WAIT1_Waitus(delay);
+ 186              		.loc 1 75 0
+ 187 0076 9020     		mov	r0, #144
+ 188 0078 FFF7FEFF 		bl	WAIT1_WaitCycles
+  76:../Sources/MMA8451.c **** 	//while (!DataReceivedFlg);
+  77:../Sources/MMA8451.c **** 	//DataReceivedFlg = FALSE;
+  78:../Sources/MMA8451.c **** }
+ 189              		.loc 1 78 0
+ 190 007c BD46     		mov	sp, r7
+ 191              		@ sp needed for prologue
+ 192 007e 80BD     		pop	{r7, pc}
+ 193              	.L8:
+ 194              		.align	2
+ 195              	.L7:
+ 196 0080 00000000 		.word	MyI2CPtr
+ 197 0084 00000000 		.word	OutData
+ 198 0088 00000000 		.word	Error
+ 199 008c 00000000 		.word	DataTransmittedFlg
+ 200 0090 06000000 		.word	mma845x+6
+ 201              		.cfi_endproc
+ 202              	.LFE1:
+ 204              		.section	.text.MMA845X_Poll,"ax",%progbits
+ 205              		.align	2
+ 206              		.global	MMA845X_Poll
+ 207              		.code	16
+ 208              		.thumb_func
+ 210              	MMA845X_Poll:
+ 211              	.LFB2:
+  79:../Sources/MMA8451.c **** 
+  80:../Sources/MMA8451.c **** /**************************************************************************//*!
+  81:../Sources/MMA8451.c **** * @brief    MMA845x polling function 
+  82:../Sources/MMA8451.c **** ******************************************************************************/
+  83:../Sources/MMA8451.c **** void MMA845X_Poll(void)
+  84:../Sources/MMA8451.c **** {
+ 212              		.loc 1 84 0
+ 213              		.cfi_startproc
+ 214 0000 80B5     		push	{r7, lr}
+ 215              	.LCFI4:
+ 216              		.cfi_def_cfa_offset 8
+ 217              		.cfi_offset 7, -8
+ 218              		.cfi_offset 14, -4
+ 219 0002 00AF     		add	r7, sp, #0
+ 220              	.LCFI5:
+ 221              		.cfi_def_cfa_register 7
+  85:../Sources/MMA8451.c ****     //if(measuring == TRANSMIT)
+  86:../Sources/MMA8451.c ****     {
+  87:../Sources/MMA8451.c ****       measuring = IDLE;
+ 222              		.loc 1 87 0
+ 223 0004 374B     		ldr	r3, .L13
+ 224 0006 0022     		mov	r2, #0
+ 225 0008 1A70     		strb	r2, [r3]
+  88:../Sources/MMA8451.c ****       measuring_last = TRANSMIT;
+ 226              		.loc 1 88 0
+ 227 000a 374B     		ldr	r3, .L13+4
+ 228 000c 0122     		mov	r2, #1
+ 229 000e 1A70     		strb	r2, [r3]
+  89:../Sources/MMA8451.c ****        
+  90:../Sources/MMA8451.c ****       OutData[0] = MMA845X_CFG_VALUE;
+ 230              		.loc 1 90 0
+ 231 0010 364B     		ldr	r3, .L13+8
+ 232 0012 0122     		mov	r2, #1
+ 233 0014 1A70     		strb	r2, [r3]
+  91:../Sources/MMA8451.c ****       Error = I2C2_MasterSendBlock(MyI2CPtr, &OutData, 1, LDD_I2C_NO_SEND_STOP); /* Send OutData (4
+ 234              		.loc 1 91 0
+ 235 0016 364B     		ldr	r3, .L13+12
+ 236 0018 1A68     		ldr	r2, [r3]
+ 237 001a 344B     		ldr	r3, .L13+8
+ 238 001c 101C     		mov	r0, r2
+ 239 001e 191C     		mov	r1, r3
+ 240 0020 0122     		mov	r2, #1
+ 241 0022 0023     		mov	r3, #0
+ 242 0024 FFF7FEFF 		bl	I2C2_MasterSendBlock
+ 243 0028 031C     		mov	r3, r0
+ 244 002a 1A1C     		mov	r2, r3
+ 245 002c 314B     		ldr	r3, .L13+16
+ 246 002e 1A80     		strh	r2, [r3]
+  92:../Sources/MMA8451.c ****       WAIT1_Waitus(delay);
+ 247              		.loc 1 92 0
+ 248 0030 9020     		mov	r0, #144
+ 249 0032 FFF7FEFF 		bl	WAIT1_WaitCycles
+  93:../Sources/MMA8451.c ****       //while (!DataTransmittedFlg); 
+  94:../Sources/MMA8451.c ****       //DataTransmittedFlg = FALSE;   
+  95:../Sources/MMA8451.c ****     }
+  96:../Sources/MMA8451.c ****     //else if(measuring == RECEIVE)
+  97:../Sources/MMA8451.c ****     {
+  98:../Sources/MMA8451.c ****       measuring = IDLE;
+ 250              		.loc 1 98 0
+ 251 0036 2B4B     		ldr	r3, .L13
+ 252 0038 0022     		mov	r2, #0
+ 253 003a 1A70     		strb	r2, [r3]
+  99:../Sources/MMA8451.c ****       measuring_last = RECEIVE;
+ 254              		.loc 1 99 0
+ 255 003c 2A4B     		ldr	r3, .L13+4
+ 256 003e 0222     		mov	r2, #2
+ 257 0040 1A70     		strb	r2, [r3]
+ 100:../Sources/MMA8451.c ****       Error = I2C2_MasterReceiveBlock(MyI2CPtr, &InData, MMA845X_BUFFER_SIZE, LDD_I2C_SEND_STOP);
+ 258              		.loc 1 100 0
+ 259 0042 2B4B     		ldr	r3, .L13+12
+ 260 0044 1A68     		ldr	r2, [r3]
+ 261 0046 2C4B     		ldr	r3, .L13+20
+ 262 0048 101C     		mov	r0, r2
+ 263 004a 191C     		mov	r1, r3
+ 264 004c 0622     		mov	r2, #6
+ 265 004e 0123     		mov	r3, #1
+ 266 0050 FFF7FEFF 		bl	I2C2_MasterReceiveBlock
+ 267 0054 031C     		mov	r3, r0
+ 268 0056 1A1C     		mov	r2, r3
+ 269 0058 264B     		ldr	r3, .L13+16
+ 270 005a 1A80     		strh	r2, [r3]
+ 101:../Sources/MMA8451.c ****       WAIT1_Waitus(delay);
+ 271              		.loc 1 101 0
+ 272 005c 9020     		mov	r0, #144
+ 273 005e FFF7FEFF 		bl	WAIT1_WaitCycles
+ 102:../Sources/MMA8451.c ****       //while (!DataReceivedFlg);
+ 103:../Sources/MMA8451.c ****       //DataReceivedFlg = FALSE;  
+ 104:../Sources/MMA8451.c **** 
+ 105:../Sources/MMA8451.c ****       mma845_tmp = InData[1] | (InData[0] << 8);
+ 274              		.loc 1 105 0
+ 275 0062 254B     		ldr	r3, .L13+20
+ 276 0064 5B78     		ldrb	r3, [r3, #1]
+ 277 0066 1A1C     		mov	r2, r3
+ 278 0068 234B     		ldr	r3, .L13+20
+ 279 006a 1B78     		ldrb	r3, [r3]
+ 280 006c 1B02     		lsl	r3, r3, #8
+ 281 006e 9BB2     		uxth	r3, r3
+ 282 0070 1343     		orr	r3, r2
+ 283 0072 9AB2     		uxth	r2, r3
+ 284 0074 214B     		ldr	r3, .L13+24
+ 285 0076 1A80     		strh	r2, [r3]
+ 106:../Sources/MMA8451.c ****       mma845x.x = (mma845_tmp / MMA845X_DIVIDER);
+ 286              		.loc 1 106 0
+ 287 0078 204B     		ldr	r3, .L13+24
+ 288 007a 1B88     		ldrh	r3, [r3]
+ 289 007c 1BB2     		sxth	r3, r3
+ 290 007e 002B     		cmp	r3, #0
+ 291 0080 00DA     		bge	.L10
+ 292 0082 0333     		add	r3, r3, #3
+ 293              	.L10:
+ 294 0084 9B10     		asr	r3, r3, #2
+ 295 0086 9AB2     		uxth	r2, r3
+ 296 0088 1D4B     		ldr	r3, .L13+28
+ 297 008a 1A80     		strh	r2, [r3]
+ 107:../Sources/MMA8451.c **** 
+ 108:../Sources/MMA8451.c ****       mma845_tmp = InData[3] | (InData[2] << 8);
+ 298              		.loc 1 108 0
+ 299 008c 1A4B     		ldr	r3, .L13+20
+ 300 008e DB78     		ldrb	r3, [r3, #3]
+ 301 0090 1A1C     		mov	r2, r3
+ 302 0092 194B     		ldr	r3, .L13+20
+ 303 0094 9B78     		ldrb	r3, [r3, #2]
+ 304 0096 1B02     		lsl	r3, r3, #8
+ 305 0098 9BB2     		uxth	r3, r3
+ 306 009a 1343     		orr	r3, r2
+ 307 009c 9AB2     		uxth	r2, r3
+ 308 009e 174B     		ldr	r3, .L13+24
+ 309 00a0 1A80     		strh	r2, [r3]
+ 109:../Sources/MMA8451.c ****       mma845x.y = (mma845_tmp / MMA845X_DIVIDER);
+ 310              		.loc 1 109 0
+ 311 00a2 164B     		ldr	r3, .L13+24
+ 312 00a4 1B88     		ldrh	r3, [r3]
+ 313 00a6 1BB2     		sxth	r3, r3
+ 314 00a8 002B     		cmp	r3, #0
+ 315 00aa 00DA     		bge	.L11
+ 316 00ac 0333     		add	r3, r3, #3
+ 317              	.L11:
+ 318 00ae 9B10     		asr	r3, r3, #2
+ 319 00b0 9AB2     		uxth	r2, r3
+ 320 00b2 134B     		ldr	r3, .L13+28
+ 321 00b4 5A80     		strh	r2, [r3, #2]
+ 110:../Sources/MMA8451.c **** 
+ 111:../Sources/MMA8451.c ****       mma845_tmp = InData[5] | (InData[4] << 8);     
+ 322              		.loc 1 111 0
+ 323 00b6 104B     		ldr	r3, .L13+20
+ 324 00b8 5B79     		ldrb	r3, [r3, #5]
+ 325 00ba 1A1C     		mov	r2, r3
+ 326 00bc 0E4B     		ldr	r3, .L13+20
+ 327 00be 1B79     		ldrb	r3, [r3, #4]
+ 328 00c0 1B02     		lsl	r3, r3, #8
+ 329 00c2 9BB2     		uxth	r3, r3
+ 330 00c4 1343     		orr	r3, r2
+ 331 00c6 9AB2     		uxth	r2, r3
+ 332 00c8 0C4B     		ldr	r3, .L13+24
+ 333 00ca 1A80     		strh	r2, [r3]
+ 112:../Sources/MMA8451.c ****       mma845x.z = (mma845_tmp / MMA845X_DIVIDER);   
+ 334              		.loc 1 112 0
+ 335 00cc 0B4B     		ldr	r3, .L13+24
+ 336 00ce 1B88     		ldrh	r3, [r3]
+ 337 00d0 1BB2     		sxth	r3, r3
+ 338 00d2 002B     		cmp	r3, #0
+ 339 00d4 00DA     		bge	.L12
+ 340 00d6 0333     		add	r3, r3, #3
+ 341              	.L12:
+ 342 00d8 9B10     		asr	r3, r3, #2
+ 343 00da 9AB2     		uxth	r2, r3
+ 344 00dc 084B     		ldr	r3, .L13+28
+ 345 00de 9A80     		strh	r2, [r3, #4]
+ 113:../Sources/MMA8451.c ****       
+ 114:../Sources/MMA8451.c ****       //printf("x-axis %d \ny-axis %d \nz-axis %d \n", mma845x.x, mma845x.y, mma845x.z);
+ 115:../Sources/MMA8451.c ****       //printf("\n");
+ 116:../Sources/MMA8451.c ****     }
+ 117:../Sources/MMA8451.c ****   //  return mma845x;
+ 118:../Sources/MMA8451.c **** }
+ 346              		.loc 1 118 0
+ 347 00e0 BD46     		mov	sp, r7
+ 348              		@ sp needed for prologue
+ 349 00e2 80BD     		pop	{r7, pc}
+ 350              	.L14:
+ 351              		.align	2
+ 352              	.L13:
+ 353 00e4 00000000 		.word	measuring
+ 354 00e8 00000000 		.word	measuring_last
+ 355 00ec 00000000 		.word	OutData
+ 356 00f0 00000000 		.word	MyI2CPtr
+ 357 00f4 00000000 		.word	Error
+ 358 00f8 00000000 		.word	InData
+ 359 00fc 00000000 		.word	mma845_tmp
+ 360 0100 00000000 		.word	mma845x
+ 361              		.cfi_endproc
+ 362              	.LFE2:
+ 364              		.text
+ 365              	.Letext0:
+ 366              		.file 2 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 367              		.file 3 "C:/workspace/USBDM/Generated_Code/PE_Types.h"
+ 368              		.file 4 "../Sources/MMA8451.h"
+ 369              		.file 5 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 MMA8451.c
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:21     .bss.DataReceivedFlg:00000000 DataReceivedFlg
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:22     .bss.DataReceivedFlg:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:27     .bss.DataTransmittedFlg:00000000 DataTransmittedFlg
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:28     .bss.DataTransmittedFlg:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:34     .data.OutData:00000000 OutData
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:31     .data.OutData:00000000 $d
+                            *COM*:00000006 InData
+                            *COM*:00000002 Error
+                            *COM*:00000004 MyI2CPtr
+                            *COM*:00000008 mma845x
+                            *COM*:00000002 mma845_tmp
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:45     .bss.measuring:00000000 measuring
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:46     .bss.measuring:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:50     .data.measuring_last:00000000 measuring_last
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:53     .text.Timer_Interrupt_CB:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:58     .text.Timer_Interrupt_CB:00000000 Timer_Interrupt_CB
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:104    .text.Timer_Interrupt_CB:00000030 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:110    .text.MMA845X_Init:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:115    .text.MMA845X_Init:00000000 MMA845X_Init
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:196    .text.MMA845X_Init:00000080 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:205    .text.MMA845X_Poll:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:210    .text.MMA845X_Poll:00000000 MMA845X_Poll
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cctXnm4R.s:353    .text.MMA845X_Poll:000000e4 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+I2C2_Init
+I2C2_MasterSendBlock
+WAIT1_WaitCycles
+I2C2_MasterReceiveBlock

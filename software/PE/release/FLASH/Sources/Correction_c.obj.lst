@@ -1,0 +1,312 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Correction.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	AR2_Correct
+  18              		.section	.bss.AR2_Correct,"aw",%nobits
+  19              		.align	2
+  22              	AR2_Correct:
+  23 0000 00000000 		.space	4
+  24              		.global	AAC_Z_Correct
+  25              		.section	.bss.AAC_Z_Correct,"aw",%nobits
+  26              		.align	2
+  29              	AAC_Z_Correct:
+  30 0000 00000000 		.space	4
+  31              		.global	AR2_Correct_Temp
+  32              		.section	.bss.AR2_Correct_Temp,"aw",%nobits
+  33              		.align	3
+  36              	AR2_Correct_Temp:
+  37 0000 00000000 		.space	8
+  37      00000000 
+  38              		.global	AAC_Z_Correct_Temp
+  39              		.section	.bss.AAC_Z_Correct_Temp,"aw",%nobits
+  40              		.align	3
+  43              	AAC_Z_Correct_Temp:
+  44 0000 00000000 		.space	8
+  44      00000000 
+  45              		.global	Correct_Times
+  46              		.section	.bss.Correct_Times,"aw",%nobits
+  47              		.align	2
+  50              	Correct_Times:
+  51 0000 00000000 		.space	4
+  52              		.section	.text.Correction_Start,"ax",%progbits
+  53              		.align	2
+  54              		.global	Correction_Start
+  55              		.code	16
+  56              		.thumb_func
+  58              	Correction_Start:
+  59              	.LFB0:
+  60              		.file 1 "../Sources/Correction.c"
+   1:../Sources/Correction.c **** /*
+   2:../Sources/Correction.c ****  * Correction.c
+   3:../Sources/Correction.c ****  *
+   4:../Sources/Correction.c ****  *  Created on: May 25, 2013
+   5:../Sources/Correction.c ****  *      Author: chenty
+   6:../Sources/Correction.c ****  */
+   7:../Sources/Correction.c **** #include "PE_LDD.h"
+   8:../Sources/Correction.c **** #include "CCD.h"
+   9:../Sources/Correction.c **** 
+  10:../Sources/Correction.c **** int		AR2_Correct = 0;
+  11:../Sources/Correction.c **** int		AAC_Z_Correct = 0;
+  12:../Sources/Correction.c **** int64_t	AR2_Correct_Temp = 0;
+  13:../Sources/Correction.c **** int64_t	AAC_Z_Correct_Temp = 0;
+  14:../Sources/Correction.c **** int		Correct_Times = 0; 
+  15:../Sources/Correction.c **** extern int32_t Temp1,Temp2;
+  16:../Sources/Correction.c **** extern int32_t Integral_AAC_E;
+  17:../Sources/Correction.c **** extern int32_t SpeedL_Integral,SpeedR_Integral;
+  18:../Sources/Correction.c **** 
+  19:../Sources/Correction.c **** void Correction_Start(){
+  61              		.loc 1 19 0
+  62              		.cfi_startproc
+  63 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  64              	.LCFI0:
+  65              		.cfi_def_cfa_offset 20
+  66              		.cfi_offset 4, -20
+  67              		.cfi_offset 5, -16
+  68              		.cfi_offset 6, -12
+  69              		.cfi_offset 7, -8
+  70              		.cfi_offset 14, -4
+  71 0002 00AF     		add	r7, sp, #0
+  72              	.LCFI1:
+  73              		.cfi_def_cfa_register 7
+  20:../Sources/Correction.c **** 	Correct_Times++;
+  74              		.loc 1 20 0
+  75 0004 104B     		ldr	r3, .L2
+  76 0006 1B68     		ldr	r3, [r3]
+  77 0008 581C     		add	r0, r3, #1
+  78 000a 0F4B     		ldr	r3, .L2
+  79 000c 1860     		str	r0, [r3]
+  21:../Sources/Correction.c **** 	AR2_Correct_Temp += Temp1;
+  80              		.loc 1 21 0
+  81 000e 0F4B     		ldr	r3, .L2+4
+  82 0010 1B68     		ldr	r3, [r3]
+  83 0012 1D1C     		mov	r5, r3
+  84 0014 DB17     		asr	r3, r3, #31
+  85 0016 1E1C     		mov	r6, r3
+  86 0018 0D4B     		ldr	r3, .L2+8
+  87 001a 5C68     		ldr	r4, [r3, #4]
+  88 001c 1B68     		ldr	r3, [r3]
+  89 001e 5B19     		add	r3, r3, r5
+  90 0020 7441     		adc	r4, r4, r6
+  91 0022 0B48     		ldr	r0, .L2+8
+  92 0024 0360     		str	r3, [r0]
+  93 0026 4460     		str	r4, [r0, #4]
+  22:../Sources/Correction.c **** 	AAC_Z_Correct_Temp += Temp2;
+  94              		.loc 1 22 0
+  95 0028 0A4B     		ldr	r3, .L2+12
+  96 002a 1B68     		ldr	r3, [r3]
+  97 002c 191C     		mov	r1, r3
+  98 002e DB17     		asr	r3, r3, #31
+  99 0030 1A1C     		mov	r2, r3
+ 100 0032 094B     		ldr	r3, .L2+16
+ 101 0034 5C68     		ldr	r4, [r3, #4]
+ 102 0036 1B68     		ldr	r3, [r3]
+ 103 0038 5B18     		add	r3, r3, r1
+ 104 003a 5441     		adc	r4, r4, r2
+ 105 003c 064A     		ldr	r2, .L2+16
+ 106 003e 1360     		str	r3, [r2]
+ 107 0040 5460     		str	r4, [r2, #4]
+  23:../Sources/Correction.c **** }
+ 108              		.loc 1 23 0
+ 109 0042 BD46     		mov	sp, r7
+ 110              		@ sp needed for prologue
+ 111 0044 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 112              	.L3:
+ 113 0046 C046     		.align	2
+ 114              	.L2:
+ 115 0048 00000000 		.word	Correct_Times
+ 116 004c 00000000 		.word	Temp1
+ 117 0050 00000000 		.word	AR2_Correct_Temp
+ 118 0054 00000000 		.word	Temp2
+ 119 0058 00000000 		.word	AAC_Z_Correct_Temp
+ 120              		.cfi_endproc
+ 121              	.LFE0:
+ 123              		.global	__aeabi_ldivmod
+ 124              		.section	.text.Correction_End,"ax",%progbits
+ 125              		.align	2
+ 126              		.global	Correction_End
+ 127              		.code	16
+ 128              		.thumb_func
+ 130              	Correction_End:
+ 131              	.LFB1:
+  24:../Sources/Correction.c **** 
+  25:../Sources/Correction.c **** void Correction_End(){
+ 132              		.loc 1 25 0
+ 133              		.cfi_startproc
+ 134 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 135              	.LCFI2:
+ 136              		.cfi_def_cfa_offset 20
+ 137              		.cfi_offset 4, -20
+ 138              		.cfi_offset 5, -16
+ 139              		.cfi_offset 6, -12
+ 140              		.cfi_offset 7, -8
+ 141              		.cfi_offset 14, -4
+ 142 0002 4746     		mov	r7, r8
+ 143 0004 80B4     		push	{r7}
+ 144              	.LCFI3:
+ 145              		.cfi_def_cfa_offset 24
+ 146              		.cfi_offset 8, -24
+ 147 0006 00AF     		add	r7, sp, #0
+ 148              	.LCFI4:
+ 149              		.cfi_def_cfa_register 7
+  26:../Sources/Correction.c **** 	if (AR2_Correct_Temp){
+ 150              		.loc 1 26 0
+ 151 0008 2D49     		ldr	r1, .L7+8
+ 152 000a 0868     		ldr	r0, [r1]
+ 153 000c 4968     		ldr	r1, [r1, #4]
+ 154 000e 061C     		mov	r6, r0
+ 155 0010 0E43     		orr	r6, r1
+ 156 0012 4AD0     		beq	.L4
+  27:../Sources/Correction.c **** 		AR2_Correct -= AR2_Correct_Temp / Correct_Times;
+ 157              		.loc 1 27 0
+ 158 0014 2B49     		ldr	r1, .L7+12
+ 159 0016 0968     		ldr	r1, [r1]
+ 160 0018 8846     		mov	r8, r1
+ 161 001a 2949     		ldr	r1, .L7+8
+ 162 001c 0868     		ldr	r0, [r1]
+ 163 001e 4968     		ldr	r1, [r1, #4]
+ 164 0020 294E     		ldr	r6, .L7+16
+ 165 0022 3668     		ldr	r6, [r6]
+ 166 0024 321C     		mov	r2, r6
+ 167 0026 F617     		asr	r6, r6, #31
+ 168 0028 331C     		mov	r3, r6
+ 169 002a FFF7FEFF 		bl	__aeabi_ldivmod
+ 170 002e 021C     		mov	r2, r0
+ 171 0030 0B1C     		mov	r3, r1
+ 172 0032 131C     		mov	r3, r2
+ 173 0034 4246     		mov	r2, r8
+ 174 0036 D31A     		sub	r3, r2, r3
+ 175 0038 1A1C     		mov	r2, r3
+ 176 003a 224B     		ldr	r3, .L7+12
+ 177 003c 1A60     		str	r2, [r3]
+  28:../Sources/Correction.c **** 		AAC_Z_Correct -= AAC_Z_Correct_Temp / Correct_Times / AAC_div_AR2 ;
+ 178              		.loc 1 28 0
+ 179 003e 234B     		ldr	r3, .L7+20
+ 180 0040 1B68     		ldr	r3, [r3]
+ 181 0042 1E1C     		mov	r6, r3
+ 182 0044 224B     		ldr	r3, .L7+24
+ 183 0046 1A68     		ldr	r2, [r3]
+ 184 0048 5B68     		ldr	r3, [r3, #4]
+ 185 004a 1F49     		ldr	r1, .L7+16
+ 186 004c 0968     		ldr	r1, [r1]
+ 187 004e 0C1C     		mov	r4, r1
+ 188 0050 C917     		asr	r1, r1, #31
+ 189 0052 0D1C     		mov	r5, r1
+ 190 0054 101C     		mov	r0, r2
+ 191 0056 191C     		mov	r1, r3
+ 192 0058 221C     		mov	r2, r4
+ 193 005a 2B1C     		mov	r3, r5
+ 194 005c FFF7FEFF 		bl	__aeabi_ldivmod
+ 195 0060 031C     		mov	r3, r0
+ 196 0062 0C1C     		mov	r4, r1
+ 197 0064 181C     		mov	r0, r3
+ 198 0066 211C     		mov	r1, r4
+ 199 0068 144B     		ldr	r3, .L7+4
+ 200 006a 134A     		ldr	r2, .L7
+ 201 006c FFF7FEFF 		bl	__aeabi_ldivmod
+ 202 0070 031C     		mov	r3, r0
+ 203 0072 0C1C     		mov	r4, r1
+ 204 0074 F31A     		sub	r3, r6, r3
+ 205 0076 1A1C     		mov	r2, r3
+ 206 0078 144B     		ldr	r3, .L7+20
+ 207 007a 1A60     		str	r2, [r3]
+  29:../Sources/Correction.c **** 		AR2_Correct_Temp = AAC_Z_Correct_Temp = 0;
+ 208              		.loc 1 29 0
+ 209 007c 144A     		ldr	r2, .L7+24
+ 210 007e 0023     		mov	r3, #0
+ 211 0080 0024     		mov	r4, #0
+ 212 0082 1360     		str	r3, [r2]
+ 213 0084 5460     		str	r4, [r2, #4]
+ 214 0086 124B     		ldr	r3, .L7+24
+ 215 0088 5C68     		ldr	r4, [r3, #4]
+ 216 008a 1B68     		ldr	r3, [r3]
+ 217 008c 0C4A     		ldr	r2, .L7+8
+ 218 008e 1360     		str	r3, [r2]
+ 219 0090 5460     		str	r4, [r2, #4]
+  30:../Sources/Correction.c **** 		Correct_Times = 0;
+ 220              		.loc 1 30 0
+ 221 0092 0D4B     		ldr	r3, .L7+16
+ 222 0094 0022     		mov	r2, #0
+ 223 0096 1A60     		str	r2, [r3]
+  31:../Sources/Correction.c **** 		Integral_AAC_E = 0;
+ 224              		.loc 1 31 0
+ 225 0098 0E4B     		ldr	r3, .L7+28
+ 226 009a 0022     		mov	r2, #0
+ 227 009c 1A60     		str	r2, [r3]
+  32:../Sources/Correction.c **** 		SpeedL_Integral = 0;
+ 228              		.loc 1 32 0
+ 229 009e 0E4B     		ldr	r3, .L7+32
+ 230 00a0 0022     		mov	r2, #0
+ 231 00a2 1A60     		str	r2, [r3]
+  33:../Sources/Correction.c **** 		SpeedR_Integral = 0;
+ 232              		.loc 1 33 0
+ 233 00a4 0D4B     		ldr	r3, .L7+36
+ 234 00a6 0022     		mov	r2, #0
+ 235 00a8 1A60     		str	r2, [r3]
+ 236              	.L4:
+  34:../Sources/Correction.c **** 	}
+  35:../Sources/Correction.c **** }
+ 237              		.loc 1 35 0
+ 238 00aa BD46     		mov	sp, r7
+ 239              		@ sp needed for prologue
+ 240 00ac 04BC     		pop	{r2}
+ 241 00ae 9046     		mov	r8, r2
+ 242 00b0 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 243              	.L8:
+ 244 00b2 C046C046 		.align	3
+ 244      C046
+ 245              	.L7:
+ 246 00b8 D80E0000 		.word	3800
+ 247 00bc 00000000 		.word	0
+ 248 00c0 00000000 		.word	AR2_Correct_Temp
+ 249 00c4 00000000 		.word	AR2_Correct
+ 250 00c8 00000000 		.word	Correct_Times
+ 251 00cc 00000000 		.word	AAC_Z_Correct
+ 252 00d0 00000000 		.word	AAC_Z_Correct_Temp
+ 253 00d4 00000000 		.word	Integral_AAC_E
+ 254 00d8 00000000 		.word	SpeedL_Integral
+ 255 00dc 00000000 		.word	SpeedR_Integral
+ 256              		.cfi_endproc
+ 257              	.LFE1:
+ 259              		.text
+ 260              	.Letext0:
+ 261              		.file 2 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Correction.c
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:22     .bss.AR2_Correct:00000000 AR2_Correct
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:19     .bss.AR2_Correct:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:29     .bss.AAC_Z_Correct:00000000 AAC_Z_Correct
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:26     .bss.AAC_Z_Correct:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:36     .bss.AR2_Correct_Temp:00000000 AR2_Correct_Temp
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:33     .bss.AR2_Correct_Temp:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:43     .bss.AAC_Z_Correct_Temp:00000000 AAC_Z_Correct_Temp
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:40     .bss.AAC_Z_Correct_Temp:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:50     .bss.Correct_Times:00000000 Correct_Times
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:47     .bss.Correct_Times:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:53     .text.Correction_Start:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:58     .text.Correction_Start:00000000 Correction_Start
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:115    .text.Correction_Start:00000048 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:125    .text.Correction_End:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:130    .text.Correction_End:00000000 Correction_End
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc5Wo78e.s:246    .text.Correction_End:000000b8 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+Temp1
+Temp2
+__aeabi_ldivmod
+Integral_AAC_E
+SpeedL_Integral
+SpeedR_Integral

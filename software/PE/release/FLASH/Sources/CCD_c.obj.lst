@@ -1,0 +1,344 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"CCD.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	Pixels,512,4
+  18              		.global	Counter
+  19              		.section	.data.Counter,"aw",%progbits
+  20              		.align	1
+  23              	Counter:
+  24 0000 8000     		.short	128
+  25              		.comm	Pixels_Diff,512,4
+  26              		.global	MaxTrackL
+  27              		.section	.bss.MaxTrackL,"aw",%nobits
+  28              		.align	1
+  31              	MaxTrackL:
+  32 0000 0000     		.space	2
+  33              		.global	MaxTrackR
+  34              		.section	.bss.MaxTrackR,"aw",%nobits
+  35              		.align	1
+  38              	MaxTrackR:
+  39 0000 0000     		.space	2
+  40              		.global	Last_TrackL
+  41              		.section	.data.Last_TrackL,"aw",%progbits
+  42              		.align	2
+  45              	Last_TrackL:
+  46 0000 7F000000 		.word	127
+  47              		.global	Last_TrackR
+  48              		.section	.bss.Last_TrackR,"aw",%nobits
+  49              		.align	2
+  52              	Last_TrackR:
+  53 0000 00000000 		.space	4
+  54              		.global	TrackL
+  55              		.section	.data.TrackL,"aw",%progbits
+  56              		.align	2
+  59              	TrackL:
+  60 0000 7F000000 		.word	127
+  61              		.global	TrackR
+  62              		.section	.bss.TrackR,"aw",%nobits
+  63              		.align	2
+  66              	TrackR:
+  67 0000 00000000 		.space	4
+  68              		.global	TrackL_Diff
+  69              		.section	.bss.TrackL_Diff,"aw",%nobits
+  70              		.align	2
+  73              	TrackL_Diff:
+  74 0000 00000000 		.space	4
+  75              		.global	TrackR_Diff
+  76              		.section	.bss.TrackR_Diff,"aw",%nobits
+  77              		.align	2
+  80              	TrackR_Diff:
+  81 0000 00000000 		.space	4
+  82              		.comm	TrackL_Finsh,4,4
+  83              		.comm	TrackR_Finsh,4,4
+  84              		.global	CCD_SagL
+  85              		.section	.bss.CCD_SagL,"aw",%nobits
+  86              		.align	2
+  89              	CCD_SagL:
+  90 0000 00000000 		.space	4
+  91              		.global	CCD_SagR
+  92              		.section	.bss.CCD_SagR,"aw",%nobits
+  93              		.align	2
+  96              	CCD_SagR:
+  97 0000 00000000 		.space	4
+  98              		.global	CCD_SagL_Diff
+  99              		.section	.bss.CCD_SagL_Diff,"aw",%nobits
+ 100              		.align	2
+ 103              	CCD_SagL_Diff:
+ 104 0000 00000000 		.space	4
+ 105              		.global	CCD_SagR_Diff
+ 106              		.section	.bss.CCD_SagR_Diff,"aw",%nobits
+ 107              		.align	2
+ 110              	CCD_SagR_Diff:
+ 111 0000 00000000 		.space	4
+ 112              		.section	.text.CCD_Init,"ax",%progbits
+ 113              		.align	2
+ 114              		.global	CCD_Init
+ 115              		.code	16
+ 116              		.thumb_func
+ 118              	CCD_Init:
+ 119              	.LFB0:
+ 120              		.file 1 "../Sources/CCD.c"
+   1:../Sources/CCD.c **** /*
+   2:../Sources/CCD.c ****  * CCD.c
+   3:../Sources/CCD.c ****  *
+   4:../Sources/CCD.c ****  *  Created on: 2013-3-22
+   5:../Sources/CCD.c ****  *      Author: chenty
+   6:../Sources/CCD.c ****  */
+   7:../Sources/CCD.c **** 
+   8:../Sources/CCD.c **** 
+   9:../Sources/CCD.c **** #include "CCD.h"
+  10:../Sources/CCD.c **** #include "PE_Types.h"
+  11:../Sources/CCD.c **** #include "CCD_SI.h"
+  12:../Sources/CCD.c **** #include "CCD_CLK.h"
+  13:../Sources/CCD.c **** 
+  14:../Sources/CCD.c **** /* Global value for CCD */
+  15:../Sources/CCD.c **** uint16_t Pixels[CCD_Pixels_Width][2];
+  16:../Sources/CCD.c **** uint16_t Counter = CCD_Pixels_Width;
+  17:../Sources/CCD.c **** uint16_t Pixels_Diff[CCD_Pixels_Width][2];
+  18:../Sources/CCD.c **** uint16_t MaxTrackL = 0;
+  19:../Sources/CCD.c **** uint16_t MaxTrackR = 0;
+  20:../Sources/CCD.c **** int		 Last_TrackL = 127;
+  21:../Sources/CCD.c **** int		 Last_TrackR = 0;
+  22:../Sources/CCD.c **** int		 TrackL = 127;
+  23:../Sources/CCD.c **** int		 TrackR = 0;
+  24:../Sources/CCD.c **** int		 TrackL_Diff = 0;
+  25:../Sources/CCD.c **** int		 TrackR_Diff = 0;
+  26:../Sources/CCD.c **** int 	 TrackL_Finsh,TrackR_Finsh;
+  27:../Sources/CCD.c **** uint32_t	CCD_SagL = 0;
+  28:../Sources/CCD.c **** uint32_t 	CCD_SagR = 0;
+  29:../Sources/CCD.c **** uint32_t	CCD_SagL_Diff = 0;
+  30:../Sources/CCD.c **** uint32_t 	CCD_SagR_Diff = 0;
+  31:../Sources/CCD.c **** 
+  32:../Sources/CCD.c **** 
+  33:../Sources/CCD.c **** /* Init for CCD Measure */
+  34:../Sources/CCD.c **** void CCD_Init(){
+ 121              		.loc 1 34 0
+ 122              		.cfi_startproc
+ 123 0000 80B5     		push	{r7, lr}
+ 124              	.LCFI0:
+ 125              		.cfi_def_cfa_offset 8
+ 126              		.cfi_offset 7, -8
+ 127              		.cfi_offset 14, -4
+ 128 0002 00AF     		add	r7, sp, #0
+ 129              	.LCFI1:
+ 130              		.cfi_def_cfa_register 7
+  35:../Sources/CCD.c **** 	/* Make all SI and CLK be Low for init */
+  36:../Sources/CCD.c **** 	CCD_SI_PutVal(00);
+ 131              		.loc 1 36 0
+ 132 0004 1C4B     		ldr	r3, .L2
+ 133 0006 1B6A     		ldr	r3, [r3, #32]
+ 134 0008 181C     		mov	r0, r3
+ 135 000a 0021     		mov	r1, #0
+ 136 000c FFF7FEFF 		bl	BitsIoLdd1_PutVal
+  37:../Sources/CCD.c **** 	CCD_CLK_PutVal(00);
+ 137              		.loc 1 37 0
+ 138 0010 194B     		ldr	r3, .L2
+ 139 0012 5B6A     		ldr	r3, [r3, #36]
+ 140 0014 181C     		mov	r0, r3
+ 141 0016 0021     		mov	r1, #0
+ 142 0018 FFF7FEFF 		bl	BitsIoLdd2_PutVal
+  38:../Sources/CCD.c **** 	WAIT1_Waitus(CCD_Init_Time);
+ 143              		.loc 1 38 0
+ 144 001c 1820     		mov	r0, #24
+ 145 001e FFF7FEFF 		bl	WAIT1_WaitCycles
+  39:../Sources/CCD.c **** 
+  40:../Sources/CCD.c **** 	/* set SI to enable CCD Measure  */
+  41:../Sources/CCD.c **** 	CCD_SI_PutVal(11);
+ 146              		.loc 1 41 0
+ 147 0022 154B     		ldr	r3, .L2
+ 148 0024 1B6A     		ldr	r3, [r3, #32]
+ 149 0026 181C     		mov	r0, r3
+ 150 0028 0B21     		mov	r1, #11
+ 151 002a FFF7FEFF 		bl	BitsIoLdd1_PutVal
+  42:../Sources/CCD.c **** 	WAIT1_Waitus(CCD_Setup_Time);
+ 152              		.loc 1 42 0
+ 153 002e 3020     		mov	r0, #48
+ 154 0030 FFF7FEFF 		bl	WAIT1_WaitCycles
+  43:../Sources/CCD.c **** 	CCD_CLK_PutVal(11);
+ 155              		.loc 1 43 0
+ 156 0034 104B     		ldr	r3, .L2
+ 157 0036 5B6A     		ldr	r3, [r3, #36]
+ 158 0038 181C     		mov	r0, r3
+ 159 003a 0B21     		mov	r1, #11
+ 160 003c FFF7FEFF 		bl	BitsIoLdd2_PutVal
+  44:../Sources/CCD.c **** 	WAIT1_Waitus(CCD_Hold_Time);
+ 161              		.loc 1 44 0
+ 162 0040 1820     		mov	r0, #24
+ 163 0042 FFF7FEFF 		bl	WAIT1_WaitCycles
+  45:../Sources/CCD.c **** 	CCD_SI_PutVal(00);
+ 164              		.loc 1 45 0
+ 165 0046 0C4B     		ldr	r3, .L2
+ 166 0048 1B6A     		ldr	r3, [r3, #32]
+ 167 004a 181C     		mov	r0, r3
+ 168 004c 0021     		mov	r1, #0
+ 169 004e FFF7FEFF 		bl	BitsIoLdd1_PutVal
+  46:../Sources/CCD.c **** 	
+  47:../Sources/CCD.c **** 	/* CLK Low */
+  48:../Sources/CCD.c **** 	CLK_Low_Period;
+ 170              		.loc 1 48 0
+ 171 0052 094B     		ldr	r3, .L2
+ 172 0054 5B6A     		ldr	r3, [r3, #36]
+ 173 0056 181C     		mov	r0, r3
+ 174 0058 0021     		mov	r1, #0
+ 175 005a FFF7FEFF 		bl	BitsIoLdd2_PutVal
+  49:../Sources/CCD.c **** 	
+  50:../Sources/CCD.c **** 	/* Init for Counter & Track */
+  51:../Sources/CCD.c **** 	Counter = 0;
+ 176              		.loc 1 51 0
+ 177 005e 074B     		ldr	r3, .L2+4
+ 178 0060 0022     		mov	r2, #0
+ 179 0062 1A80     		strh	r2, [r3]
+  52:../Sources/CCD.c **** 	MaxTrackL = MaxTrackR = 0;
+ 180              		.loc 1 52 0
+ 181 0064 064B     		ldr	r3, .L2+8
+ 182 0066 0022     		mov	r2, #0
+ 183 0068 1A80     		strh	r2, [r3]
+ 184 006a 054B     		ldr	r3, .L2+8
+ 185 006c 1A88     		ldrh	r2, [r3]
+ 186 006e 054B     		ldr	r3, .L2+12
+ 187 0070 1A80     		strh	r2, [r3]
+  53:../Sources/CCD.c **** }
+ 188              		.loc 1 53 0
+ 189 0072 BD46     		mov	sp, r7
+ 190              		@ sp needed for prologue
+ 191 0074 80BD     		pop	{r7, pc}
+ 192              	.L3:
+ 193 0076 C046     		.align	2
+ 194              	.L2:
+ 195 0078 00000000 		.word	PE_LDD_DeviceDataList
+ 196 007c 00000000 		.word	Counter
+ 197 0080 00000000 		.word	MaxTrackR
+ 198 0084 00000000 		.word	MaxTrackL
+ 199              		.cfi_endproc
+ 200              	.LFE0:
+ 202              		.section	.text.CCD_measure_init,"ax",%progbits
+ 203              		.align	2
+ 204              		.global	CCD_measure_init
+ 205              		.code	16
+ 206              		.thumb_func
+ 208              	CCD_measure_init:
+ 209              	.LFB1:
+  54:../Sources/CCD.c **** 
+  55:../Sources/CCD.c **** void CCD_measure_init(){		
+ 210              		.loc 1 55 0
+ 211              		.cfi_startproc
+ 212 0000 80B5     		push	{r7, lr}
+ 213              	.LCFI2:
+ 214              		.cfi_def_cfa_offset 8
+ 215              		.cfi_offset 7, -8
+ 216              		.cfi_offset 14, -4
+ 217 0002 00AF     		add	r7, sp, #0
+ 218              	.LCFI3:
+ 219              		.cfi_def_cfa_register 7
+  56:../Sources/CCD.c **** 	/* CLK High Period */
+  57:../Sources/CCD.c **** 	CCD_CLK_PutVal(11);
+ 220              		.loc 1 57 0
+ 221 0004 0B4B     		ldr	r3, .L7
+ 222 0006 5B6A     		ldr	r3, [r3, #36]
+ 223 0008 181C     		mov	r0, r3
+ 224 000a 0B21     		mov	r1, #11
+ 225 000c FFF7FEFF 		bl	BitsIoLdd2_PutVal
+  58:../Sources/CCD.c **** //	WAIT1_Waitus(CCD_TW);
+  59:../Sources/CCD.c **** 
+  60:../Sources/CCD.c **** 	/* CLK Low Period */
+  61:../Sources/CCD.c **** 	CCD_CLK_PutVal(00);
+ 226              		.loc 1 61 0
+ 227 0010 084B     		ldr	r3, .L7
+ 228 0012 5B6A     		ldr	r3, [r3, #36]
+ 229 0014 181C     		mov	r0, r3
+ 230 0016 0021     		mov	r1, #0
+ 231 0018 FFF7FEFF 		bl	BitsIoLdd2_PutVal
+  62:../Sources/CCD.c **** //	WAIT1_Waitus(CCD_TW);
+  63:../Sources/CCD.c ****     if (Counter < CCD_Pixels_Width) AD1_Measure(FALSE);  // measure all channel, wait for result
+ 232              		.loc 1 63 0
+ 233 001c 064B     		ldr	r3, .L7+4
+ 234 001e 1B88     		ldrh	r3, [r3]
+ 235 0020 7F2B     		cmp	r3, #127
+ 236 0022 02D8     		bhi	.L5
+ 237              		.loc 1 63 0 is_stmt 0 discriminator 1
+ 238 0024 FFF7FEFF 		bl	PE_AD1_Measure
+ 239 0028 02E0     		b	.L4
+ 240              	.L5:
+  64:../Sources/CCD.c ****     else Counter = 0 ;
+ 241              		.loc 1 64 0 is_stmt 1
+ 242 002a 034B     		ldr	r3, .L7+4
+ 243 002c 0022     		mov	r2, #0
+ 244 002e 1A80     		strh	r2, [r3]
+ 245              	.L4:
+  65:../Sources/CCD.c **** //    AD1_GetValue16(Pixels[Counter]);  // Get AD conversion result
+  66:../Sources/CCD.c **** }
+ 246              		.loc 1 66 0
+ 247 0030 BD46     		mov	sp, r7
+ 248              		@ sp needed for prologue
+ 249 0032 80BD     		pop	{r7, pc}
+ 250              	.L8:
+ 251              		.align	2
+ 252              	.L7:
+ 253 0034 00000000 		.word	PE_LDD_DeviceDataList
+ 254 0038 00000000 		.word	Counter
+ 255              		.cfi_endproc
+ 256              	.LFE1:
+ 258              		.text
+ 259              	.Letext0:
+ 260              		.file 2 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 261              		.file 3 "C:/workspace/USBDM/Generated_Code/PE_Types.h"
+ 262              		.file 4 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 CCD.c
+                            *COM*:00000200 Pixels
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:23     .data.Counter:00000000 Counter
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:20     .data.Counter:00000000 $d
+                            *COM*:00000200 Pixels_Diff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:31     .bss.MaxTrackL:00000000 MaxTrackL
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:28     .bss.MaxTrackL:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:38     .bss.MaxTrackR:00000000 MaxTrackR
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:35     .bss.MaxTrackR:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:45     .data.Last_TrackL:00000000 Last_TrackL
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:42     .data.Last_TrackL:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:52     .bss.Last_TrackR:00000000 Last_TrackR
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:49     .bss.Last_TrackR:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:59     .data.TrackL:00000000 TrackL
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:56     .data.TrackL:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:66     .bss.TrackR:00000000 TrackR
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:63     .bss.TrackR:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:73     .bss.TrackL_Diff:00000000 TrackL_Diff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:70     .bss.TrackL_Diff:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:80     .bss.TrackR_Diff:00000000 TrackR_Diff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:77     .bss.TrackR_Diff:00000000 $d
+                            *COM*:00000004 TrackL_Finsh
+                            *COM*:00000004 TrackR_Finsh
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:89     .bss.CCD_SagL:00000000 CCD_SagL
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:86     .bss.CCD_SagL:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:96     .bss.CCD_SagR:00000000 CCD_SagR
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:93     .bss.CCD_SagR:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:103    .bss.CCD_SagL_Diff:00000000 CCD_SagL_Diff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:100    .bss.CCD_SagL_Diff:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:110    .bss.CCD_SagR_Diff:00000000 CCD_SagR_Diff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:107    .bss.CCD_SagR_Diff:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:113    .text.CCD_Init:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:118    .text.CCD_Init:00000000 CCD_Init
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:195    .text.CCD_Init:00000078 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:203    .text.CCD_measure_init:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:208    .text.CCD_measure_init:00000000 CCD_measure_init
+C:\DOCUME~1\chenty\LOCALS~1\Temp\ccAnHVIf.s:253    .text.CCD_measure_init:00000034 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+BitsIoLdd1_PutVal
+BitsIoLdd2_PutVal
+WAIT1_WaitCycles
+PE_LDD_DeviceDataList
+PE_AD1_Measure

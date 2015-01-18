@@ -1,0 +1,413 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Servo.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	PWM_Servo
+  18              		.section	.bss.PWM_Servo,"aw",%nobits
+  19              		.align	2
+  22              	PWM_Servo:
+  23 0000 00000000 		.space	4
+  24              		.global	PWM_Servo_High
+  25              		.section	.data.PWM_Servo_High,"aw",%progbits
+  26              		.align	2
+  29              	PWM_Servo_High:
+  30 0000 F82A0000 		.word	11000
+  31              		.global	PWM_Servo_Low
+  32              		.section	.data.PWM_Servo_Low,"aw",%progbits
+  33              		.align	2
+  36              	PWM_Servo_Low:
+  37 0000 C4090000 		.word	2500
+  38              		.section	.text.Servo_Down,"ax",%progbits
+  39              		.align	2
+  40              		.global	Servo_Down
+  41              		.code	16
+  42              		.thumb_func
+  44              	Servo_Down:
+  45              	.LFB0:
+  46              		.file 1 "../Sources/Servo.c"
+   1:../Sources/Servo.c **** /*
+   2:../Sources/Servo.c ****  * Servo.c
+   3:../Sources/Servo.c ****  *
+   4:../Sources/Servo.c ****  *  Created on: May 25, 2013
+   5:../Sources/Servo.c ****  *      Author: chenty
+   6:../Sources/Servo.c ****  */
+   7:../Sources/Servo.c **** #include "Servo_Video1.h"
+   8:../Sources/Servo.c **** int PWM_Servo = 0;
+   9:../Sources/Servo.c **** int PWM_Servo_High = 11000,PWM_Servo_Low = 2500;
+  10:../Sources/Servo.c **** 
+  11:../Sources/Servo.c **** void Servo_Down(){
+  47              		.loc 1 11 0
+  48              		.cfi_startproc
+  49 0000 80B5     		push	{r7, lr}
+  50              	.LCFI0:
+  51              		.cfi_def_cfa_offset 8
+  52              		.cfi_offset 7, -8
+  53              		.cfi_offset 14, -4
+  54 0002 00AF     		add	r7, sp, #0
+  55              	.LCFI1:
+  56              		.cfi_def_cfa_register 7
+  12:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_Low ; PWM_Servo <= PWM_Servo_High; PWM_Servo+=10){
+  57              		.loc 1 12 0
+  58 0004 104B     		ldr	r3, .L4
+  59 0006 1A68     		ldr	r2, [r3]
+  60 0008 104B     		ldr	r3, .L4+4
+  61 000a 1A60     		str	r2, [r3]
+  62 000c 13E0     		b	.L2
+  63              	.L3:
+  13:../Sources/Servo.c **** 		Servo_Video1_SetRatio16(0xFFFF-PWM_Servo);
+  64              		.loc 1 13 0 discriminator 2
+  65 000e 104B     		ldr	r3, .L4+8
+  66 0010 DA6B     		ldr	r2, [r3, #60]
+  67 0012 0E4B     		ldr	r3, .L4+4
+  68 0014 1B68     		ldr	r3, [r3]
+  69 0016 9BB2     		uxth	r3, r3
+  70 0018 DB43     		mvn	r3, r3
+  71 001a 9BB2     		uxth	r3, r3
+  72 001c 101C     		mov	r0, r2
+  73 001e 191C     		mov	r1, r3
+  74 0020 FFF7FEFF 		bl	PwmLdd5_SetRatio16
+  14:../Sources/Servo.c **** 		WAIT1_Waitms(1);
+  75              		.loc 1 14 0 discriminator 2
+  76 0024 0120     		mov	r0, #1
+  77 0026 FFF7FEFF 		bl	WAIT1_Waitms
+  12:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_Low ; PWM_Servo <= PWM_Servo_High; PWM_Servo+=10){
+  78              		.loc 1 12 0 discriminator 2
+  79 002a 084B     		ldr	r3, .L4+4
+  80 002c 1B68     		ldr	r3, [r3]
+  81 002e 1A1C     		mov	r2, r3
+  82 0030 0A32     		add	r2, r2, #10
+  83 0032 064B     		ldr	r3, .L4+4
+  84 0034 1A60     		str	r2, [r3]
+  85              	.L2:
+  12:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_Low ; PWM_Servo <= PWM_Servo_High; PWM_Servo+=10){
+  86              		.loc 1 12 0 is_stmt 0 discriminator 1
+  87 0036 054B     		ldr	r3, .L4+4
+  88 0038 1A68     		ldr	r2, [r3]
+  89 003a 064B     		ldr	r3, .L4+12
+  90 003c 1B68     		ldr	r3, [r3]
+  91 003e 9A42     		cmp	r2, r3
+  92 0040 E5DD     		ble	.L3
+  15:../Sources/Servo.c **** 	}
+  16:../Sources/Servo.c **** }
+  93              		.loc 1 16 0 is_stmt 1
+  94 0042 BD46     		mov	sp, r7
+  95              		@ sp needed for prologue
+  96 0044 80BD     		pop	{r7, pc}
+  97              	.L5:
+  98 0046 C046     		.align	2
+  99              	.L4:
+ 100 0048 00000000 		.word	PWM_Servo_Low
+ 101 004c 00000000 		.word	PWM_Servo
+ 102 0050 00000000 		.word	PE_LDD_DeviceDataList
+ 103 0054 00000000 		.word	PWM_Servo_High
+ 104              		.cfi_endproc
+ 105              	.LFE0:
+ 107              		.section	.text.Servo_UP,"ax",%progbits
+ 108              		.align	2
+ 109              		.global	Servo_UP
+ 110              		.code	16
+ 111              		.thumb_func
+ 113              	Servo_UP:
+ 114              	.LFB1:
+  17:../Sources/Servo.c **** 
+  18:../Sources/Servo.c **** void Servo_UP(){
+ 115              		.loc 1 18 0
+ 116              		.cfi_startproc
+ 117 0000 80B5     		push	{r7, lr}
+ 118              	.LCFI2:
+ 119              		.cfi_def_cfa_offset 8
+ 120              		.cfi_offset 7, -8
+ 121              		.cfi_offset 14, -4
+ 122 0002 00AF     		add	r7, sp, #0
+ 123              	.LCFI3:
+ 124              		.cfi_def_cfa_register 7
+  19:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_High ; PWM_Servo >= PWM_Servo_Low; PWM_Servo-=2000){
+ 125              		.loc 1 19 0
+ 126 0004 104B     		ldr	r3, .L9
+ 127 0006 1A68     		ldr	r2, [r3]
+ 128 0008 104B     		ldr	r3, .L9+4
+ 129 000a 1A60     		str	r2, [r3]
+ 130 000c 13E0     		b	.L7
+ 131              	.L8:
+  20:../Sources/Servo.c **** 		Servo_Video1_SetRatio16(0xFFFF-PWM_Servo);
+ 132              		.loc 1 20 0 discriminator 2
+ 133 000e 104B     		ldr	r3, .L9+8
+ 134 0010 DA6B     		ldr	r2, [r3, #60]
+ 135 0012 0E4B     		ldr	r3, .L9+4
+ 136 0014 1B68     		ldr	r3, [r3]
+ 137 0016 9BB2     		uxth	r3, r3
+ 138 0018 DB43     		mvn	r3, r3
+ 139 001a 9BB2     		uxth	r3, r3
+ 140 001c 101C     		mov	r0, r2
+ 141 001e 191C     		mov	r1, r3
+ 142 0020 FFF7FEFF 		bl	PwmLdd5_SetRatio16
+  21:../Sources/Servo.c **** 		WAIT1_Waitms(10);
+ 143              		.loc 1 21 0 discriminator 2
+ 144 0024 0A20     		mov	r0, #10
+ 145 0026 FFF7FEFF 		bl	WAIT1_Waitms
+  19:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_High ; PWM_Servo >= PWM_Servo_Low; PWM_Servo-=2000){
+ 146              		.loc 1 19 0 discriminator 2
+ 147 002a 084B     		ldr	r3, .L9+4
+ 148 002c 1B68     		ldr	r3, [r3]
+ 149 002e 0949     		ldr	r1, .L9+12
+ 150 0030 5A18     		add	r2, r3, r1
+ 151 0032 064B     		ldr	r3, .L9+4
+ 152 0034 1A60     		str	r2, [r3]
+ 153              	.L7:
+  19:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_High ; PWM_Servo >= PWM_Servo_Low; PWM_Servo-=2000){
+ 154              		.loc 1 19 0 is_stmt 0 discriminator 1
+ 155 0036 054B     		ldr	r3, .L9+4
+ 156 0038 1A68     		ldr	r2, [r3]
+ 157 003a 074B     		ldr	r3, .L9+16
+ 158 003c 1B68     		ldr	r3, [r3]
+ 159 003e 9A42     		cmp	r2, r3
+ 160 0040 E5DA     		bge	.L8
+  22:../Sources/Servo.c **** 	}
+  23:../Sources/Servo.c **** }
+ 161              		.loc 1 23 0 is_stmt 1
+ 162 0042 BD46     		mov	sp, r7
+ 163              		@ sp needed for prologue
+ 164 0044 80BD     		pop	{r7, pc}
+ 165              	.L10:
+ 166 0046 C046     		.align	2
+ 167              	.L9:
+ 168 0048 00000000 		.word	PWM_Servo_High
+ 169 004c 00000000 		.word	PWM_Servo
+ 170 0050 00000000 		.word	PE_LDD_DeviceDataList
+ 171 0054 30F8FFFF 		.word	-2000
+ 172 0058 00000000 		.word	PWM_Servo_Low
+ 173              		.cfi_endproc
+ 174              	.LFE1:
+ 176              		.section	.text.Servo_Down2,"ax",%progbits
+ 177              		.align	2
+ 178              		.global	Servo_Down2
+ 179              		.code	16
+ 180              		.thumb_func
+ 182              	Servo_Down2:
+ 183              	.LFB2:
+  24:../Sources/Servo.c **** 
+  25:../Sources/Servo.c **** void Servo_Down2(){
+ 184              		.loc 1 25 0
+ 185              		.cfi_startproc
+ 186 0000 80B5     		push	{r7, lr}
+ 187              	.LCFI4:
+ 188              		.cfi_def_cfa_offset 8
+ 189              		.cfi_offset 7, -8
+ 190              		.cfi_offset 14, -4
+ 191 0002 00AF     		add	r7, sp, #0
+ 192              	.LCFI5:
+ 193              		.cfi_def_cfa_register 7
+  26:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_Low ; PWM_Servo <= PWM_Servo_High; PWM_Servo+=2000){
+ 194              		.loc 1 26 0
+ 195 0004 104B     		ldr	r3, .L14
+ 196 0006 1A68     		ldr	r2, [r3]
+ 197 0008 104B     		ldr	r3, .L14+4
+ 198 000a 1A60     		str	r2, [r3]
+ 199 000c 14E0     		b	.L12
+ 200              	.L13:
+  27:../Sources/Servo.c **** 		Servo_Video1_SetRatio16(0xFFFF-PWM_Servo);
+ 201              		.loc 1 27 0 discriminator 2
+ 202 000e 104B     		ldr	r3, .L14+8
+ 203 0010 DA6B     		ldr	r2, [r3, #60]
+ 204 0012 0E4B     		ldr	r3, .L14+4
+ 205 0014 1B68     		ldr	r3, [r3]
+ 206 0016 9BB2     		uxth	r3, r3
+ 207 0018 DB43     		mvn	r3, r3
+ 208 001a 9BB2     		uxth	r3, r3
+ 209 001c 101C     		mov	r0, r2
+ 210 001e 191C     		mov	r1, r3
+ 211 0020 FFF7FEFF 		bl	PwmLdd5_SetRatio16
+  28:../Sources/Servo.c **** 		WAIT1_Waitms(10);
+ 212              		.loc 1 28 0 discriminator 2
+ 213 0024 0A20     		mov	r0, #10
+ 214 0026 FFF7FEFF 		bl	WAIT1_Waitms
+  26:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_Low ; PWM_Servo <= PWM_Servo_High; PWM_Servo+=2000){
+ 215              		.loc 1 26 0 discriminator 2
+ 216 002a 084B     		ldr	r3, .L14+4
+ 217 002c 1B68     		ldr	r3, [r3]
+ 218 002e FA21     		mov	r1, #250
+ 219 0030 C900     		lsl	r1, r1, #3
+ 220 0032 5A18     		add	r2, r3, r1
+ 221 0034 054B     		ldr	r3, .L14+4
+ 222 0036 1A60     		str	r2, [r3]
+ 223              	.L12:
+  26:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_Low ; PWM_Servo <= PWM_Servo_High; PWM_Servo+=2000){
+ 224              		.loc 1 26 0 is_stmt 0 discriminator 1
+ 225 0038 044B     		ldr	r3, .L14+4
+ 226 003a 1A68     		ldr	r2, [r3]
+ 227 003c 054B     		ldr	r3, .L14+12
+ 228 003e 1B68     		ldr	r3, [r3]
+ 229 0040 9A42     		cmp	r2, r3
+ 230 0042 E4DD     		ble	.L13
+  29:../Sources/Servo.c **** 	}
+  30:../Sources/Servo.c **** }
+ 231              		.loc 1 30 0 is_stmt 1
+ 232 0044 BD46     		mov	sp, r7
+ 233              		@ sp needed for prologue
+ 234 0046 80BD     		pop	{r7, pc}
+ 235              	.L15:
+ 236              		.align	2
+ 237              	.L14:
+ 238 0048 00000000 		.word	PWM_Servo_Low
+ 239 004c 00000000 		.word	PWM_Servo
+ 240 0050 00000000 		.word	PE_LDD_DeviceDataList
+ 241 0054 00000000 		.word	PWM_Servo_High
+ 242              		.cfi_endproc
+ 243              	.LFE2:
+ 245              		.section	.text.Servo_UP2,"ax",%progbits
+ 246              		.align	2
+ 247              		.global	Servo_UP2
+ 248              		.code	16
+ 249              		.thumb_func
+ 251              	Servo_UP2:
+ 252              	.LFB3:
+  31:../Sources/Servo.c **** 
+  32:../Sources/Servo.c **** void Servo_UP2(){
+ 253              		.loc 1 32 0
+ 254              		.cfi_startproc
+ 255 0000 80B5     		push	{r7, lr}
+ 256              	.LCFI6:
+ 257              		.cfi_def_cfa_offset 8
+ 258              		.cfi_offset 7, -8
+ 259              		.cfi_offset 14, -4
+ 260 0002 00AF     		add	r7, sp, #0
+ 261              	.LCFI7:
+ 262              		.cfi_def_cfa_register 7
+  33:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_High ; PWM_Servo >= PWM_Servo_Low; PWM_Servo-=10){
+ 263              		.loc 1 33 0
+ 264 0004 104B     		ldr	r3, .L19
+ 265 0006 1A68     		ldr	r2, [r3]
+ 266 0008 104B     		ldr	r3, .L19+4
+ 267 000a 1A60     		str	r2, [r3]
+ 268 000c 13E0     		b	.L17
+ 269              	.L18:
+  34:../Sources/Servo.c **** 		Servo_Video1_SetRatio16(0xFFFF-PWM_Servo);
+ 270              		.loc 1 34 0 discriminator 2
+ 271 000e 104B     		ldr	r3, .L19+8
+ 272 0010 DA6B     		ldr	r2, [r3, #60]
+ 273 0012 0E4B     		ldr	r3, .L19+4
+ 274 0014 1B68     		ldr	r3, [r3]
+ 275 0016 9BB2     		uxth	r3, r3
+ 276 0018 DB43     		mvn	r3, r3
+ 277 001a 9BB2     		uxth	r3, r3
+ 278 001c 101C     		mov	r0, r2
+ 279 001e 191C     		mov	r1, r3
+ 280 0020 FFF7FEFF 		bl	PwmLdd5_SetRatio16
+  35:../Sources/Servo.c **** 		WAIT1_Waitms(1);
+ 281              		.loc 1 35 0 discriminator 2
+ 282 0024 0120     		mov	r0, #1
+ 283 0026 FFF7FEFF 		bl	WAIT1_Waitms
+  33:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_High ; PWM_Servo >= PWM_Servo_Low; PWM_Servo-=10){
+ 284              		.loc 1 33 0 discriminator 2
+ 285 002a 084B     		ldr	r3, .L19+4
+ 286 002c 1B68     		ldr	r3, [r3]
+ 287 002e 1A1C     		mov	r2, r3
+ 288 0030 0A3A     		sub	r2, r2, #10
+ 289 0032 064B     		ldr	r3, .L19+4
+ 290 0034 1A60     		str	r2, [r3]
+ 291              	.L17:
+  33:../Sources/Servo.c **** 	for (PWM_Servo = PWM_Servo_High ; PWM_Servo >= PWM_Servo_Low; PWM_Servo-=10){
+ 292              		.loc 1 33 0 is_stmt 0 discriminator 1
+ 293 0036 054B     		ldr	r3, .L19+4
+ 294 0038 1A68     		ldr	r2, [r3]
+ 295 003a 064B     		ldr	r3, .L19+12
+ 296 003c 1B68     		ldr	r3, [r3]
+ 297 003e 9A42     		cmp	r2, r3
+ 298 0040 E5DA     		bge	.L18
+  36:../Sources/Servo.c **** 	}
+  37:../Sources/Servo.c **** }
+ 299              		.loc 1 37 0 is_stmt 1
+ 300 0042 BD46     		mov	sp, r7
+ 301              		@ sp needed for prologue
+ 302 0044 80BD     		pop	{r7, pc}
+ 303              	.L20:
+ 304 0046 C046     		.align	2
+ 305              	.L19:
+ 306 0048 00000000 		.word	PWM_Servo_High
+ 307 004c 00000000 		.word	PWM_Servo
+ 308 0050 00000000 		.word	PE_LDD_DeviceDataList
+ 309 0054 00000000 		.word	PWM_Servo_Low
+ 310              		.cfi_endproc
+ 311              	.LFE3:
+ 313              		.section	.text.Servo_PowerOFF,"ax",%progbits
+ 314              		.align	2
+ 315              		.global	Servo_PowerOFF
+ 316              		.code	16
+ 317              		.thumb_func
+ 319              	Servo_PowerOFF:
+ 320              	.LFB4:
+  38:../Sources/Servo.c **** 
+  39:../Sources/Servo.c **** 
+  40:../Sources/Servo.c **** void Servo_PowerOFF(){
+ 321              		.loc 1 40 0
+ 322              		.cfi_startproc
+ 323 0000 80B5     		push	{r7, lr}
+ 324              	.LCFI8:
+ 325              		.cfi_def_cfa_offset 8
+ 326              		.cfi_offset 7, -8
+ 327              		.cfi_offset 14, -4
+ 328 0002 00AF     		add	r7, sp, #0
+ 329              	.LCFI9:
+ 330              		.cfi_def_cfa_register 7
+  41:../Sources/Servo.c **** 	Servo_Video1_SetRatio16(0);
+ 331              		.loc 1 41 0
+ 332 0004 034B     		ldr	r3, .L22
+ 333 0006 DB6B     		ldr	r3, [r3, #60]
+ 334 0008 181C     		mov	r0, r3
+ 335 000a 0021     		mov	r1, #0
+ 336 000c FFF7FEFF 		bl	PwmLdd5_SetRatio16
+  42:../Sources/Servo.c **** }
+ 337              		.loc 1 42 0
+ 338 0010 BD46     		mov	sp, r7
+ 339              		@ sp needed for prologue
+ 340 0012 80BD     		pop	{r7, pc}
+ 341              	.L23:
+ 342              		.align	2
+ 343              	.L22:
+ 344 0014 00000000 		.word	PE_LDD_DeviceDataList
+ 345              		.cfi_endproc
+ 346              	.LFE4:
+ 348              		.text
+ 349              	.Letext0:
+ 350              		.file 2 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Servo.c
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:22     .bss.PWM_Servo:00000000 PWM_Servo
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:19     .bss.PWM_Servo:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:29     .data.PWM_Servo_High:00000000 PWM_Servo_High
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:26     .data.PWM_Servo_High:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:36     .data.PWM_Servo_Low:00000000 PWM_Servo_Low
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:33     .data.PWM_Servo_Low:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:39     .text.Servo_Down:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:44     .text.Servo_Down:00000000 Servo_Down
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:100    .text.Servo_Down:00000048 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:108    .text.Servo_UP:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:113    .text.Servo_UP:00000000 Servo_UP
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:168    .text.Servo_UP:00000048 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:177    .text.Servo_Down2:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:182    .text.Servo_Down2:00000000 Servo_Down2
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:238    .text.Servo_Down2:00000048 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:246    .text.Servo_UP2:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:251    .text.Servo_UP2:00000000 Servo_UP2
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:306    .text.Servo_UP2:00000048 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:314    .text.Servo_PowerOFF:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:319    .text.Servo_PowerOFF:00000000 Servo_PowerOFF
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cc7S3bXV.s:344    .text.Servo_PowerOFF:00000014 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+PwmLdd5_SetRatio16
+WAIT1_Waitms
+PE_LDD_DeviceDataList

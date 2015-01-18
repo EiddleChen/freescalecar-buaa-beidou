@@ -1,0 +1,2171 @@
+   1              		.cpu cortex-m0
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"Events.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	SpeedL_Counter
+  18              		.section	.bss.SpeedL_Counter,"aw",%nobits
+  19              		.align	2
+  22              	SpeedL_Counter:
+  23 0000 00000000 		.space	4
+  24              		.comm	SpeedL_Edges,4,4
+  25              		.global	SpeedR_Counter
+  26              		.section	.bss.SpeedR_Counter,"aw",%nobits
+  27              		.align	2
+  30              	SpeedR_Counter:
+  31 0000 00000000 		.space	4
+  32              		.comm	SpeedR_Edges,4,4
+  33              		.global	SpeedL_Integral
+  34              		.section	.bss.SpeedL_Integral,"aw",%nobits
+  35              		.align	2
+  38              	SpeedL_Integral:
+  39 0000 00000000 		.space	4
+  40              		.global	SpeedR_Integral
+  41              		.section	.bss.SpeedR_Integral,"aw",%nobits
+  42              		.align	2
+  45              	SpeedR_Integral:
+  46 0000 00000000 		.space	4
+  47              		.comm	SpeedL_Correct_Buff,32,4
+  48              		.global	SpeedL_Correct_Pointer
+  49              		.section	.bss.SpeedL_Correct_Pointer,"aw",%nobits
+  50              		.align	2
+  53              	SpeedL_Correct_Pointer:
+  54 0000 00000000 		.space	4
+  55              		.global	SpeedL_Correct_Counter
+  56              		.section	.bss.SpeedL_Correct_Counter,"aw",%nobits
+  57              		.align	2
+  60              	SpeedL_Correct_Counter:
+  61 0000 00000000 		.space	4
+  62              		.comm	SpeedR_Correct_Buff,32,4
+  63              		.global	SpeedR_Correct_Pointer
+  64              		.section	.bss.SpeedR_Correct_Pointer,"aw",%nobits
+  65              		.align	2
+  68              	SpeedR_Correct_Pointer:
+  69 0000 00000000 		.space	4
+  70              		.global	SpeedR_Correct_Counter
+  71              		.section	.bss.SpeedR_Correct_Counter,"aw",%nobits
+  72              		.align	2
+  75              	SpeedR_Correct_Counter:
+  76 0000 00000000 		.space	4
+  77              		.comm	AAC_Z_ADC,2,2
+  78              		.comm	AR2_ADC,2,2
+  79              		.comm	ADC_Measured,14,4
+  80              		.global	CCD_TW
+  81              		.section	.data.CCD_TW,"aw",%progbits
+  82              		.align	2
+  85              	CCD_TW:
+  86 0000 01000000 		.word	1
+  87              		.global	CCD_TW_Counter
+  88              		.section	.bss.CCD_TW_Counter,"aw",%nobits
+  89              		.align	2
+  92              	CCD_TW_Counter:
+  93 0000 00000000 		.space	4
+  94              		.comm	AAC_E,512,4
+  95              		.comm	AAC_E2,512,4
+  96              		.global	Integral_AAC_E
+  97              		.section	.bss.Integral_AAC_E,"aw",%nobits
+  98              		.align	2
+ 101              	Integral_AAC_E:
+ 102 0000 00000000 		.space	4
+ 103              		.global	Integral_AAC_E2
+ 104              		.section	.bss.Integral_AAC_E2,"aw",%nobits
+ 105              		.align	2
+ 108              	Integral_AAC_E2:
+ 109 0000 00000000 		.space	4
+ 110              		.comm	Motor_Speed,4,4
+ 111              		.global	Sag_Temp1
+ 112              		.section	.bss.Sag_Temp1,"aw",%nobits
+ 113              		.align	2
+ 116              	Sag_Temp1:
+ 117 0000 00000000 		.space	4
+ 118              		.global	Sag_Temp2
+ 119              		.section	.bss.Sag_Temp2,"aw",%nobits
+ 120              		.align	2
+ 123              	Sag_Temp2:
+ 124 0000 00000000 		.space	4
+ 125              		.global	Sag_Temp3
+ 126              		.section	.bss.Sag_Temp3,"aw",%nobits
+ 127              		.align	2
+ 130              	Sag_Temp3:
+ 131 0000 00000000 		.space	4
+ 132              		.comm	Temp1,4,4
+ 133              		.comm	Temp2,4,4
+ 134              		.comm	DebugI,4,4
+ 135              		.comm	DebugI2,4,4
+ 136              		.comm	Motor_Speed_PWM,4,4
+ 137              		.comm	Motor_Speed_PWM2,4,4
+ 138              		.global	MotorControlL
+ 139              		.section	.bss.MotorControlL,"aw",%nobits
+ 140              		.align	2
+ 143              	MotorControlL:
+ 144 0000 00000000 		.space	4
+ 145              		.global	MotorControlR
+ 146              		.section	.bss.MotorControlR,"aw",%nobits
+ 147              		.align	2
+ 150              	MotorControlR:
+ 151 0000 00000000 		.space	4
+ 152              		.global	Motor_Controler
+ 153              		.section	.bss.Motor_Controler,"aw",%nobits
+ 154              		.align	2
+ 157              	Motor_Controler:
+ 158 0000 00000000 		.space	4
+ 159              		.global	Mono
+ 160              		.section	.data.Mono,"aw",%progbits
+ 161              		.align	2
+ 164              	Mono:
+ 165 0000 01000000 		.word	1
+ 166              		.global	__aeabi_i2d
+ 167              		.global	__aeabi_dmul
+ 168              		.global	__aeabi_d2iz
+ 169              		.global	__aeabi_dsub
+ 170              		.global	__aeabi_idivmod
+ 171              		.global	__aeabi_dadd
+ 172              		.section	.text.TU2_OnCounterRestart_Old,"ax",%progbits
+ 173              		.align	2
+ 174              		.global	TU2_OnCounterRestart_Old
+ 175              		.code	16
+ 176              		.thumb_func
+ 178              	TU2_OnCounterRestart_Old:
+ 179              	.LFB0:
+ 180              		.file 1 "../Sources/Events.c"
+   1:../Sources/Events.c **** /** ###################################################################
+   2:../Sources/Events.c **** **     Filename    : Events.c
+   3:../Sources/Events.c **** **     Project     : ProcessorExpert
+   4:../Sources/Events.c **** **     Processor   : MKL25Z128VLK4
+   5:../Sources/Events.c **** **     Component   : Events
+   6:../Sources/Events.c **** **     Version     : Driver 01.00
+   7:../Sources/Events.c **** **     Compiler    : GNU C Compiler
+   8:../Sources/Events.c **** **     Date/Time   : 2013-03-28, 17:52, # CodeGen: 0
+   9:../Sources/Events.c **** **     Abstract    :
+  10:../Sources/Events.c **** **         This is user's event module.
+  11:../Sources/Events.c **** **         Put your event handler code here.
+  12:../Sources/Events.c **** /**     Settings    :
+  13:../Sources/Events.c **** **     Contents    :
+  14:../Sources/Events.c **** **         Cpu_OnNMIINT - void Cpu_OnNMIINT(void);
+  15:../Sources/Events.c **** **
+  16:../Sources/Events.c **** ** ###################################################################*/
+  17:../Sources/Events.c **** /* MODULE Events */
+  18:../Sources/Events.c **** 
+  19:../Sources/Events.c **** #include "Cpu.h"
+  20:../Sources/Events.c **** #include "Events.h"
+  21:../Sources/Events.c **** 
+  22:../Sources/Events.c **** /* User includes (#include below this line is not maintained by Processor Expert) */
+  23:../Sources/Events.c **** #include "stdio.h"
+  24:../Sources/Events.c **** #include "MMA8451.h"
+  25:../Sources/Events.c **** #include "CCD.h"
+  26:../Sources/Events.c **** #include "Motor.h"
+  27:../Sources/Events.c **** 
+  28:../Sources/Events.c **** extern volatile bool DataTransmittedFlg;
+  29:../Sources/Events.c **** extern volatile bool DataReceivedFlg;
+  30:../Sources/Events.c **** extern void Timer_Interrupt_CB(void);
+  31:../Sources/Events.c **** 
+  32:../Sources/Events.c **** 
+  33:../Sources/Events.c **** /* Global value for speed */
+  34:../Sources/Events.c **** int32_t SpeedL_Counter = 0;
+  35:../Sources/Events.c **** int32_t SpeedL_Edges;
+  36:../Sources/Events.c **** int32_t SpeedR_Counter = 0;
+  37:../Sources/Events.c **** int32_t SpeedR_Edges;
+  38:../Sources/Events.c **** int32_t SpeedL_Integral = 0;
+  39:../Sources/Events.c **** int32_t SpeedR_Integral = 0;
+  40:../Sources/Events.c **** int		SpeedL_Correct_Buff[Speed_Correct_Times], SpeedL_Correct_Pointer = 0, SpeedL_Correct_Counter =
+  41:../Sources/Events.c **** int		SpeedR_Correct_Buff[Speed_Correct_Times], SpeedR_Correct_Pointer = 0, SpeedR_Correct_Counter =
+  42:../Sources/Events.c **** 
+  43:../Sources/Events.c **** 
+  44:../Sources/Events.c **** /* Global value for MMA8451 */
+  45:../Sources/Events.c **** extern MMA845X mma845x;
+  46:../Sources/Events.c **** 
+  47:../Sources/Events.c **** /* Global value for CCD */
+  48:../Sources/Events.c **** extern uint16_t Pixels[CCD_Pixels_Width][2];
+  49:../Sources/Events.c **** extern uint16_t Counter;
+  50:../Sources/Events.c **** uint16_t AAC_Z_ADC;
+  51:../Sources/Events.c **** uint16_t AR2_ADC;
+  52:../Sources/Events.c **** uint16_t ADC_Measured[CCD_Channels];
+  53:../Sources/Events.c **** int		 CCD_TW = 1; 			// *150us
+  54:../Sources/Events.c **** int		 CCD_TW_Counter = 0;
+  55:../Sources/Events.c **** 
+  56:../Sources/Events.c **** /* Global value for CCD Track */
+  57:../Sources/Events.c **** extern uint16_t MaxTrackL;
+  58:../Sources/Events.c **** extern uint16_t MaxTrackR;
+  59:../Sources/Events.c **** extern int   	Last_TrackL;
+  60:../Sources/Events.c **** extern int		Last_TrackR;
+  61:../Sources/Events.c **** extern int		TrackL;
+  62:../Sources/Events.c **** extern int		TrackR;
+  63:../Sources/Events.c **** extern int		TrackL_Diff;
+  64:../Sources/Events.c **** extern int		TrackR_Diff;
+  65:../Sources/Events.c **** extern uint16_t Pixels_Diff[CCD_Pixels_Width][2];
+  66:../Sources/Events.c **** extern int 	 	TrackL_Finsh,TrackR_Finsh;
+  67:../Sources/Events.c **** extern uint32_t	CCD_SagL;
+  68:../Sources/Events.c **** extern uint32_t CCD_SagR;
+  69:../Sources/Events.c **** extern uint32_t	CCD_SagL_Diff;
+  70:../Sources/Events.c **** extern uint32_t CCD_SagR_Diff;
+  71:../Sources/Events.c **** 
+  72:../Sources/Events.c **** /* Global value for Self balanced */
+  73:../Sources/Events.c **** int32_t AAC_E[CCD_Pixels_Width],AAC_E2[CCD_Pixels_Width];
+  74:../Sources/Events.c **** int32_t Integral_AAC_E = 0,Integral_AAC_E2 = 0;
+  75:../Sources/Events.c **** int32_t Motor_Speed;
+  76:../Sources/Events.c **** int32_t Sag_Temp1 = 0;
+  77:../Sources/Events.c **** int32_t Sag_Temp2 = 0;
+  78:../Sources/Events.c **** int32_t Sag_Temp3 = 0;
+  79:../Sources/Events.c **** int32_t Temp1,Temp2;
+  80:../Sources/Events.c **** int32_t DebugI,DebugI2;
+  81:../Sources/Events.c **** int32_t Motor_Speed_PWM,Motor_Speed_PWM2;
+  82:../Sources/Events.c **** int32_t MotorControlL = 0,MotorControlR = 0;
+  83:../Sources/Events.c **** 
+  84:../Sources/Events.c **** /* Global value for Stand-up and  Correction */
+  85:../Sources/Events.c **** extern int	AR2_Correct;
+  86:../Sources/Events.c **** extern int	AAC_Z_Correct;
+  87:../Sources/Events.c **** extern int	Correction_Before_Stand_Up;
+  88:../Sources/Events.c **** extern int	NotStand_Up;
+  89:../Sources/Events.c **** 
+  90:../Sources/Events.c **** /* Parameter for Control */
+  91:../Sources/Events.c **** #define k 0.0001//0.001
+  92:../Sources/Events.c **** #define k1 0.014//0.02 //0.006	Proportional component for Motor
+  93:../Sources/Events.c **** #define k2 0.9 //0.01 	Integral component for Motor
+  94:../Sources/Events.c **** #define k1_Speeder 20///34// max 220		Proportional component for Speeder
+  95:../Sources/Events.c **** #define K2_Speeder 45//230//300 //220 //		Integral component for Speeder
+  96:../Sources/Events.c **** int		Motor_Controler = 0;
+  97:../Sources/Events.c **** int 	Mono = 1;
+  98:../Sources/Events.c **** /*
+  99:../Sources/Events.c **** ** ===================================================================
+ 100:../Sources/Events.c **** **     Event       :  TU2_OnCounterRestart_Old (module Events)
+ 101:../Sources/Events.c **** **
+ 102:../Sources/Events.c **** **     Component   :  TU2 [TimerUnit_LDD]
+ 103:../Sources/Events.c **** **     !!IMPORTANT!!:
+ 104:../Sources/Events.c **** **         This Function hacked TU2_OnCounterRestart() so to use this 
+ 105:../Sources/Events.c **** **         ADD TU2_OnCounterRestart_Old() to TU2_OnCounterRestart() 
+ 106:../Sources/Events.c **** **         in PwmLdd5.c first
+ 107:../Sources/Events.c **** ** ===================================================================
+ 108:../Sources/Events.c **** */
+ 109:../Sources/Events.c **** 
+ 110:../Sources/Events.c **** /* Main Interrupt at 100Hz */
+ 111:../Sources/Events.c **** void TU2_OnCounterRestart_Old()
+ 112:../Sources/Events.c **** {
+ 181              		.loc 1 112 0
+ 182              		.cfi_startproc
+ 183 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 184              	.LCFI0:
+ 185              		.cfi_def_cfa_offset 24
+ 186              		.cfi_offset 3, -24
+ 187              		.cfi_offset 4, -20
+ 188              		.cfi_offset 5, -16
+ 189              		.cfi_offset 6, -12
+ 190              		.cfi_offset 7, -8
+ 191              		.cfi_offset 14, -4
+ 192 0002 4F46     		mov	r7, r9
+ 193 0004 4646     		mov	r6, r8
+ 194 0006 C0B4     		push	{r6, r7}
+ 195              	.LCFI1:
+ 196              		.cfi_def_cfa_offset 32
+ 197              		.cfi_offset 8, -32
+ 198              		.cfi_offset 9, -28
+ 199 0008 00AF     		add	r7, sp, #0
+ 200              	.LCFI2:
+ 201              		.cfi_def_cfa_register 7
+ 113:../Sources/Events.c ****   /* Write your code here ... */
+ 114:../Sources/Events.c **** 	//Timer_Interrupt_CB();
+ 115:../Sources/Events.c **** 	
+ 116:../Sources/Events.c **** 	 /* MMA8451 working */ 
+ 117:../Sources/Events.c **** 	//MMA845X_Poll();
+ 118:../Sources/Events.c **** 
+ 119:../Sources/Events.c **** 	/* CCD&Speed Working */
+ 120:../Sources/Events.c **** 
+ 121:../Sources/Events.c **** 	/* Speed Polling */
+ 122:../Sources/Events.c **** 	SpeedL_Edges = SpeedL_Counter;
+ 202              		.loc 1 122 0
+ 203 000a E14B     		ldr	r3, .L28+32
+ 204 000c 1A68     		ldr	r2, [r3]
+ 205 000e E14B     		ldr	r3, .L28+36
+ 206 0010 1A60     		str	r2, [r3]
+ 123:../Sources/Events.c **** 	SpeedR_Edges = SpeedR_Counter;
+ 207              		.loc 1 123 0
+ 208 0012 E14B     		ldr	r3, .L28+40
+ 209 0014 1A68     		ldr	r2, [r3]
+ 210 0016 E14B     		ldr	r3, .L28+44
+ 211 0018 1A60     		str	r2, [r3]
+ 124:../Sources/Events.c **** 	SpeedL_Integral += SpeedL;
+ 212              		.loc 1 124 0
+ 213 001a E14B     		ldr	r3, .L28+48
+ 214 001c 1B68     		ldr	r3, [r3]
+ 215 001e 072B     		cmp	r3, #7
+ 216 0020 03DC     		bgt	.L2
+ 217              		.loc 1 124 0 is_stmt 0 discriminator 2
+ 218 0022 DF4B     		ldr	r3, .L28+48
+ 219 0024 1B68     		ldr	r3, [r3]
+ 220 0026 002B     		cmp	r3, #0
+ 221 0028 03DC     		bgt	.L3
+ 222              	.L2:
+ 223              		.loc 1 124 0 discriminator 1
+ 224 002a DA4B     		ldr	r3, .L28+36
+ 225 002c 1B68     		ldr	r3, [r3]
+ 226 002e 5B42     		neg	r3, r3
+ 227 0030 04E0     		b	.L4
+ 228              	.L3:
+ 229              		.loc 1 124 0 discriminator 3
+ 230 0032 D84B     		ldr	r3, .L28+36
+ 231 0034 1A68     		ldr	r2, [r3]
+ 232 0036 DB4B     		ldr	r3, .L28+52
+ 233 0038 1B68     		ldr	r3, [r3]
+ 234 003a D31A     		sub	r3, r2, r3
+ 235              	.L4:
+ 236              		.loc 1 124 0 discriminator 4
+ 237 003c DA4A     		ldr	r2, .L28+56
+ 238 003e 1268     		ldr	r2, [r2]
+ 239 0040 9A18     		add	r2, r3, r2
+ 240 0042 D94B     		ldr	r3, .L28+56
+ 241 0044 1A60     		str	r2, [r3]
+ 125:../Sources/Events.c **** 	SpeedR_Integral += SpeedR;	
+ 242              		.loc 1 125 0 is_stmt 1 discriminator 4
+ 243 0046 D94B     		ldr	r3, .L28+60
+ 244 0048 1B68     		ldr	r3, [r3]
+ 245 004a 072B     		cmp	r3, #7
+ 246 004c 03DC     		bgt	.L5
+ 247              		.loc 1 125 0 is_stmt 0 discriminator 2
+ 248 004e D74B     		ldr	r3, .L28+60
+ 249 0050 1B68     		ldr	r3, [r3]
+ 250 0052 002B     		cmp	r3, #0
+ 251 0054 14DC     		bgt	.L6
+ 252              	.L5:
+ 253              		.loc 1 125 0 discriminator 1
+ 254 0056 D14B     		ldr	r3, .L28+44
+ 255 0058 1B68     		ldr	r3, [r3]
+ 256 005a 181C     		mov	r0, r3
+ 257 005c FFF7FEFF 		bl	__aeabi_i2d
+ 258 0060 031C     		mov	r3, r0
+ 259 0062 0C1C     		mov	r4, r1
+ 260 0064 181C     		mov	r0, r3
+ 261 0066 211C     		mov	r1, r4
+ 262 0068 C24B     		ldr	r3, .L28+4
+ 263 006a C14A     		ldr	r2, .L28
+ 264 006c FFF7FEFF 		bl	__aeabi_dmul
+ 265 0070 031C     		mov	r3, r0
+ 266 0072 0C1C     		mov	r4, r1
+ 267 0074 181C     		mov	r0, r3
+ 268 0076 211C     		mov	r1, r4
+ 269 0078 FFF7FEFF 		bl	__aeabi_d2iz
+ 270 007c 031C     		mov	r3, r0
+ 271 007e 24E0     		b	.L7
+ 272              	.L6:
+ 273              		.loc 1 125 0 discriminator 3
+ 274 0080 C64B     		ldr	r3, .L28+44
+ 275 0082 1B68     		ldr	r3, [r3]
+ 276 0084 181C     		mov	r0, r3
+ 277 0086 FFF7FEFF 		bl	__aeabi_i2d
+ 278 008a 031C     		mov	r3, r0
+ 279 008c 0C1C     		mov	r4, r1
+ 280 008e 181C     		mov	r0, r3
+ 281 0090 211C     		mov	r1, r4
+ 282 0092 B94A     		ldr	r2, .L28+8
+ 283 0094 B94B     		ldr	r3, .L28+12
+ 284 0096 FFF7FEFF 		bl	__aeabi_dmul
+ 285 009a 031C     		mov	r3, r0
+ 286 009c 0C1C     		mov	r4, r1
+ 287 009e 1D1C     		mov	r5, r3
+ 288 00a0 261C     		mov	r6, r4
+ 289 00a2 C34B     		ldr	r3, .L28+64
+ 290 00a4 1B68     		ldr	r3, [r3]
+ 291 00a6 181C     		mov	r0, r3
+ 292 00a8 FFF7FEFF 		bl	__aeabi_i2d
+ 293 00ac 031C     		mov	r3, r0
+ 294 00ae 0C1C     		mov	r4, r1
+ 295 00b0 281C     		mov	r0, r5
+ 296 00b2 311C     		mov	r1, r6
+ 297 00b4 1A1C     		mov	r2, r3
+ 298 00b6 231C     		mov	r3, r4
+ 299 00b8 FFF7FEFF 		bl	__aeabi_dsub
+ 300 00bc 031C     		mov	r3, r0
+ 301 00be 0C1C     		mov	r4, r1
+ 302 00c0 181C     		mov	r0, r3
+ 303 00c2 211C     		mov	r1, r4
+ 304 00c4 FFF7FEFF 		bl	__aeabi_d2iz
+ 305 00c8 031C     		mov	r3, r0
+ 306              	.L7:
+ 307              		.loc 1 125 0 discriminator 4
+ 308 00ca BA4A     		ldr	r2, .L28+68
+ 309 00cc 1268     		ldr	r2, [r2]
+ 310 00ce 9A18     		add	r2, r3, r2
+ 311 00d0 B84B     		ldr	r3, .L28+68
+ 312 00d2 1A60     		str	r2, [r3]
+ 126:../Sources/Events.c **** 	
+ 127:../Sources/Events.c **** 	/* Speed Correction */
+ 128:../Sources/Events.c **** 	SpeedL_Correct_Counter -= SpeedL_Correct_Buff[SpeedL_Correct_Pointer];
+ 313              		.loc 1 128 0 is_stmt 1 discriminator 4
+ 314 00d4 B24B     		ldr	r3, .L28+48
+ 315 00d6 1A68     		ldr	r2, [r3]
+ 316 00d8 B74B     		ldr	r3, .L28+72
+ 317 00da 1968     		ldr	r1, [r3]
+ 318 00dc B74B     		ldr	r3, .L28+76
+ 319 00de 8900     		lsl	r1, r1, #2
+ 320 00e0 CB58     		ldr	r3, [r1, r3]
+ 321 00e2 D21A     		sub	r2, r2, r3
+ 322 00e4 AE4B     		ldr	r3, .L28+48
+ 323 00e6 1A60     		str	r2, [r3]
+ 129:../Sources/Events.c **** 	SpeedL_Correct_Buff[SpeedL_Correct_Pointer] = ((Motor_Speed_PWM * 100 + Integral_AAC_E) <= 0);
+ 324              		.loc 1 129 0 discriminator 4
+ 325 00e8 B34B     		ldr	r3, .L28+72
+ 326 00ea 1A68     		ldr	r2, [r3]
+ 327 00ec B44B     		ldr	r3, .L28+80
+ 328 00ee 1B68     		ldr	r3, [r3]
+ 329 00f0 6421     		mov	r1, #100
+ 330 00f2 5943     		mul	r1, r3
+ 331 00f4 B34B     		ldr	r3, .L28+84
+ 332 00f6 1B68     		ldr	r3, [r3]
+ 333 00f8 CB18     		add	r3, r1, r3
+ 334 00fa 591E     		sub	r1, r3, #1
+ 335 00fc 0B43     		orr	r3, r1
+ 336 00fe D90F     		lsr	r1, r3, #31
+ 337 0100 AE4B     		ldr	r3, .L28+76
+ 338 0102 9200     		lsl	r2, r2, #2
+ 339 0104 D150     		str	r1, [r2, r3]
+ 130:../Sources/Events.c **** 	SpeedL_Correct_Counter += SpeedL_Correct_Buff[SpeedL_Correct_Pointer];
+ 340              		.loc 1 130 0 discriminator 4
+ 341 0106 AC4B     		ldr	r3, .L28+72
+ 342 0108 1A68     		ldr	r2, [r3]
+ 343 010a AC4B     		ldr	r3, .L28+76
+ 344 010c 9200     		lsl	r2, r2, #2
+ 345 010e D258     		ldr	r2, [r2, r3]
+ 346 0110 A34B     		ldr	r3, .L28+48
+ 347 0112 1B68     		ldr	r3, [r3]
+ 348 0114 D218     		add	r2, r2, r3
+ 349 0116 A24B     		ldr	r3, .L28+48
+ 350 0118 1A60     		str	r2, [r3]
+ 131:../Sources/Events.c **** 	SpeedL_Correct_Pointer = (SpeedL_Correct_Pointer + 1) % SpeedL_Correct_Pointer;
+ 351              		.loc 1 131 0 discriminator 4
+ 352 011a A74B     		ldr	r3, .L28+72
+ 353 011c 1B68     		ldr	r3, [r3]
+ 354 011e 5A1C     		add	r2, r3, #1
+ 355 0120 A54B     		ldr	r3, .L28+72
+ 356 0122 1B68     		ldr	r3, [r3]
+ 357 0124 101C     		mov	r0, r2
+ 358 0126 191C     		mov	r1, r3
+ 359 0128 FFF7FEFF 		bl	__aeabi_idivmod
+ 360 012c 0B1C     		mov	r3, r1
+ 361 012e 1A1C     		mov	r2, r3
+ 362 0130 A14B     		ldr	r3, .L28+72
+ 363 0132 1A60     		str	r2, [r3]
+ 132:../Sources/Events.c **** 
+ 133:../Sources/Events.c **** 	SpeedR_Correct_Counter -= SpeedR_Correct_Buff[SpeedR_Correct_Pointer];
+ 364              		.loc 1 133 0 discriminator 4
+ 365 0134 9D4B     		ldr	r3, .L28+60
+ 366 0136 1A68     		ldr	r2, [r3]
+ 367 0138 A34B     		ldr	r3, .L28+88
+ 368 013a 1968     		ldr	r1, [r3]
+ 369 013c A34B     		ldr	r3, .L28+92
+ 370 013e 8900     		lsl	r1, r1, #2
+ 371 0140 CB58     		ldr	r3, [r1, r3]
+ 372 0142 D21A     		sub	r2, r2, r3
+ 373 0144 994B     		ldr	r3, .L28+60
+ 374 0146 1A60     		str	r2, [r3]
+ 134:../Sources/Events.c **** 	SpeedR_Correct_Buff[SpeedL_Correct_Pointer] = ((Motor_Speed_PWM * 100 + Integral_AAC_E) <= 0);
+ 375              		.loc 1 134 0 discriminator 4
+ 376 0148 9B4B     		ldr	r3, .L28+72
+ 377 014a 1A68     		ldr	r2, [r3]
+ 378 014c 9C4B     		ldr	r3, .L28+80
+ 379 014e 1B68     		ldr	r3, [r3]
+ 380 0150 6421     		mov	r1, #100
+ 381 0152 5943     		mul	r1, r3
+ 382 0154 9B4B     		ldr	r3, .L28+84
+ 383 0156 1B68     		ldr	r3, [r3]
+ 384 0158 CB18     		add	r3, r1, r3
+ 385 015a 591E     		sub	r1, r3, #1
+ 386 015c 0B43     		orr	r3, r1
+ 387 015e D90F     		lsr	r1, r3, #31
+ 388 0160 9A4B     		ldr	r3, .L28+92
+ 389 0162 9200     		lsl	r2, r2, #2
+ 390 0164 D150     		str	r1, [r2, r3]
+ 135:../Sources/Events.c **** 	SpeedR_Correct_Counter += SpeedR_Correct_Buff[SpeedR_Correct_Pointer];
+ 391              		.loc 1 135 0 discriminator 4
+ 392 0166 984B     		ldr	r3, .L28+88
+ 393 0168 1A68     		ldr	r2, [r3]
+ 394 016a 984B     		ldr	r3, .L28+92
+ 395 016c 9200     		lsl	r2, r2, #2
+ 396 016e D258     		ldr	r2, [r2, r3]
+ 397 0170 8E4B     		ldr	r3, .L28+60
+ 398 0172 1B68     		ldr	r3, [r3]
+ 399 0174 D218     		add	r2, r2, r3
+ 400 0176 8D4B     		ldr	r3, .L28+60
+ 401 0178 1A60     		str	r2, [r3]
+ 136:../Sources/Events.c **** 	SpeedR_Correct_Pointer = (SpeedR_Correct_Pointer + 1) % SpeedR_Correct_Pointer;
+ 402              		.loc 1 136 0 discriminator 4
+ 403 017a 934B     		ldr	r3, .L28+88
+ 404 017c 1B68     		ldr	r3, [r3]
+ 405 017e 5A1C     		add	r2, r3, #1
+ 406 0180 914B     		ldr	r3, .L28+88
+ 407 0182 1B68     		ldr	r3, [r3]
+ 408 0184 101C     		mov	r0, r2
+ 409 0186 191C     		mov	r1, r3
+ 410 0188 FFF7FEFF 		bl	__aeabi_idivmod
+ 411 018c 0B1C     		mov	r3, r1
+ 412 018e 1A1C     		mov	r2, r3
+ 413 0190 8D4B     		ldr	r3, .L28+88
+ 414 0192 1A60     		str	r2, [r3]
+ 137:../Sources/Events.c **** 		
+ 138:../Sources/Events.c **** 	
+ 139:../Sources/Events.c **** 	/* Speed Init */
+ 140:../Sources/Events.c **** 	SpeedL_Counter = 0;
+ 415              		.loc 1 140 0 discriminator 4
+ 416 0194 7E4B     		ldr	r3, .L28+32
+ 417 0196 0022     		mov	r2, #0
+ 418 0198 1A60     		str	r2, [r3]
+ 141:../Sources/Events.c **** 	SpeedR_Counter = 0;
+ 419              		.loc 1 141 0 discriminator 4
+ 420 019a 7F4B     		ldr	r3, .L28+40
+ 421 019c 0022     		mov	r2, #0
+ 422 019e 1A60     		str	r2, [r3]
+ 142:../Sources/Events.c **** 	
+ 143:../Sources/Events.c **** 	/* CCD Polling Debug */
+ 144:../Sources/Events.c **** 	int i;
+ 145:../Sources/Events.c **** //	uint16_t Pix_Temp[CCD_Pixels_Width][2];
+ 146:../Sources/Events.c **** //	for (i = 0;i < CCD_Pixels_Width; i++) { Pix_Temp[CCD_Pixels_Width][0] = CCDL(i);Pix_Temp[CCD_Pix
+ 147:../Sources/Events.c **** //	for (i = 0;i < CCD_Pixels_Width; i++) printf("%d\t%d\t%d\t%d\t%d\n",CCDL(i) >> 10,CCDR(i) >> 10,
+ 148:../Sources/Events.c **** //	for (i = 0;i < CCD_Pixels_Width; i++) printf("%d\t%d\t%d\t%d\t%d\n",CCDL(i) >> 10,CCDL_Diff(i) >
+ 149:../Sources/Events.c **** //	for (i = 0;i < CCD_Pixels_Width; i++) printf("%d\t%d\t%d\t%d\t%d\n",CCDR(i) >> 10,CCDR_Diff(i) >
+ 150:../Sources/Events.c **** 
+ 151:../Sources/Events.c **** 	
+ 152:../Sources/Events.c **** 	/* Polling parameters of Components finish, write your code before */	
+ 153:../Sources/Events.c **** 	
+ 154:../Sources/Events.c **** 	/* Use click or Correction_Before_Stand_Up for Correction */
+ 155:../Sources/Events.c **** 	if (!Bit1_GetVal() || Correction_Before_Stand_Up) Correction_Start();
+ 423              		.loc 1 155 0 discriminator 4
+ 424 01a0 8B4B     		ldr	r3, .L28+96
+ 425 01a2 1B6B     		ldr	r3, [r3, #48]
+ 426 01a4 181C     		mov	r0, r3
+ 427 01a6 FFF7FEFF 		bl	BitIoLdd1_GetVal
+ 428 01aa 031C     		mov	r3, r0
+ 429 01ac 03D0     		beq	.L8
+ 430              		.loc 1 155 0 is_stmt 0 discriminator 2
+ 431 01ae 894B     		ldr	r3, .L28+100
+ 432 01b0 1B68     		ldr	r3, [r3]
+ 433 01b2 002B     		cmp	r3, #0
+ 434 01b4 02D0     		beq	.L9
+ 435              	.L8:
+ 436              		.loc 1 155 0 discriminator 1
+ 437 01b6 FFF7FEFF 		bl	Correction_Start
+ 438 01ba 01E0     		b	.L10
+ 439              	.L9:
+ 156:../Sources/Events.c **** 	else Correction_End();
+ 440              		.loc 1 156 0 is_stmt 1
+ 441 01bc FFF7FEFF 		bl	Correction_End
+ 442              	.L10:
+ 157:../Sources/Events.c **** 	
+ 158:../Sources/Events.c **** 	/* Use powerup for Correction */
+ 159:../Sources/Events.c **** 	Motor_Speed_PWM = (int32_t)( Temp1 * k2  + k1 * Integral_AAC_E );
+ 443              		.loc 1 159 0
+ 444 01c0 854B     		ldr	r3, .L28+104
+ 445 01c2 1B68     		ldr	r3, [r3]
+ 446 01c4 181C     		mov	r0, r3
+ 447 01c6 FFF7FEFF 		bl	__aeabi_i2d
+ 448 01ca 031C     		mov	r3, r0
+ 449 01cc 0C1C     		mov	r4, r1
+ 450 01ce 181C     		mov	r0, r3
+ 451 01d0 211C     		mov	r1, r4
+ 452 01d2 6B4A     		ldr	r2, .L28+16
+ 453 01d4 6B4B     		ldr	r3, .L28+20
+ 454 01d6 FFF7FEFF 		bl	__aeabi_dmul
+ 455 01da 031C     		mov	r3, r0
+ 456 01dc 0C1C     		mov	r4, r1
+ 457 01de 1D1C     		mov	r5, r3
+ 458 01e0 261C     		mov	r6, r4
+ 459 01e2 784B     		ldr	r3, .L28+84
+ 460 01e4 1B68     		ldr	r3, [r3]
+ 461 01e6 181C     		mov	r0, r3
+ 462 01e8 FFF7FEFF 		bl	__aeabi_i2d
+ 463 01ec 031C     		mov	r3, r0
+ 464 01ee 0C1C     		mov	r4, r1
+ 465 01f0 181C     		mov	r0, r3
+ 466 01f2 211C     		mov	r1, r4
+ 467 01f4 644A     		ldr	r2, .L28+24
+ 468 01f6 654B     		ldr	r3, .L28+28
+ 469 01f8 FFF7FEFF 		bl	__aeabi_dmul
+ 470 01fc 031C     		mov	r3, r0
+ 471 01fe 0C1C     		mov	r4, r1
+ 472 0200 281C     		mov	r0, r5
+ 473 0202 311C     		mov	r1, r6
+ 474 0204 1A1C     		mov	r2, r3
+ 475 0206 231C     		mov	r3, r4
+ 476 0208 FFF7FEFF 		bl	__aeabi_dadd
+ 477 020c 031C     		mov	r3, r0
+ 478 020e 0C1C     		mov	r4, r1
+ 479 0210 181C     		mov	r0, r3
+ 480 0212 211C     		mov	r1, r4
+ 481 0214 FFF7FEFF 		bl	__aeabi_d2iz
+ 482 0218 021C     		mov	r2, r0
+ 483 021a 694B     		ldr	r3, .L28+80
+ 484 021c 1A60     		str	r2, [r3]
+ 160:../Sources/Events.c **** 	DebugI = k1_Speeder * SpeedL_Integral;
+ 485              		.loc 1 160 0
+ 486 021e 624B     		ldr	r3, .L28+56
+ 487 0220 1A68     		ldr	r2, [r3]
+ 488 0222 131C     		mov	r3, r2
+ 489 0224 9B00     		lsl	r3, r3, #2
+ 490 0226 9B18     		add	r3, r3, r2
+ 491 0228 9B00     		lsl	r3, r3, #2
+ 492 022a 1A1C     		mov	r2, r3
+ 493 022c 6B4B     		ldr	r3, .L28+108
+ 494 022e 1A60     		str	r2, [r3]
+ 161:../Sources/Events.c **** 	DebugI2 =  (int32_t)SpeedL;
+ 495              		.loc 1 161 0
+ 496 0230 5B4B     		ldr	r3, .L28+48
+ 497 0232 1B68     		ldr	r3, [r3]
+ 498 0234 072B     		cmp	r3, #7
+ 499 0236 03DC     		bgt	.L11
+ 500              		.loc 1 161 0 is_stmt 0 discriminator 2
+ 501 0238 594B     		ldr	r3, .L28+48
+ 502 023a 1B68     		ldr	r3, [r3]
+ 503 023c 002B     		cmp	r3, #0
+ 504 023e 03DC     		bgt	.L12
+ 505              	.L11:
+ 506              		.loc 1 161 0 discriminator 1
+ 507 0240 544B     		ldr	r3, .L28+36
+ 508 0242 1B68     		ldr	r3, [r3]
+ 509 0244 5A42     		neg	r2, r3
+ 510 0246 04E0     		b	.L13
+ 511              	.L12:
+ 512 0248 524B     		ldr	r3, .L28+36
+ 513 024a 1A68     		ldr	r2, [r3]
+ 514 024c 554B     		ldr	r3, .L28+52
+ 515 024e 1B68     		ldr	r3, [r3]
+ 516 0250 D21A     		sub	r2, r2, r3
+ 517              	.L13:
+ 518              		.loc 1 161 0 discriminator 3
+ 519 0252 634B     		ldr	r3, .L28+112
+ 520 0254 1A60     		str	r2, [r3]
+ 162:../Sources/Events.c **** 
+ 163:../Sources/Events.c **** 	if (!NotStand_Up){
+ 521              		.loc 1 163 0 is_stmt 1 discriminator 3
+ 522 0256 634B     		ldr	r3, .L28+116
+ 523 0258 1B68     		ldr	r3, [r3]
+ 524 025a 002B     		cmp	r3, #0
+ 525 025c 00D0     		beq	.LCB304
+ 526 025e 43E1     		b	.L1	@long jump
+ 527              	.LCB304:
+ 164:../Sources/Events.c **** 		if (Mono==1) Set_Motors_Mono( Motor_Speed_PWM - SpeedL_FB , Motor_Speed_PWM - SpeedR_FB ); 
+ 528              		.loc 1 164 0
+ 529 0260 614B     		ldr	r3, .L28+120
+ 530 0262 1B68     		ldr	r3, [r3]
+ 531 0264 012B     		cmp	r3, #1
+ 532 0266 00D0     		beq	.LCB308
+ 533 0268 C0E0     		b	.L15	@long jump
+ 534              	.LCB308:
+ 535              		.loc 1 164 0 is_stmt 0 discriminator 1
+ 536 026a 4F4B     		ldr	r3, .L28+56
+ 537 026c 1B68     		ldr	r3, [r3]
+ 538 026e 1422     		mov	r2, #20
+ 539 0270 5242     		neg	r2, r2
+ 540 0272 111C     		mov	r1, r2
+ 541 0274 5943     		mul	r1, r3
+ 542 0276 4A4B     		ldr	r3, .L28+48
+ 543 0278 1B68     		ldr	r3, [r3]
+ 544 027a 072B     		cmp	r3, #7
+ 545 027c 03DC     		bgt	.L16
+ 546              		.loc 1 164 0 discriminator 2
+ 547 027e 484B     		ldr	r3, .L28+48
+ 548 0280 1B68     		ldr	r3, [r3]
+ 549 0282 002B     		cmp	r3, #0
+ 550 0284 05DC     		bgt	.L17
+ 551              	.L16:
+ 552              		.loc 1 164 0 discriminator 1
+ 553 0286 434B     		ldr	r3, .L28+36
+ 554 0288 1B68     		ldr	r3, [r3]
+ 555 028a 2D22     		mov	r2, #45
+ 556 028c 5242     		neg	r2, r2
+ 557 028e 5343     		mul	r3, r2
+ 558 0290 09E0     		b	.L18
+ 559              	.L17:
+ 560              		.loc 1 164 0 discriminator 3
+ 561 0292 404B     		ldr	r3, .L28+36
+ 562 0294 1A68     		ldr	r2, [r3]
+ 563 0296 434B     		ldr	r3, .L28+52
+ 564 0298 1B68     		ldr	r3, [r3]
+ 565 029a D21A     		sub	r2, r2, r3
+ 566 029c 131C     		mov	r3, r2
+ 567 029e 5B00     		lsl	r3, r3, #1
+ 568 02a0 9B18     		add	r3, r3, r2
+ 569 02a2 1A01     		lsl	r2, r3, #4
+ 570 02a4 D31A     		sub	r3, r2, r3
+ 571              	.L18:
+ 572              		.loc 1 164 0 discriminator 4
+ 573 02a6 CA1A     		sub	r2, r1, r3
+ 574 02a8 454B     		ldr	r3, .L28+80
+ 575 02aa 1B68     		ldr	r3, [r3]
+ 576 02ac D318     		add	r3, r2, r3
+ 577 02ae 9846     		mov	r8, r3
+ 578 02b0 404B     		ldr	r3, .L28+68
+ 579 02b2 1B68     		ldr	r3, [r3]
+ 580 02b4 1422     		mov	r2, #20
+ 581 02b6 5242     		neg	r2, r2
+ 582 02b8 111C     		mov	r1, r2
+ 583 02ba 5943     		mul	r1, r3
+ 584 02bc 8946     		mov	r9, r1
+ 585 02be 3B4B     		ldr	r3, .L28+60
+ 586 02c0 1B68     		ldr	r3, [r3]
+ 587 02c2 072B     		cmp	r3, #7
+ 588 02c4 03DC     		bgt	.L19
+ 589              		.loc 1 164 0 discriminator 2
+ 590 02c6 394B     		ldr	r3, .L28+60
+ 591 02c8 1B68     		ldr	r3, [r3]
+ 592 02ca 002B     		cmp	r3, #0
+ 593 02cc 19DC     		bgt	.L20
+ 594              	.L19:
+ 595              		.loc 1 164 0 discriminator 1
+ 596 02ce 334B     		ldr	r3, .L28+44
+ 597 02d0 1B68     		ldr	r3, [r3]
+ 598 02d2 181C     		mov	r0, r3
+ 599 02d4 FFF7FEFF 		bl	__aeabi_i2d
+ 600 02d8 031C     		mov	r3, r0
+ 601 02da 0C1C     		mov	r4, r1
+ 602 02dc 181C     		mov	r0, r3
+ 603 02de 211C     		mov	r1, r4
+ 604 02e0 244B     		ldr	r3, .L28+4
+ 605 02e2 234A     		ldr	r2, .L28
+ 606 02e4 FFF7FEFF 		bl	__aeabi_dmul
+ 607 02e8 031C     		mov	r3, r0
+ 608 02ea 0C1C     		mov	r4, r1
+ 609 02ec 181C     		mov	r0, r3
+ 610 02ee 211C     		mov	r1, r4
+ 611 02f0 FFF7FEFF 		bl	__aeabi_d2iz
+ 612 02f4 021C     		mov	r2, r0
+ 613 02f6 131C     		mov	r3, r2
+ 614 02f8 5B00     		lsl	r3, r3, #1
+ 615 02fa 9B18     		add	r3, r3, r2
+ 616 02fc 1A01     		lsl	r2, r3, #4
+ 617 02fe D31A     		sub	r3, r2, r3
+ 618 0300 29E0     		b	.L21
+ 619              	.L20:
+ 620              		.loc 1 164 0 discriminator 3
+ 621 0302 264B     		ldr	r3, .L28+44
+ 622 0304 1B68     		ldr	r3, [r3]
+ 623 0306 181C     		mov	r0, r3
+ 624 0308 FFF7FEFF 		bl	__aeabi_i2d
+ 625 030c 031C     		mov	r3, r0
+ 626 030e 0C1C     		mov	r4, r1
+ 627 0310 181C     		mov	r0, r3
+ 628 0312 211C     		mov	r1, r4
+ 629 0314 184A     		ldr	r2, .L28+8
+ 630 0316 194B     		ldr	r3, .L28+12
+ 631 0318 FFF7FEFF 		bl	__aeabi_dmul
+ 632 031c 031C     		mov	r3, r0
+ 633 031e 0C1C     		mov	r4, r1
+ 634 0320 1D1C     		mov	r5, r3
+ 635 0322 261C     		mov	r6, r4
+ 636 0324 224B     		ldr	r3, .L28+64
+ 637 0326 1B68     		ldr	r3, [r3]
+ 638 0328 181C     		mov	r0, r3
+ 639 032a FFF7FEFF 		bl	__aeabi_i2d
+ 640 032e 031C     		mov	r3, r0
+ 641 0330 0C1C     		mov	r4, r1
+ 642 0332 281C     		mov	r0, r5
+ 643 0334 311C     		mov	r1, r6
+ 644 0336 1A1C     		mov	r2, r3
+ 645 0338 231C     		mov	r3, r4
+ 646 033a FFF7FEFF 		bl	__aeabi_dsub
+ 647 033e 031C     		mov	r3, r0
+ 648 0340 0C1C     		mov	r4, r1
+ 649 0342 181C     		mov	r0, r3
+ 650 0344 211C     		mov	r1, r4
+ 651 0346 FFF7FEFF 		bl	__aeabi_d2iz
+ 652 034a 021C     		mov	r2, r0
+ 653 034c 131C     		mov	r3, r2
+ 654 034e 5B00     		lsl	r3, r3, #1
+ 655 0350 9B18     		add	r3, r3, r2
+ 656 0352 1A01     		lsl	r2, r3, #4
+ 657 0354 D31A     		sub	r3, r2, r3
+ 658              	.L21:
+ 659              		.loc 1 164 0 discriminator 4
+ 660 0356 4946     		mov	r1, r9
+ 661 0358 CA1A     		sub	r2, r1, r3
+ 662 035a 194B     		ldr	r3, .L28+80
+ 663 035c 1B68     		ldr	r3, [r3]
+ 664 035e D318     		add	r3, r2, r3
+ 665 0360 4046     		mov	r0, r8
+ 666 0362 191C     		mov	r1, r3
+ 667 0364 FFF7FEFF 		bl	Set_Motors_Mono
+ 668 0368 BEE0     		b	.L1
+ 669              	.L29:
+ 670 036a C046C046 		.align	3
+ 670      C046
+ 671              	.L28:
+ 672 0370 E9263108 		.word	137438953
+ 673 0374 AC1CEEBF 		.word	-1074914132
+ 674 0378 E9263108 		.word	137438953
+ 675 037c AC1CEE3F 		.word	1072569516
+ 676 0380 CDCCCCCC 		.word	-858993459
+ 677 0384 CCCCEC3F 		.word	1072483532
+ 678 0388 79E92631 		.word	824633721
+ 679 038c 08AC8C3F 		.word	1066183688
+ 680 0390 00000000 		.word	SpeedL_Counter
+ 681 0394 00000000 		.word	SpeedL_Edges
+ 682 0398 00000000 		.word	SpeedR_Counter
+ 683 039c 00000000 		.word	SpeedR_Edges
+ 684 03a0 00000000 		.word	SpeedL_Correct_Counter
+ 685 03a4 00000000 		.word	MotorControlL
+ 686 03a8 00000000 		.word	SpeedL_Integral
+ 687 03ac 00000000 		.word	SpeedR_Correct_Counter
+ 688 03b0 00000000 		.word	MotorControlR
+ 689 03b4 00000000 		.word	SpeedR_Integral
+ 690 03b8 00000000 		.word	SpeedL_Correct_Pointer
+ 691 03bc 00000000 		.word	SpeedL_Correct_Buff
+ 692 03c0 00000000 		.word	Motor_Speed_PWM
+ 693 03c4 00000000 		.word	Integral_AAC_E
+ 694 03c8 00000000 		.word	SpeedR_Correct_Pointer
+ 695 03cc 00000000 		.word	SpeedR_Correct_Buff
+ 696 03d0 00000000 		.word	PE_LDD_DeviceDataList
+ 697 03d4 00000000 		.word	Correction_Before_Stand_Up
+ 698 03d8 00000000 		.word	Temp1
+ 699 03dc 00000000 		.word	DebugI
+ 700 03e0 00000000 		.word	DebugI2
+ 701 03e4 00000000 		.word	NotStand_Up
+ 702 03e8 00000000 		.word	Mono
+ 703              	.L15:
+ 165:../Sources/Events.c **** 		else Set_Motors( Motor_Speed_PWM - SpeedR_FB , Motor_Speed_PWM - SpeedL_FB ); 
+ 704              		.loc 1 165 0 is_stmt 1
+ 705 03ec 464B     		ldr	r3, .L30+16
+ 706 03ee 1B68     		ldr	r3, [r3]
+ 707 03f0 1422     		mov	r2, #20
+ 708 03f2 5242     		neg	r2, r2
+ 709 03f4 111C     		mov	r1, r2
+ 710 03f6 5943     		mul	r1, r3
+ 711 03f8 8846     		mov	r8, r1
+ 712 03fa 444B     		ldr	r3, .L30+20
+ 713 03fc 1B68     		ldr	r3, [r3]
+ 714 03fe 072B     		cmp	r3, #7
+ 715 0400 03DC     		bgt	.L22
+ 716              		.loc 1 165 0 is_stmt 0 discriminator 2
+ 717 0402 424B     		ldr	r3, .L30+20
+ 718 0404 1B68     		ldr	r3, [r3]
+ 719 0406 002B     		cmp	r3, #0
+ 720 0408 19DC     		bgt	.L23
+ 721              	.L22:
+ 722              		.loc 1 165 0 discriminator 1
+ 723 040a 414B     		ldr	r3, .L30+24
+ 724 040c 1B68     		ldr	r3, [r3]
+ 725 040e 181C     		mov	r0, r3
+ 726 0410 FFF7FEFF 		bl	__aeabi_i2d
+ 727 0414 031C     		mov	r3, r0
+ 728 0416 0C1C     		mov	r4, r1
+ 729 0418 181C     		mov	r0, r3
+ 730 041a 211C     		mov	r1, r4
+ 731 041c 374B     		ldr	r3, .L30+4
+ 732 041e 364A     		ldr	r2, .L30
+ 733 0420 FFF7FEFF 		bl	__aeabi_dmul
+ 734 0424 031C     		mov	r3, r0
+ 735 0426 0C1C     		mov	r4, r1
+ 736 0428 181C     		mov	r0, r3
+ 737 042a 211C     		mov	r1, r4
+ 738 042c FFF7FEFF 		bl	__aeabi_d2iz
+ 739 0430 021C     		mov	r2, r0
+ 740 0432 131C     		mov	r3, r2
+ 741 0434 5B00     		lsl	r3, r3, #1
+ 742 0436 9B18     		add	r3, r3, r2
+ 743 0438 1A01     		lsl	r2, r3, #4
+ 744 043a D31A     		sub	r3, r2, r3
+ 745 043c 29E0     		b	.L24
+ 746              	.L23:
+ 747              		.loc 1 165 0 discriminator 3
+ 748 043e 344B     		ldr	r3, .L30+24
+ 749 0440 1B68     		ldr	r3, [r3]
+ 750 0442 181C     		mov	r0, r3
+ 751 0444 FFF7FEFF 		bl	__aeabi_i2d
+ 752 0448 031C     		mov	r3, r0
+ 753 044a 0C1C     		mov	r4, r1
+ 754 044c 181C     		mov	r0, r3
+ 755 044e 211C     		mov	r1, r4
+ 756 0450 2B4A     		ldr	r2, .L30+8
+ 757 0452 2C4B     		ldr	r3, .L30+12
+ 758 0454 FFF7FEFF 		bl	__aeabi_dmul
+ 759 0458 031C     		mov	r3, r0
+ 760 045a 0C1C     		mov	r4, r1
+ 761 045c 1D1C     		mov	r5, r3
+ 762 045e 261C     		mov	r6, r4
+ 763 0460 2C4B     		ldr	r3, .L30+28
+ 764 0462 1B68     		ldr	r3, [r3]
+ 765 0464 181C     		mov	r0, r3
+ 766 0466 FFF7FEFF 		bl	__aeabi_i2d
+ 767 046a 031C     		mov	r3, r0
+ 768 046c 0C1C     		mov	r4, r1
+ 769 046e 281C     		mov	r0, r5
+ 770 0470 311C     		mov	r1, r6
+ 771 0472 1A1C     		mov	r2, r3
+ 772 0474 231C     		mov	r3, r4
+ 773 0476 FFF7FEFF 		bl	__aeabi_dsub
+ 774 047a 031C     		mov	r3, r0
+ 775 047c 0C1C     		mov	r4, r1
+ 776 047e 181C     		mov	r0, r3
+ 777 0480 211C     		mov	r1, r4
+ 778 0482 FFF7FEFF 		bl	__aeabi_d2iz
+ 779 0486 021C     		mov	r2, r0
+ 780 0488 131C     		mov	r3, r2
+ 781 048a 5B00     		lsl	r3, r3, #1
+ 782 048c 9B18     		add	r3, r3, r2
+ 783 048e 1A01     		lsl	r2, r3, #4
+ 784 0490 D31A     		sub	r3, r2, r3
+ 785              	.L24:
+ 786              		.loc 1 165 0 discriminator 4
+ 787 0492 4146     		mov	r1, r8
+ 788 0494 CA1A     		sub	r2, r1, r3
+ 789 0496 204B     		ldr	r3, .L30+32
+ 790 0498 1B68     		ldr	r3, [r3]
+ 791 049a D118     		add	r1, r2, r3
+ 792 049c 1F4B     		ldr	r3, .L30+36
+ 793 049e 1B68     		ldr	r3, [r3]
+ 794 04a0 1422     		mov	r2, #20
+ 795 04a2 5242     		neg	r2, r2
+ 796 04a4 101C     		mov	r0, r2
+ 797 04a6 5843     		mul	r0, r3
+ 798 04a8 1D4B     		ldr	r3, .L30+40
+ 799 04aa 1B68     		ldr	r3, [r3]
+ 800 04ac 072B     		cmp	r3, #7
+ 801 04ae 03DC     		bgt	.L25
+ 802              		.loc 1 165 0 discriminator 2
+ 803 04b0 1B4B     		ldr	r3, .L30+40
+ 804 04b2 1B68     		ldr	r3, [r3]
+ 805 04b4 002B     		cmp	r3, #0
+ 806 04b6 05DC     		bgt	.L26
+ 807              	.L25:
+ 808              		.loc 1 165 0 discriminator 1
+ 809 04b8 1A4B     		ldr	r3, .L30+44
+ 810 04ba 1B68     		ldr	r3, [r3]
+ 811 04bc 2D22     		mov	r2, #45
+ 812 04be 5242     		neg	r2, r2
+ 813 04c0 5343     		mul	r3, r2
+ 814 04c2 09E0     		b	.L27
+ 815              	.L26:
+ 816              		.loc 1 165 0 discriminator 3
+ 817 04c4 174B     		ldr	r3, .L30+44
+ 818 04c6 1A68     		ldr	r2, [r3]
+ 819 04c8 174B     		ldr	r3, .L30+48
+ 820 04ca 1B68     		ldr	r3, [r3]
+ 821 04cc D21A     		sub	r2, r2, r3
+ 822 04ce 131C     		mov	r3, r2
+ 823 04d0 5B00     		lsl	r3, r3, #1
+ 824 04d2 9B18     		add	r3, r3, r2
+ 825 04d4 1A01     		lsl	r2, r3, #4
+ 826 04d6 D31A     		sub	r3, r2, r3
+ 827              	.L27:
+ 828              		.loc 1 165 0 discriminator 4
+ 829 04d8 C21A     		sub	r2, r0, r3
+ 830 04da 0F4B     		ldr	r3, .L30+32
+ 831 04dc 1B68     		ldr	r3, [r3]
+ 832 04de D318     		add	r3, r2, r3
+ 833 04e0 081C     		mov	r0, r1
+ 834 04e2 191C     		mov	r1, r3
+ 835 04e4 FFF7FEFF 		bl	Set_Motors
+ 836              	.L1:
+ 166:../Sources/Events.c **** 	}
+ 167:../Sources/Events.c **** }
+ 837              		.loc 1 167 0 is_stmt 1
+ 838 04e8 BD46     		mov	sp, r7
+ 839              		@ sp needed for prologue
+ 840 04ea 0CBC     		pop	{r2, r3}
+ 841 04ec 9046     		mov	r8, r2
+ 842 04ee 9946     		mov	r9, r3
+ 843 04f0 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 844              	.L31:
+ 845 04f2 C046C046 		.align	3
+ 845      C046
+ 846              	.L30:
+ 847 04f8 E9263108 		.word	137438953
+ 848 04fc AC1CEEBF 		.word	-1074914132
+ 849 0500 E9263108 		.word	137438953
+ 850 0504 AC1CEE3F 		.word	1072569516
+ 851 0508 00000000 		.word	SpeedR_Integral
+ 852 050c 00000000 		.word	SpeedR_Correct_Counter
+ 853 0510 00000000 		.word	SpeedR_Edges
+ 854 0514 00000000 		.word	MotorControlR
+ 855 0518 00000000 		.word	Motor_Speed_PWM
+ 856 051c 00000000 		.word	SpeedL_Integral
+ 857 0520 00000000 		.word	SpeedL_Correct_Counter
+ 858 0524 00000000 		.word	SpeedL_Edges
+ 859 0528 00000000 		.word	MotorControlL
+ 860              		.cfi_endproc
+ 861              	.LFE0:
+ 863 052c C046C046 		.section	.text.I2C2_OnMasterBlockSent,"ax",%progbits
+ 864              		.align	2
+ 865              		.global	I2C2_OnMasterBlockSent
+ 866              		.code	16
+ 867              		.thumb_func
+ 869              	I2C2_OnMasterBlockSent:
+ 870              	.LFB1:
+ 168:../Sources/Events.c **** 
+ 169:../Sources/Events.c **** /*
+ 170:../Sources/Events.c **** ** ===================================================================
+ 171:../Sources/Events.c **** **     Event       :  I2C2_OnMasterBlockSent (module Events)
+ 172:../Sources/Events.c **** **
+ 173:../Sources/Events.c **** **     Component   :  I2C2 [I2C_LDD]
+ 174:../Sources/Events.c **** **     Description :
+ 175:../Sources/Events.c **** **         This event is called when I2C in master mode finishes the
+ 176:../Sources/Events.c **** **         transmission of the data successfully. This event is not
+ 177:../Sources/Events.c **** **         available for the SLAVE mode and if MasterSendBlock is
+ 178:../Sources/Events.c **** **         disabled. 
+ 179:../Sources/Events.c **** **     Parameters  :
+ 180:../Sources/Events.c **** **         NAME            - DESCRIPTION
+ 181:../Sources/Events.c **** **       * UserDataPtr     - Pointer to the user or
+ 182:../Sources/Events.c **** **                           RTOS specific data. This pointer is passed
+ 183:../Sources/Events.c **** **                           as the parameter of Init method.
+ 184:../Sources/Events.c **** **     Returns     : Nothing
+ 185:../Sources/Events.c **** ** ===================================================================
+ 186:../Sources/Events.c **** */
+ 187:../Sources/Events.c **** void I2C2_OnMasterBlockSent(LDD_TUserData *UserDataPtr)
+ 188:../Sources/Events.c **** {
+ 871              		.loc 1 188 0
+ 872              		.cfi_startproc
+ 873 0000 80B5     		push	{r7, lr}
+ 874              	.LCFI3:
+ 875              		.cfi_def_cfa_offset 8
+ 876              		.cfi_offset 7, -8
+ 877              		.cfi_offset 14, -4
+ 878 0002 82B0     		sub	sp, sp, #8
+ 879              	.LCFI4:
+ 880              		.cfi_def_cfa_offset 16
+ 881 0004 00AF     		add	r7, sp, #0
+ 882              	.LCFI5:
+ 883              		.cfi_def_cfa_register 7
+ 884 0006 7860     		str	r0, [r7, #4]
+ 189:../Sources/Events.c ****   /* Write your code here ... */
+ 190:../Sources/Events.c **** 	  DataTransmittedFlg = TRUE;
+ 885              		.loc 1 190 0
+ 886 0008 024B     		ldr	r3, .L33
+ 887 000a 0122     		mov	r2, #1
+ 888 000c 1A70     		strb	r2, [r3]
+ 191:../Sources/Events.c **** }
+ 889              		.loc 1 191 0
+ 890 000e BD46     		mov	sp, r7
+ 891 0010 02B0     		add	sp, sp, #8
+ 892              		@ sp needed for prologue
+ 893 0012 80BD     		pop	{r7, pc}
+ 894              	.L34:
+ 895              		.align	2
+ 896              	.L33:
+ 897 0014 00000000 		.word	DataTransmittedFlg
+ 898              		.cfi_endproc
+ 899              	.LFE1:
+ 901              		.section	.text.I2C2_OnMasterBlockReceived,"ax",%progbits
+ 902              		.align	2
+ 903              		.global	I2C2_OnMasterBlockReceived
+ 904              		.code	16
+ 905              		.thumb_func
+ 907              	I2C2_OnMasterBlockReceived:
+ 908              	.LFB2:
+ 192:../Sources/Events.c **** 
+ 193:../Sources/Events.c **** /*
+ 194:../Sources/Events.c **** ** ===================================================================
+ 195:../Sources/Events.c **** **     Event       :  I2C2_OnMasterBlockReceived (module Events)
+ 196:../Sources/Events.c **** **
+ 197:../Sources/Events.c **** **     Component   :  I2C2 [I2C_LDD]
+ 198:../Sources/Events.c **** **     Description :
+ 199:../Sources/Events.c **** **         This event is called when I2C is in master mode and finishes
+ 200:../Sources/Events.c **** **         the reception of the data successfully. This event is not
+ 201:../Sources/Events.c **** **         available for the SLAVE mode and if MasterReceiveBlock is
+ 202:../Sources/Events.c **** **         disabled.
+ 203:../Sources/Events.c **** **     Parameters  :
+ 204:../Sources/Events.c **** **         NAME            - DESCRIPTION
+ 205:../Sources/Events.c **** **       * UserDataPtr     - Pointer to the user or
+ 206:../Sources/Events.c **** **                           RTOS specific data. This pointer is passed
+ 207:../Sources/Events.c **** **                           as the parameter of Init method.
+ 208:../Sources/Events.c **** **     Returns     : Nothing
+ 209:../Sources/Events.c **** ** ===================================================================
+ 210:../Sources/Events.c **** */
+ 211:../Sources/Events.c **** void I2C2_OnMasterBlockReceived(LDD_TUserData *UserDataPtr)
+ 212:../Sources/Events.c **** {
+ 909              		.loc 1 212 0
+ 910              		.cfi_startproc
+ 911 0000 80B5     		push	{r7, lr}
+ 912              	.LCFI6:
+ 913              		.cfi_def_cfa_offset 8
+ 914              		.cfi_offset 7, -8
+ 915              		.cfi_offset 14, -4
+ 916 0002 82B0     		sub	sp, sp, #8
+ 917              	.LCFI7:
+ 918              		.cfi_def_cfa_offset 16
+ 919 0004 00AF     		add	r7, sp, #0
+ 920              	.LCFI8:
+ 921              		.cfi_def_cfa_register 7
+ 922 0006 7860     		str	r0, [r7, #4]
+ 213:../Sources/Events.c ****   /* Write your code here ... */
+ 214:../Sources/Events.c **** 	  DataReceivedFlg = TRUE;
+ 923              		.loc 1 214 0
+ 924 0008 024B     		ldr	r3, .L36
+ 925 000a 0122     		mov	r2, #1
+ 926 000c 1A70     		strb	r2, [r3]
+ 215:../Sources/Events.c **** }
+ 927              		.loc 1 215 0
+ 928 000e BD46     		mov	sp, r7
+ 929 0010 02B0     		add	sp, sp, #8
+ 930              		@ sp needed for prologue
+ 931 0012 80BD     		pop	{r7, pc}
+ 932              	.L37:
+ 933              		.align	2
+ 934              	.L36:
+ 935 0014 00000000 		.word	DataReceivedFlg
+ 936              		.cfi_endproc
+ 937              	.LFE2:
+ 939              		.section	.text.I2C2_OnError,"ax",%progbits
+ 940              		.align	2
+ 941              		.global	I2C2_OnError
+ 942              		.code	16
+ 943              		.thumb_func
+ 945              	I2C2_OnError:
+ 946              	.LFB3:
+ 216:../Sources/Events.c **** 
+ 217:../Sources/Events.c **** /*
+ 218:../Sources/Events.c **** ** ===================================================================
+ 219:../Sources/Events.c **** **     Event       :  I2C2_OnError (module Events)
+ 220:../Sources/Events.c **** **
+ 221:../Sources/Events.c **** **     Component   :  I2C2 [I2C_LDD]
+ 222:../Sources/Events.c **** **     Description :
+ 223:../Sources/Events.c **** **         This event is called when an error (e.g. Arbitration lost)
+ 224:../Sources/Events.c **** **         occurs. The errors can be read with GetError method.
+ 225:../Sources/Events.c **** **     Parameters  :
+ 226:../Sources/Events.c **** **         NAME            - DESCRIPTION
+ 227:../Sources/Events.c **** **       * UserDataPtr     - Pointer to the user or
+ 228:../Sources/Events.c **** **                           RTOS specific data. This pointer is passed
+ 229:../Sources/Events.c **** **                           as the parameter of Init method.
+ 230:../Sources/Events.c **** **     Returns     : Nothing
+ 231:../Sources/Events.c **** ** ===================================================================
+ 232:../Sources/Events.c **** */
+ 233:../Sources/Events.c **** void I2C2_OnError(LDD_TUserData *UserDataPtr)
+ 234:../Sources/Events.c **** {
+ 947              		.loc 1 234 0
+ 948              		.cfi_startproc
+ 949 0000 80B5     		push	{r7, lr}
+ 950              	.LCFI9:
+ 951              		.cfi_def_cfa_offset 8
+ 952              		.cfi_offset 7, -8
+ 953              		.cfi_offset 14, -4
+ 954 0002 82B0     		sub	sp, sp, #8
+ 955              	.LCFI10:
+ 956              		.cfi_def_cfa_offset 16
+ 957 0004 00AF     		add	r7, sp, #0
+ 958              	.LCFI11:
+ 959              		.cfi_def_cfa_register 7
+ 960 0006 7860     		str	r0, [r7, #4]
+ 235:../Sources/Events.c ****   /* Write your code here ... */
+ 236:../Sources/Events.c **** }
+ 961              		.loc 1 236 0
+ 962 0008 BD46     		mov	sp, r7
+ 963 000a 02B0     		add	sp, sp, #8
+ 964              		@ sp needed for prologue
+ 965 000c 80BD     		pop	{r7, pc}
+ 966              		.cfi_endproc
+ 967              	.LFE3:
+ 969 000e C046     		.section	.text.EInt1_OnInterrupt,"ax",%progbits
+ 970              		.align	2
+ 971              		.global	EInt1_OnInterrupt
+ 972              		.code	16
+ 973              		.thumb_func
+ 975              	EInt1_OnInterrupt:
+ 976              	.LFB4:
+ 237:../Sources/Events.c **** 
+ 238:../Sources/Events.c **** /*
+ 239:../Sources/Events.c **** ** ===================================================================
+ 240:../Sources/Events.c **** **     Event       :  EInt1_OnInterrupt (module Events)
+ 241:../Sources/Events.c **** **
+ 242:../Sources/Events.c **** **     Component   :  EInt1 [ExtInt]
+ 243:../Sources/Events.c **** **     Description :
+ 244:../Sources/Events.c **** **         This event is called when an active signal edge/level has
+ 245:../Sources/Events.c **** **         occurred.
+ 246:../Sources/Events.c **** **     Parameters  : None
+ 247:../Sources/Events.c **** **     Returns     : Nothing
+ 248:../Sources/Events.c **** ** ===================================================================
+ 249:../Sources/Events.c **** */
+ 250:../Sources/Events.c **** void EInt1_OnInterrupt(void)
+ 251:../Sources/Events.c **** {
+ 977              		.loc 1 251 0
+ 978              		.cfi_startproc
+ 979 0000 80B5     		push	{r7, lr}
+ 980              	.LCFI12:
+ 981              		.cfi_def_cfa_offset 8
+ 982              		.cfi_offset 7, -8
+ 983              		.cfi_offset 14, -4
+ 984 0002 00AF     		add	r7, sp, #0
+ 985              	.LCFI13:
+ 986              		.cfi_def_cfa_register 7
+ 252:../Sources/Events.c ****   /* Write your code here ... */
+ 253:../Sources/Events.c **** 	SpeedR_Counter++;
+ 987              		.loc 1 253 0
+ 988 0004 034B     		ldr	r3, .L40
+ 989 0006 1B68     		ldr	r3, [r3]
+ 990 0008 5A1C     		add	r2, r3, #1
+ 991 000a 024B     		ldr	r3, .L40
+ 992 000c 1A60     		str	r2, [r3]
+ 254:../Sources/Events.c **** }
+ 993              		.loc 1 254 0
+ 994 000e BD46     		mov	sp, r7
+ 995              		@ sp needed for prologue
+ 996 0010 80BD     		pop	{r7, pc}
+ 997              	.L41:
+ 998 0012 C046     		.align	2
+ 999              	.L40:
+ 1000 0014 00000000 		.word	SpeedR_Counter
+ 1001              		.cfi_endproc
+ 1002              	.LFE4:
+ 1004              		.section	.text.EInt2_OnInterrupt,"ax",%progbits
+ 1005              		.align	2
+ 1006              		.global	EInt2_OnInterrupt
+ 1007              		.code	16
+ 1008              		.thumb_func
+ 1010              	EInt2_OnInterrupt:
+ 1011              	.LFB5:
+ 255:../Sources/Events.c **** 
+ 256:../Sources/Events.c **** /*
+ 257:../Sources/Events.c **** ** ===================================================================
+ 258:../Sources/Events.c **** **     Event       :  EInt2_OnInterrupt (module Events)
+ 259:../Sources/Events.c **** **
+ 260:../Sources/Events.c **** **     Component   :  EInt2 [ExtInt]
+ 261:../Sources/Events.c **** **     Description :
+ 262:../Sources/Events.c **** **         This event is called when an active signal edge/level has
+ 263:../Sources/Events.c **** **         occurred.
+ 264:../Sources/Events.c **** **     Parameters  : None
+ 265:../Sources/Events.c **** **     Returns     : Nothing
+ 266:../Sources/Events.c **** ** ===================================================================
+ 267:../Sources/Events.c **** */
+ 268:../Sources/Events.c **** void EInt2_OnInterrupt(void)
+ 269:../Sources/Events.c **** {
+ 1012              		.loc 1 269 0
+ 1013              		.cfi_startproc
+ 1014 0000 80B5     		push	{r7, lr}
+ 1015              	.LCFI14:
+ 1016              		.cfi_def_cfa_offset 8
+ 1017              		.cfi_offset 7, -8
+ 1018              		.cfi_offset 14, -4
+ 1019 0002 00AF     		add	r7, sp, #0
+ 1020              	.LCFI15:
+ 1021              		.cfi_def_cfa_register 7
+ 270:../Sources/Events.c ****   /* Write your code here ... */
+ 271:../Sources/Events.c **** 	SpeedL_Counter++;
+ 1022              		.loc 1 271 0
+ 1023 0004 034B     		ldr	r3, .L43
+ 1024 0006 1B68     		ldr	r3, [r3]
+ 1025 0008 5A1C     		add	r2, r3, #1
+ 1026 000a 024B     		ldr	r3, .L43
+ 1027 000c 1A60     		str	r2, [r3]
+ 272:../Sources/Events.c **** }
+ 1028              		.loc 1 272 0
+ 1029 000e BD46     		mov	sp, r7
+ 1030              		@ sp needed for prologue
+ 1031 0010 80BD     		pop	{r7, pc}
+ 1032              	.L44:
+ 1033 0012 C046     		.align	2
+ 1034              	.L43:
+ 1035 0014 00000000 		.word	SpeedL_Counter
+ 1036              		.cfi_endproc
+ 1037              	.LFE5:
+ 1039              		.global	__aeabi_ui2d
+ 1040              		.global	__aeabi_dcmpgt
+ 1041              		.section	.text.TU3_OnCounterRestart,"ax",%progbits
+ 1042              		.align	2
+ 1043              		.global	TU3_OnCounterRestart
+ 1044              		.code	16
+ 1045              		.thumb_func
+ 1047              	TU3_OnCounterRestart:
+ 1048              	.LFB6:
+ 273:../Sources/Events.c **** 
+ 274:../Sources/Events.c **** /*
+ 275:../Sources/Events.c **** ** ===================================================================
+ 276:../Sources/Events.c **** **     Event       :  AD1_OnEnd (module Events)
+ 277:../Sources/Events.c **** **
+ 278:../Sources/Events.c **** **     Component   :  AD1 [ADC]
+ 279:../Sources/Events.c **** **     Description :
+ 280:../Sources/Events.c **** **         This event is called after the measurement (which consists
+ 281:../Sources/Events.c **** **         of <1 or more conversions>) is/are finished.
+ 282:../Sources/Events.c **** **         The event is available only when the <Interrupt
+ 283:../Sources/Events.c **** **         service/event> property is enabled.
+ 284:../Sources/Events.c **** **     Parameters  : None
+ 285:../Sources/Events.c **** **     Returns     : Nothing
+ 286:../Sources/Events.c **** ** ===================================================================
+ 287:../Sources/Events.c **** */
+ 288:../Sources/Events.c **** 
+ 289:../Sources/Events.c **** /*
+ 290:../Sources/Events.c **** ** ===================================================================
+ 291:../Sources/Events.c **** **     Event       :  TU3_OnCounterRestart (module Events)
+ 292:../Sources/Events.c **** **
+ 293:../Sources/Events.c **** **     Component   :  TU3 [TimerUnit_LDD]
+ 294:../Sources/Events.c **** **     Description :
+ 295:../Sources/Events.c **** **         Called if counter overflow/underflow or counter is
+ 296:../Sources/Events.c **** **         reinitialized by modulo or compare register matching.
+ 297:../Sources/Events.c **** **         OnCounterRestart event and Timer unit must be enabled. See
+ 298:../Sources/Events.c **** **         <SetEventMask> and <GetEventMask> methods. This event is
+ 299:../Sources/Events.c **** **         available only if a <Interrupt> is enabled.
+ 300:../Sources/Events.c **** **     Parameters  :
+ 301:../Sources/Events.c **** **         NAME            - DESCRIPTION
+ 302:../Sources/Events.c **** **       * UserDataPtr     - Pointer to the user or
+ 303:../Sources/Events.c **** **                           RTOS specific data. The pointer passed as
+ 304:../Sources/Events.c **** **                           the parameter of Init method.
+ 305:../Sources/Events.c **** **     Returns     : Nothing
+ 306:../Sources/Events.c **** ** ===================================================================
+ 307:../Sources/Events.c **** */
+ 308:../Sources/Events.c **** 
+ 309:../Sources/Events.c **** void TU3_OnCounterRestart(LDD_TUserData *UserDataPtr)
+ 310:../Sources/Events.c **** {
+ 1049              		.loc 1 310 0
+ 1050              		.cfi_startproc
+ 1051 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1052              	.LCFI16:
+ 1053              		.cfi_def_cfa_offset 20
+ 1054              		.cfi_offset 4, -20
+ 1055              		.cfi_offset 5, -16
+ 1056              		.cfi_offset 6, -12
+ 1057              		.cfi_offset 7, -8
+ 1058              		.cfi_offset 14, -4
+ 1059 0002 4746     		mov	r7, r8
+ 1060 0004 80B4     		push	{r7}
+ 1061              	.LCFI17:
+ 1062              		.cfi_def_cfa_offset 24
+ 1063              		.cfi_offset 8, -24
+ 1064 0006 84B0     		sub	sp, sp, #16
+ 1065              	.LCFI18:
+ 1066              		.cfi_def_cfa_offset 40
+ 1067 0008 00AF     		add	r7, sp, #0
+ 1068              	.LCFI19:
+ 1069              		.cfi_def_cfa_register 7
+ 1070 000a F860     		str	r0, [r7, #12]
+ 311:../Sources/Events.c **** 	
+ 312:../Sources/Events.c **** 	if ( Counter == CCD_Pixels_Width){
+ 1071              		.loc 1 312 0
+ 1072 000c C84B     		ldr	r3, .L64+16
+ 1073 000e 1B88     		ldrh	r3, [r3]
+ 1074 0010 802B     		cmp	r3, #128
+ 1075 0012 00D0     		beq	.LCB757
+ 1076 0014 A2E0     		b	.L46	@long jump
+ 1077              	.LCB757:
+ 1078              	.LBB2:
+ 313:../Sources/Events.c **** 		
+ 314:../Sources/Events.c **** 		/* Verify Track & Update Last_Track,Track_Diff */
+ 315:../Sources/Events.c **** 		if ( MaxTrackL > MaxTrackL_Threhold * CCD_SagL_Diff ){
+ 1079              		.loc 1 315 0
+ 1080 0016 C74B     		ldr	r3, .L64+20
+ 1081 0018 1B88     		ldrh	r3, [r3]
+ 1082 001a 181C     		mov	r0, r3
+ 1083 001c FFF7FEFF 		bl	__aeabi_i2d
+ 1084 0020 051C     		mov	r5, r0
+ 1085 0022 0E1C     		mov	r6, r1
+ 1086 0024 C44B     		ldr	r3, .L64+24
+ 1087 0026 1B68     		ldr	r3, [r3]
+ 1088 0028 181C     		mov	r0, r3
+ 1089 002a FFF7FEFF 		bl	__aeabi_ui2d
+ 1090 002e 031C     		mov	r3, r0
+ 1091 0030 0C1C     		mov	r4, r1
+ 1092 0032 181C     		mov	r0, r3
+ 1093 0034 211C     		mov	r1, r4
+ 1094 0036 BB4B     		ldr	r3, .L64+4
+ 1095 0038 B94A     		ldr	r2, .L64
+ 1096 003a FFF7FEFF 		bl	__aeabi_dmul
+ 1097 003e 031C     		mov	r3, r0
+ 1098 0040 0C1C     		mov	r4, r1
+ 1099 0042 0122     		mov	r2, #1
+ 1100 0044 9046     		mov	r8, r2
+ 1101 0046 281C     		mov	r0, r5
+ 1102 0048 311C     		mov	r1, r6
+ 1103 004a 1A1C     		mov	r2, r3
+ 1104 004c 231C     		mov	r3, r4
+ 1105 004e FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1106 0052 031C     		mov	r3, r0
+ 1107 0054 01D1     		bne	.L47
+ 1108 0056 0023     		mov	r3, #0
+ 1109 0058 9846     		mov	r8, r3
+ 1110              	.L47:
+ 1111 005a 4146     		mov	r1, r8
+ 1112 005c CBB2     		uxtb	r3, r1
+ 1113 005e 002B     		cmp	r3, #0
+ 1114 0060 0BD0     		beq	.L48
+ 316:../Sources/Events.c **** 			TrackL_Diff = TrackL - Last_TrackL;
+ 1115              		.loc 1 316 0
+ 1116 0062 B64B     		ldr	r3, .L64+28
+ 1117 0064 1A68     		ldr	r2, [r3]
+ 1118 0066 B64B     		ldr	r3, .L64+32
+ 1119 0068 1B68     		ldr	r3, [r3]
+ 1120 006a D21A     		sub	r2, r2, r3
+ 1121 006c B54B     		ldr	r3, .L64+36
+ 1122 006e 1A60     		str	r2, [r3]
+ 317:../Sources/Events.c **** 			Last_TrackL = TrackL;
+ 1123              		.loc 1 317 0
+ 1124 0070 B24B     		ldr	r3, .L64+28
+ 1125 0072 1A68     		ldr	r2, [r3]
+ 1126 0074 B24B     		ldr	r3, .L64+32
+ 1127 0076 1A60     		str	r2, [r3]
+ 1128 0078 02E0     		b	.L49
+ 1129              	.L48:
+ 318:../Sources/Events.c **** 		}
+ 319:../Sources/Events.c **** 		else TrackL_Diff = 0;				
+ 1130              		.loc 1 319 0
+ 1131 007a B24B     		ldr	r3, .L64+36
+ 1132 007c 0022     		mov	r2, #0
+ 1133 007e 1A60     		str	r2, [r3]
+ 1134              	.L49:
+ 320:../Sources/Events.c **** 		if ( MaxTrackR > MaxTrackR_Threhold * CCD_SagR_Diff ){
+ 1135              		.loc 1 320 0
+ 1136 0080 B14B     		ldr	r3, .L64+40
+ 1137 0082 1B88     		ldrh	r3, [r3]
+ 1138 0084 181C     		mov	r0, r3
+ 1139 0086 FFF7FEFF 		bl	__aeabi_i2d
+ 1140 008a 051C     		mov	r5, r0
+ 1141 008c 0E1C     		mov	r6, r1
+ 1142 008e AF4B     		ldr	r3, .L64+44
+ 1143 0090 1B68     		ldr	r3, [r3]
+ 1144 0092 181C     		mov	r0, r3
+ 1145 0094 FFF7FEFF 		bl	__aeabi_ui2d
+ 1146 0098 031C     		mov	r3, r0
+ 1147 009a 0C1C     		mov	r4, r1
+ 1148 009c 181C     		mov	r0, r3
+ 1149 009e 211C     		mov	r1, r4
+ 1150 00a0 A04B     		ldr	r3, .L64+4
+ 1151 00a2 9F4A     		ldr	r2, .L64
+ 1152 00a4 FFF7FEFF 		bl	__aeabi_dmul
+ 1153 00a8 031C     		mov	r3, r0
+ 1154 00aa 0C1C     		mov	r4, r1
+ 1155 00ac 0122     		mov	r2, #1
+ 1156 00ae 9046     		mov	r8, r2
+ 1157 00b0 281C     		mov	r0, r5
+ 1158 00b2 311C     		mov	r1, r6
+ 1159 00b4 1A1C     		mov	r2, r3
+ 1160 00b6 231C     		mov	r3, r4
+ 1161 00b8 FFF7FEFF 		bl	__aeabi_dcmpgt
+ 1162 00bc 031C     		mov	r3, r0
+ 1163 00be 01D1     		bne	.L50
+ 1164 00c0 0023     		mov	r3, #0
+ 1165 00c2 9846     		mov	r8, r3
+ 1166              	.L50:
+ 1167 00c4 4246     		mov	r2, r8
+ 1168 00c6 D3B2     		uxtb	r3, r2
+ 1169 00c8 002B     		cmp	r3, #0
+ 1170 00ca 0BD0     		beq	.L51
+ 321:../Sources/Events.c **** 			TrackR_Diff = TrackR - Last_TrackR;
+ 1171              		.loc 1 321 0
+ 1172 00cc A04B     		ldr	r3, .L64+48
+ 1173 00ce 1A68     		ldr	r2, [r3]
+ 1174 00d0 A04B     		ldr	r3, .L64+52
+ 1175 00d2 1B68     		ldr	r3, [r3]
+ 1176 00d4 D21A     		sub	r2, r2, r3
+ 1177 00d6 A04B     		ldr	r3, .L64+56
+ 1178 00d8 1A60     		str	r2, [r3]
+ 322:../Sources/Events.c **** 			Last_TrackR = TrackR;
+ 1179              		.loc 1 322 0
+ 1180 00da 9D4B     		ldr	r3, .L64+48
+ 1181 00dc 1A68     		ldr	r2, [r3]
+ 1182 00de 9D4B     		ldr	r3, .L64+52
+ 1183 00e0 1A60     		str	r2, [r3]
+ 1184 00e2 02E0     		b	.L52
+ 1185              	.L51:
+ 323:../Sources/Events.c **** 		}
+ 324:../Sources/Events.c **** 		else TrackR_Diff = 0;
+ 1186              		.loc 1 324 0
+ 1187 00e4 9C4B     		ldr	r3, .L64+56
+ 1188 00e6 0022     		mov	r2, #0
+ 1189 00e8 1A60     		str	r2, [r3]
+ 1190              	.L52:
+ 325:../Sources/Events.c **** 		
+ 326:../Sources/Events.c **** 		/* CCD Auto Exposure */
+ 327:../Sources/Events.c **** 		if ((CCD_SagL > MaxCCDSag)&&(CCD_TW >= 1)) CCD_TW--;
+ 1191              		.loc 1 327 0
+ 1192 00ea 9C4B     		ldr	r3, .L64+60
+ 1193 00ec 1A68     		ldr	r2, [r3]
+ 1194 00ee 9C4B     		ldr	r3, .L64+64
+ 1195 00f0 9A42     		cmp	r2, r3
+ 1196 00f2 08D9     		bls	.L53
+ 1197              		.loc 1 327 0 is_stmt 0 discriminator 1
+ 1198 00f4 9B4B     		ldr	r3, .L64+68
+ 1199 00f6 1B68     		ldr	r3, [r3]
+ 1200 00f8 002B     		cmp	r3, #0
+ 1201 00fa 04DD     		ble	.L53
+ 1202 00fc 994B     		ldr	r3, .L64+68
+ 1203 00fe 1B68     		ldr	r3, [r3]
+ 1204 0100 5A1E     		sub	r2, r3, #1
+ 1205 0102 984B     		ldr	r3, .L64+68
+ 1206 0104 1A60     		str	r2, [r3]
+ 1207              	.L53:
+ 328:../Sources/Events.c **** 		if (((CCD_SagL+CCD_SagR)/2 < MinCCDSag)&&(CCD_TW <= 10)) CCD_TW++;
+ 1208              		.loc 1 328 0 is_stmt 1
+ 1209 0106 954B     		ldr	r3, .L64+60
+ 1210 0108 1A68     		ldr	r2, [r3]
+ 1211 010a 974B     		ldr	r3, .L64+72
+ 1212 010c 1B68     		ldr	r3, [r3]
+ 1213 010e D218     		add	r2, r2, r3
+ 1214 0110 964B     		ldr	r3, .L64+76
+ 1215 0112 9A42     		cmp	r2, r3
+ 1216 0114 08D8     		bhi	.L54
+ 1217              		.loc 1 328 0 is_stmt 0 discriminator 1
+ 1218 0116 934B     		ldr	r3, .L64+68
+ 1219 0118 1B68     		ldr	r3, [r3]
+ 1220 011a 0A2B     		cmp	r3, #10
+ 1221 011c 04DC     		bgt	.L54
+ 1222 011e 914B     		ldr	r3, .L64+68
+ 1223 0120 1B68     		ldr	r3, [r3]
+ 1224 0122 5A1C     		add	r2, r3, #1
+ 1225 0124 8F4B     		ldr	r3, .L64+68
+ 1226 0126 1A60     		str	r2, [r3]
+ 1227              	.L54:
+ 329:../Sources/Events.c **** 		
+ 330:../Sources/Events.c **** 		/* Track Finshed */
+ 331:../Sources/Events.c **** 		TrackL_Finsh = TrackL;
+ 1228              		.loc 1 331 0 is_stmt 1
+ 1229 0128 844B     		ldr	r3, .L64+28
+ 1230 012a 1A68     		ldr	r2, [r3]
+ 1231 012c 904B     		ldr	r3, .L64+80
+ 1232 012e 1A60     		str	r2, [r3]
+ 332:../Sources/Events.c **** 		TrackR_Finsh = TrackR;
+ 1233              		.loc 1 332 0
+ 1234 0130 874B     		ldr	r3, .L64+48
+ 1235 0132 1A68     		ldr	r2, [r3]
+ 1236 0134 8F4B     		ldr	r3, .L64+84
+ 1237 0136 1A60     		str	r2, [r3]
+ 333:../Sources/Events.c **** 		/* CCD cycle finish  */
+ 334:../Sources/Events.c **** 		//////////////////////
+ 335:../Sources/Events.c **** 		
+ 336:../Sources/Events.c **** 		//////////////////////
+ 337:../Sources/Events.c **** 		/* CCD cycle start  */
+ 338:../Sources/Events.c **** 		// Init ADC Counter, SI and CLK
+ 339:../Sources/Events.c **** 		CCD_Init();
+ 1238              		.loc 1 339 0
+ 1239 0138 FFF7FEFF 		bl	CCD_Init
+ 340:../Sources/Events.c **** 		CCD_SagL = CCD_SagR = CCD_SagL_Diff = CCD_SagR_Diff = 0;
+ 1240              		.loc 1 340 0
+ 1241 013c 834B     		ldr	r3, .L64+44
+ 1242 013e 0022     		mov	r2, #0
+ 1243 0140 1A60     		str	r2, [r3]
+ 1244 0142 824B     		ldr	r3, .L64+44
+ 1245 0144 1A68     		ldr	r2, [r3]
+ 1246 0146 7C4B     		ldr	r3, .L64+24
+ 1247 0148 1A60     		str	r2, [r3]
+ 1248 014a 7B4B     		ldr	r3, .L64+24
+ 1249 014c 1A68     		ldr	r2, [r3]
+ 1250 014e 864B     		ldr	r3, .L64+72
+ 1251 0150 1A60     		str	r2, [r3]
+ 1252 0152 854B     		ldr	r3, .L64+72
+ 1253 0154 1A68     		ldr	r2, [r3]
+ 1254 0156 814B     		ldr	r3, .L64+60
+ 1255 0158 1A60     		str	r2, [r3]
+ 1256 015a 7DE1     		b	.L45
+ 1257              	.L46:
+ 1258              	.LBE2:
+ 341:../Sources/Events.c **** 	}
+ 342:../Sources/Events.c **** 	else{
+ 343:../Sources/Events.c **** 		// ADC start working
+ 344:../Sources/Events.c **** 		AD1_Measure(TRUE);
+ 1259              		.loc 1 344 0
+ 1260 015c FFF7FEFF 		bl	PE_AD1_Measure
+ 345:../Sources/Events.c **** 		AD1_GetValue16(ADC_Measured);
+ 1261              		.loc 1 345 0
+ 1262 0160 854B     		ldr	r3, .L64+88
+ 1263 0162 181C     		mov	r0, r3
+ 1264 0164 FFF7FEFF 		bl	AD1_GetValue16
+ 346:../Sources/Events.c **** 		if (CCD_TW_Counter == CCD_TW - 1) CLK_High_Period;
+ 1265              		.loc 1 346 0
+ 1266 0168 7E4B     		ldr	r3, .L64+68
+ 1267 016a 1B68     		ldr	r3, [r3]
+ 1268 016c 5A1E     		sub	r2, r3, #1
+ 1269 016e 834B     		ldr	r3, .L64+92
+ 1270 0170 1B68     		ldr	r3, [r3]
+ 1271 0172 9A42     		cmp	r2, r3
+ 1272 0174 05D1     		bne	.L56
+ 1273              		.loc 1 346 0 is_stmt 0 discriminator 1
+ 1274 0176 824B     		ldr	r3, .L64+96
+ 1275 0178 5B6A     		ldr	r3, [r3, #36]
+ 1276 017a 181C     		mov	r0, r3
+ 1277 017c 0B21     		mov	r1, #11
+ 1278 017e FFF7FEFF 		bl	BitsIoLdd2_PutVal
+ 1279              	.L56:
+ 347:../Sources/Events.c **** 		
+ 348:../Sources/Events.c **** 		// Calc the Parameters	
+ 349:../Sources/Events.c **** 		Temp1 = AR2;
+ 1280              		.loc 1 349 0 is_stmt 1
+ 1281 0182 7D4B     		ldr	r3, .L64+88
+ 1282 0184 DB88     		ldrh	r3, [r3, #6]
+ 1283 0186 7F4A     		ldr	r2, .L64+100
+ 1284 0188 D21A     		sub	r2, r2, r3
+ 1285 018a 7F4B     		ldr	r3, .L64+104
+ 1286 018c 1B68     		ldr	r3, [r3]
+ 1287 018e D218     		add	r2, r2, r3
+ 1288 0190 7E4B     		ldr	r3, .L64+108
+ 1289 0192 1A60     		str	r2, [r3]
+ 350:../Sources/Events.c **** 		Temp2 = AAC_Z;
+ 1290              		.loc 1 350 0
+ 1291 0194 784B     		ldr	r3, .L64+88
+ 1292 0196 9B88     		ldrh	r3, [r3, #4]
+ 1293 0198 7D49     		ldr	r1, .L64+112
+ 1294 019a 5A18     		add	r2, r3, r1
+ 1295 019c 7D4B     		ldr	r3, .L64+116
+ 1296 019e 1B68     		ldr	r3, [r3]
+ 1297 01a0 D318     		add	r3, r2, r3
+ 1298 01a2 7D4A     		ldr	r2, .L64+120
+ 1299 01a4 5A43     		mul	r2, r3
+ 1300 01a6 7D4B     		ldr	r3, .L64+124
+ 1301 01a8 1A60     		str	r2, [r3]
+ 351:../Sources/Events.c **** 		Integral_AAC_E += Temp1 + k * ( Temp2 - Integral_AAC_E );
+ 1302              		.loc 1 351 0
+ 1303 01aa 7D4B     		ldr	r3, .L64+128
+ 1304 01ac 1B68     		ldr	r3, [r3]
+ 1305 01ae 181C     		mov	r0, r3
+ 1306 01b0 FFF7FEFF 		bl	__aeabi_i2d
+ 1307 01b4 051C     		mov	r5, r0
+ 1308 01b6 0E1C     		mov	r6, r1
+ 1309 01b8 744B     		ldr	r3, .L64+108
+ 1310 01ba 1B68     		ldr	r3, [r3]
+ 1311 01bc 181C     		mov	r0, r3
+ 1312 01be FFF7FEFF 		bl	__aeabi_i2d
+ 1313 01c2 3860     		str	r0, [r7]
+ 1314 01c4 7960     		str	r1, [r7, #4]
+ 1315 01c6 754B     		ldr	r3, .L64+124
+ 1316 01c8 1A68     		ldr	r2, [r3]
+ 1317 01ca 754B     		ldr	r3, .L64+128
+ 1318 01cc 1B68     		ldr	r3, [r3]
+ 1319 01ce D31A     		sub	r3, r2, r3
+ 1320 01d0 181C     		mov	r0, r3
+ 1321 01d2 FFF7FEFF 		bl	__aeabi_i2d
+ 1322 01d6 031C     		mov	r3, r0
+ 1323 01d8 0C1C     		mov	r4, r1
+ 1324 01da 181C     		mov	r0, r3
+ 1325 01dc 211C     		mov	r1, r4
+ 1326 01de 524A     		ldr	r2, .L64+8
+ 1327 01e0 524B     		ldr	r3, .L64+12
+ 1328 01e2 FFF7FEFF 		bl	__aeabi_dmul
+ 1329 01e6 031C     		mov	r3, r0
+ 1330 01e8 0C1C     		mov	r4, r1
+ 1331 01ea 3868     		ldr	r0, [r7]
+ 1332 01ec 7968     		ldr	r1, [r7, #4]
+ 1333 01ee 1A1C     		mov	r2, r3
+ 1334 01f0 231C     		mov	r3, r4
+ 1335 01f2 FFF7FEFF 		bl	__aeabi_dadd
+ 1336 01f6 031C     		mov	r3, r0
+ 1337 01f8 0C1C     		mov	r4, r1
+ 1338 01fa 281C     		mov	r0, r5
+ 1339 01fc 311C     		mov	r1, r6
+ 1340 01fe 1A1C     		mov	r2, r3
+ 1341 0200 231C     		mov	r3, r4
+ 1342 0202 FFF7FEFF 		bl	__aeabi_dadd
+ 1343 0206 031C     		mov	r3, r0
+ 1344 0208 0C1C     		mov	r4, r1
+ 1345 020a 181C     		mov	r0, r3
+ 1346 020c 211C     		mov	r1, r4
+ 1347 020e FFF7FEFF 		bl	__aeabi_d2iz
+ 1348 0212 021C     		mov	r2, r0
+ 1349 0214 624B     		ldr	r3, .L64+128
+ 1350 0216 1A60     		str	r2, [r3]
+ 352:../Sources/Events.c **** 		if (CCD_TW_Counter == CCD_TW - 1) {
+ 1351              		.loc 1 352 0
+ 1352 0218 524B     		ldr	r3, .L64+68
+ 1353 021a 1B68     		ldr	r3, [r3]
+ 1354 021c 5A1E     		sub	r2, r3, #1
+ 1355 021e 574B     		ldr	r3, .L64+92
+ 1356 0220 1B68     		ldr	r3, [r3]
+ 1357 0222 9A42     		cmp	r2, r3
+ 1358 0224 00D0     		beq	.LCB1024
+ 1359 0226 12E1     		b	.L57	@long jump
+ 1360              	.LCB1024:
+ 353:../Sources/Events.c **** 			CCD_SagL += CCDL(Counter) =  ADC_Measured[LCCDL_CH];
+ 1361              		.loc 1 353 0
+ 1362 0228 414B     		ldr	r3, .L64+16
+ 1363 022a 1B88     		ldrh	r3, [r3]
+ 1364 022c 524A     		ldr	r2, .L64+88
+ 1365 022e 1088     		ldrh	r0, [r2]
+ 1366 0230 5C4A     		ldr	r2, .L64+132
+ 1367 0232 9900     		lsl	r1, r3, #2
+ 1368 0234 8852     		strh	r0, [r1, r2]
+ 1369 0236 5B4A     		ldr	r2, .L64+132
+ 1370 0238 9B00     		lsl	r3, r3, #2
+ 1371 023a 9B5A     		ldrh	r3, [r3, r2]
+ 1372 023c 1A1C     		mov	r2, r3
+ 1373 023e 474B     		ldr	r3, .L64+60
+ 1374 0240 1B68     		ldr	r3, [r3]
+ 1375 0242 D218     		add	r2, r2, r3
+ 1376 0244 454B     		ldr	r3, .L64+60
+ 1377 0246 1A60     		str	r2, [r3]
+ 354:../Sources/Events.c **** 			CCD_SagR += CCDR(Counter) =  ADC_Measured[LCCDR_CH];
+ 1378              		.loc 1 354 0
+ 1379 0248 394B     		ldr	r3, .L64+16
+ 1380 024a 1B88     		ldrh	r3, [r3]
+ 1381 024c 4A4A     		ldr	r2, .L64+88
+ 1382 024e 5188     		ldrh	r1, [r2, #2]
+ 1383 0250 5448     		ldr	r0, .L64+132
+ 1384 0252 9A00     		lsl	r2, r3, #2
+ 1385 0254 8218     		add	r2, r0, r2
+ 1386 0256 0232     		add	r2, r2, #2
+ 1387 0258 1180     		strh	r1, [r2]
+ 1388 025a 524A     		ldr	r2, .L64+132
+ 1389 025c 9B00     		lsl	r3, r3, #2
+ 1390 025e D318     		add	r3, r2, r3
+ 1391 0260 0233     		add	r3, r3, #2
+ 1392 0262 1B88     		ldrh	r3, [r3]
+ 1393 0264 1A1C     		mov	r2, r3
+ 1394 0266 404B     		ldr	r3, .L64+72
+ 1395 0268 1B68     		ldr	r3, [r3]
+ 1396 026a D218     		add	r2, r2, r3
+ 1397 026c 3E4B     		ldr	r3, .L64+72
+ 1398 026e 1A60     		str	r2, [r3]
+ 355:../Sources/Events.c **** 			if (Counter > CCD_Diff_Pattern_Length - 1) {
+ 1399              		.loc 1 355 0
+ 1400 0270 2F4B     		ldr	r3, .L64+16
+ 1401 0272 1B88     		ldrh	r3, [r3]
+ 1402 0274 052B     		cmp	r3, #5
+ 1403 0276 00D8     		bhi	.LCB1064
+ 1404 0278 D9E0     		b	.L58	@long jump
+ 1405              	.LCB1064:
+ 356:../Sources/Events.c **** 				
+ 357:../Sources/Events.c **** 				/* Calc CCD_Diff & CCD_Sag */
+ 358:../Sources/Events.c **** 				CCD_SagL_Diff += CCDL_Diff(Counter) = ( CCDL(Counter) > CCDL(Counter_Patterned) ) ?
+ 1406              		.loc 1 358 0
+ 1407 027a 2D4B     		ldr	r3, .L64+16
+ 1408 027c 1B88     		ldrh	r3, [r3]
+ 1409 027e 2C4A     		ldr	r2, .L64+16
+ 1410 0280 1288     		ldrh	r2, [r2]
+ 1411 0282 111C     		mov	r1, r2
+ 1412 0284 474A     		ldr	r2, .L64+132
+ 1413 0286 8900     		lsl	r1, r1, #2
+ 1414 0288 895A     		ldrh	r1, [r1, r2]
+ 1415 028a 294A     		ldr	r2, .L64+16
+ 1416 028c 1288     		ldrh	r2, [r2]
+ 1417 028e 501F     		sub	r0, r2, #5
+ 1418 0290 444A     		ldr	r2, .L64+132
+ 1419 0292 8000     		lsl	r0, r0, #2
+ 1420 0294 825A     		ldrh	r2, [r0, r2]
+ 1421 0296 9142     		cmp	r1, r2
+ 1422 0298 0ED9     		bls	.L59
+ 359:../Sources/Events.c **** 												 	  ( CCDL(Counter) - CCDL(Counter_Patterned) ) : 0 ;
+ 1423              		.loc 1 359 0
+ 1424 029a 254A     		ldr	r2, .L64+16
+ 1425 029c 1288     		ldrh	r2, [r2]
+ 1426 029e 111C     		mov	r1, r2
+ 1427 02a0 404A     		ldr	r2, .L64+132
+ 1428 02a2 8900     		lsl	r1, r1, #2
+ 1429 02a4 895A     		ldrh	r1, [r1, r2]
+ 1430 02a6 224A     		ldr	r2, .L64+16
+ 1431 02a8 1288     		ldrh	r2, [r2]
+ 1432 02aa 501F     		sub	r0, r2, #5
+ 1433 02ac 3D4A     		ldr	r2, .L64+132
+ 1434 02ae 8000     		lsl	r0, r0, #2
+ 1435 02b0 825A     		ldrh	r2, [r0, r2]
+ 358:../Sources/Events.c **** 				CCD_SagL_Diff += CCDL_Diff(Counter) = ( CCDL(Counter) > CCDL(Counter_Patterned) ) ?
+ 1436              		.loc 1 358 0
+ 1437 02b2 8A1A     		sub	r2, r1, r2
+ 1438 02b4 92B2     		uxth	r2, r2
+ 1439 02b6 00E0     		b	.L60
+ 1440              	.L59:
+ 358:../Sources/Events.c **** 				CCD_SagL_Diff += CCDL_Diff(Counter) = ( CCDL(Counter) > CCDL(Counter_Patterned) ) ?
+ 1441              		.loc 1 358 0 is_stmt 0 discriminator 1
+ 1442 02b8 0022     		mov	r2, #0
+ 1443              	.L60:
+ 358:../Sources/Events.c **** 				CCD_SagL_Diff += CCDL_Diff(Counter) = ( CCDL(Counter) > CCDL(Counter_Patterned) ) ?
+ 1444              		.loc 1 358 0 discriminator 2
+ 1445 02ba 3B49     		ldr	r1, .L64+136
+ 1446 02bc 9800     		lsl	r0, r3, #2
+ 1447 02be 4252     		strh	r2, [r0, r1]
+ 1448 02c0 394A     		ldr	r2, .L64+136
+ 1449 02c2 9B00     		lsl	r3, r3, #2
+ 1450 02c4 9B5A     		ldrh	r3, [r3, r2]
+ 1451 02c6 1A1C     		mov	r2, r3
+ 1452 02c8 1B4B     		ldr	r3, .L64+24
+ 1453 02ca 1B68     		ldr	r3, [r3]
+ 1454 02cc D218     		add	r2, r2, r3
+ 1455 02ce 1A4B     		ldr	r3, .L64+24
+ 1456 02d0 1A60     		str	r2, [r3]
+ 360:../Sources/Events.c **** 				CCD_SagR_Diff += CCDR_Diff(Counter) = ( CCDR(Counter_Patterned) > CCDR(Counter) ) ?
+ 1457              		.loc 1 360 0 is_stmt 1 discriminator 2
+ 1458 02d2 174B     		ldr	r3, .L64+16
+ 1459 02d4 1B88     		ldrh	r3, [r3]
+ 1460 02d6 164A     		ldr	r2, .L64+16
+ 1461 02d8 1288     		ldrh	r2, [r2]
+ 1462 02da 053A     		sub	r2, r2, #5
+ 1463 02dc 3149     		ldr	r1, .L64+132
+ 1464 02de 9200     		lsl	r2, r2, #2
+ 1465 02e0 8A18     		add	r2, r1, r2
+ 1466 02e2 0232     		add	r2, r2, #2
+ 1467 02e4 1188     		ldrh	r1, [r2]
+ 1468 02e6 124A     		ldr	r2, .L64+16
+ 1469 02e8 1288     		ldrh	r2, [r2]
+ 1470 02ea 2E48     		ldr	r0, .L64+132
+ 1471 02ec 9200     		lsl	r2, r2, #2
+ 1472 02ee 8218     		add	r2, r0, r2
+ 1473 02f0 0232     		add	r2, r2, #2
+ 1474 02f2 1288     		ldrh	r2, [r2]
+ 1475 02f4 9142     		cmp	r1, r2
+ 1476 02f6 59D9     		bls	.L61
+ 361:../Sources/Events.c **** 												 	  ( CCDR(Counter_Patterned) - CCDR(Counter) ) : 0 ;
+ 1477              		.loc 1 361 0
+ 1478 02f8 0D4A     		ldr	r2, .L64+16
+ 1479 02fa 1288     		ldrh	r2, [r2]
+ 1480 02fc 053A     		sub	r2, r2, #5
+ 1481 02fe 2949     		ldr	r1, .L64+132
+ 1482 0300 9200     		lsl	r2, r2, #2
+ 1483 0302 8A18     		add	r2, r1, r2
+ 1484 0304 0232     		add	r2, r2, #2
+ 1485 0306 1188     		ldrh	r1, [r2]
+ 1486 0308 094A     		ldr	r2, .L64+16
+ 1487 030a 1288     		ldrh	r2, [r2]
+ 1488 030c 2548     		ldr	r0, .L64+132
+ 1489 030e 9200     		lsl	r2, r2, #2
+ 1490 0310 8218     		add	r2, r0, r2
+ 1491 0312 0232     		add	r2, r2, #2
+ 1492 0314 1288     		ldrh	r2, [r2]
+ 360:../Sources/Events.c **** 				CCD_SagR_Diff += CCDR_Diff(Counter) = ( CCDR(Counter_Patterned) > CCDR(Counter) ) ?
+ 1493              		.loc 1 360 0
+ 1494 0316 8A1A     		sub	r2, r1, r2
+ 1495 0318 92B2     		uxth	r2, r2
+ 1496 031a 48E0     		b	.L62
+ 1497              	.L65:
+ 1498 031c C046C046 		.align	3
+ 1499              	.L64:
+ 1500 0320 FA7E6ABC 		.word	-1133871366
+ 1501 0324 7493783F 		.word	1064866676
+ 1502 0328 2D431CEB 		.word	-350469331
+ 1503 032c E2361A3F 		.word	1058682594
+ 1504 0330 00000000 		.word	Counter
+ 1505 0334 00000000 		.word	MaxTrackL
+ 1506 0338 00000000 		.word	CCD_SagL_Diff
+ 1507 033c 00000000 		.word	TrackL
+ 1508 0340 00000000 		.word	Last_TrackL
+ 1509 0344 00000000 		.word	TrackL_Diff
+ 1510 0348 00000000 		.word	MaxTrackR
+ 1511 034c 00000000 		.word	CCD_SagR_Diff
+ 1512 0350 00000000 		.word	TrackR
+ 1513 0354 00000000 		.word	Last_TrackR
+ 1514 0358 00000000 		.word	TrackR_Diff
+ 1515 035c 00000000 		.word	CCD_SagL
+ 1516 0360 00FE7F00 		.word	8388096
+ 1517 0364 00000000 		.word	CCD_TW
+ 1518 0368 00000000 		.word	CCD_SagR
+ 1519 036c FF270A00 		.word	665599
+ 1520 0370 00000000 		.word	TrackL_Finsh
+ 1521 0374 00000000 		.word	TrackR_Finsh
+ 1522 0378 00000000 		.word	ADC_Measured
+ 1523 037c 00000000 		.word	CCD_TW_Counter
+ 1524 0380 00000000 		.word	PE_LDD_DeviceDataList
+ 1525 0384 8B6E0000 		.word	28299
+ 1526 0388 00000000 		.word	AR2_Correct
+ 1527 038c 00000000 		.word	Temp1
+ 1528 0390 C089FFFF 		.word	-30272
+ 1529 0394 00000000 		.word	AAC_Z_Correct
+ 1530 0398 D80E0000 		.word	3800
+ 1531 039c 00000000 		.word	Temp2
+ 1532 03a0 00000000 		.word	Integral_AAC_E
+ 1533 03a4 00000000 		.word	Pixels
+ 1534 03a8 00000000 		.word	Pixels_Diff
+ 1535              	.L61:
+ 360:../Sources/Events.c **** 				CCD_SagR_Diff += CCDR_Diff(Counter) = ( CCDR(Counter_Patterned) > CCDR(Counter) ) ?
+ 1536              		.loc 1 360 0 is_stmt 0 discriminator 1
+ 1537 03ac 0022     		mov	r2, #0
+ 1538              	.L62:
+ 360:../Sources/Events.c **** 				CCD_SagR_Diff += CCDR_Diff(Counter) = ( CCDR(Counter_Patterned) > CCDR(Counter) ) ?
+ 1539              		.loc 1 360 0 discriminator 2
+ 1540 03ae 2D48     		ldr	r0, .L66
+ 1541 03b0 9900     		lsl	r1, r3, #2
+ 1542 03b2 4118     		add	r1, r0, r1
+ 1543 03b4 0231     		add	r1, r1, #2
+ 1544 03b6 0A80     		strh	r2, [r1]
+ 1545 03b8 2A4A     		ldr	r2, .L66
+ 1546 03ba 9B00     		lsl	r3, r3, #2
+ 1547 03bc D318     		add	r3, r2, r3
+ 1548 03be 0233     		add	r3, r3, #2
+ 1549 03c0 1B88     		ldrh	r3, [r3]
+ 1550 03c2 1A1C     		mov	r2, r3
+ 1551 03c4 284B     		ldr	r3, .L66+4
+ 1552 03c6 1B68     		ldr	r3, [r3]
+ 1553 03c8 D218     		add	r2, r2, r3
+ 1554 03ca 274B     		ldr	r3, .L66+4
+ 1555 03cc 1A60     		str	r2, [r3]
+ 362:../Sources/Events.c **** 				
+ 363:../Sources/Events.c **** 				/* Update Track & MaxTrack */
+ 364:../Sources/Events.c **** 				if (CCDL_Diff(Counter) > MaxTrackL) {
+ 1556              		.loc 1 364 0 is_stmt 1 discriminator 2
+ 1557 03ce 274B     		ldr	r3, .L66+8
+ 1558 03d0 1B88     		ldrh	r3, [r3]
+ 1559 03d2 1A1C     		mov	r2, r3
+ 1560 03d4 234B     		ldr	r3, .L66
+ 1561 03d6 9200     		lsl	r2, r2, #2
+ 1562 03d8 D25A     		ldrh	r2, [r2, r3]
+ 1563 03da 254B     		ldr	r3, .L66+12
+ 1564 03dc 1B88     		ldrh	r3, [r3]
+ 1565 03de 9A42     		cmp	r2, r3
+ 1566 03e0 0CD9     		bls	.L63
+ 365:../Sources/Events.c **** 					TrackL = Counter;
+ 1567              		.loc 1 365 0
+ 1568 03e2 224B     		ldr	r3, .L66+8
+ 1569 03e4 1B88     		ldrh	r3, [r3]
+ 1570 03e6 1A1C     		mov	r2, r3
+ 1571 03e8 224B     		ldr	r3, .L66+16
+ 1572 03ea 1A60     		str	r2, [r3]
+ 366:../Sources/Events.c **** 					MaxTrackL = CCDL_Diff(Counter);
+ 1573              		.loc 1 366 0
+ 1574 03ec 1F4B     		ldr	r3, .L66+8
+ 1575 03ee 1B88     		ldrh	r3, [r3]
+ 1576 03f0 1A1C     		mov	r2, r3
+ 1577 03f2 1C4B     		ldr	r3, .L66
+ 1578 03f4 9200     		lsl	r2, r2, #2
+ 1579 03f6 D25A     		ldrh	r2, [r2, r3]
+ 1580 03f8 1D4B     		ldr	r3, .L66+12
+ 1581 03fa 1A80     		strh	r2, [r3]
+ 1582              	.L63:
+ 367:../Sources/Events.c **** 				}
+ 368:../Sources/Events.c **** 				if (CCDR_Diff(Counter) > MaxTrackR) {
+ 1583              		.loc 1 368 0
+ 1584 03fc 1B4B     		ldr	r3, .L66+8
+ 1585 03fe 1B88     		ldrh	r3, [r3]
+ 1586 0400 184A     		ldr	r2, .L66
+ 1587 0402 9B00     		lsl	r3, r3, #2
+ 1588 0404 D318     		add	r3, r2, r3
+ 1589 0406 0233     		add	r3, r3, #2
+ 1590 0408 1A88     		ldrh	r2, [r3]
+ 1591 040a 1B4B     		ldr	r3, .L66+20
+ 1592 040c 1B88     		ldrh	r3, [r3]
+ 1593 040e 9A42     		cmp	r2, r3
+ 1594 0410 0DD9     		bls	.L58
+ 369:../Sources/Events.c **** 					TrackR = Counter;
+ 1595              		.loc 1 369 0
+ 1596 0412 164B     		ldr	r3, .L66+8
+ 1597 0414 1B88     		ldrh	r3, [r3]
+ 1598 0416 1A1C     		mov	r2, r3
+ 1599 0418 184B     		ldr	r3, .L66+24
+ 1600 041a 1A60     		str	r2, [r3]
+ 370:../Sources/Events.c **** 					MaxTrackR = CCDR_Diff(Counter);
+ 1601              		.loc 1 370 0
+ 1602 041c 134B     		ldr	r3, .L66+8
+ 1603 041e 1B88     		ldrh	r3, [r3]
+ 1604 0420 104A     		ldr	r2, .L66
+ 1605 0422 9B00     		lsl	r3, r3, #2
+ 1606 0424 D318     		add	r3, r2, r3
+ 1607 0426 0233     		add	r3, r3, #2
+ 1608 0428 1A88     		ldrh	r2, [r3]
+ 1609 042a 134B     		ldr	r3, .L66+20
+ 1610 042c 1A80     		strh	r2, [r3]
+ 1611              	.L58:
+ 371:../Sources/Events.c **** 				}			
+ 372:../Sources/Events.c **** 			} 
+ 373:../Sources/Events.c **** 			Counter++;
+ 1612              		.loc 1 373 0
+ 1613 042e 0F4B     		ldr	r3, .L66+8
+ 1614 0430 1B88     		ldrh	r3, [r3]
+ 1615 0432 0133     		add	r3, r3, #1
+ 1616 0434 9AB2     		uxth	r2, r3
+ 1617 0436 0D4B     		ldr	r3, .L66+8
+ 1618 0438 1A80     		strh	r2, [r3]
+ 374:../Sources/Events.c **** 			CCD_TW_Counter = 0;
+ 1619              		.loc 1 374 0
+ 1620 043a 114B     		ldr	r3, .L66+28
+ 1621 043c 0022     		mov	r2, #0
+ 1622 043e 1A60     		str	r2, [r3]
+ 375:../Sources/Events.c **** 			CLK_Low_Period;
+ 1623              		.loc 1 375 0
+ 1624 0440 104B     		ldr	r3, .L66+32
+ 1625 0442 5B6A     		ldr	r3, [r3, #36]
+ 1626 0444 181C     		mov	r0, r3
+ 1627 0446 0021     		mov	r1, #0
+ 1628 0448 FFF7FEFF 		bl	BitsIoLdd2_PutVal
+ 1629 044c 04E0     		b	.L45
+ 1630              	.L57:
+ 376:../Sources/Events.c **** 		}
+ 377:../Sources/Events.c **** 		else { CCD_TW_Counter++;}
+ 1631              		.loc 1 377 0
+ 1632 044e 0C4B     		ldr	r3, .L66+28
+ 1633 0450 1B68     		ldr	r3, [r3]
+ 1634 0452 5A1C     		add	r2, r3, #1
+ 1635 0454 0A4B     		ldr	r3, .L66+28
+ 1636 0456 1A60     		str	r2, [r3]
+ 1637              	.L45:
+ 378:../Sources/Events.c **** 	} 
+ 379:../Sources/Events.c **** }
+ 1638              		.loc 1 379 0
+ 1639 0458 BD46     		mov	sp, r7
+ 1640 045a 04B0     		add	sp, sp, #16
+ 1641              		@ sp needed for prologue
+ 1642 045c 04BC     		pop	{r2}
+ 1643 045e 9046     		mov	r8, r2
+ 1644 0460 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1645              	.L67:
+ 1646 0462 C046     		.align	2
+ 1647              	.L66:
+ 1648 0464 00000000 		.word	Pixels_Diff
+ 1649 0468 00000000 		.word	CCD_SagR_Diff
+ 1650 046c 00000000 		.word	Counter
+ 1651 0470 00000000 		.word	MaxTrackL
+ 1652 0474 00000000 		.word	TrackL
+ 1653 0478 00000000 		.word	MaxTrackR
+ 1654 047c 00000000 		.word	TrackR
+ 1655 0480 00000000 		.word	CCD_TW_Counter
+ 1656 0484 00000000 		.word	PE_LDD_DeviceDataList
+ 1657              		.cfi_endproc
+ 1658              	.LFE6:
+ 1660              		.section	.text.Servo_Video1_OnEnd,"ax",%progbits
+ 1661              		.align	2
+ 1662              		.global	Servo_Video1_OnEnd
+ 1663              		.code	16
+ 1664              		.thumb_func
+ 1666              	Servo_Video1_OnEnd:
+ 1667              	.LFB7:
+ 380:../Sources/Events.c **** 
+ 381:../Sources/Events.c **** 
+ 382:../Sources/Events.c **** /*
+ 383:../Sources/Events.c **** ** ===================================================================
+ 384:../Sources/Events.c **** **     Event       :  Servo_Video1_OnEnd (module Events)
+ 385:../Sources/Events.c **** **
+ 386:../Sources/Events.c **** **     Component   :  Servo_Video1 [PWM]
+ 387:../Sources/Events.c **** **     Description :
+ 388:../Sources/Events.c **** **         This event is called when the specified number of cycles has
+ 389:../Sources/Events.c **** **         been generated. (Only when the component is enabled -
+ 390:../Sources/Events.c **** **         <Enable> and the events are enabled - <EnableEvent>). The
+ 391:../Sources/Events.c **** **         event is available only when the <Interrupt service/event>
+ 392:../Sources/Events.c **** **         property is enabled and selected peripheral supports
+ 393:../Sources/Events.c **** **         appropriate interrupt.
+ 394:../Sources/Events.c **** **     Parameters  : None
+ 395:../Sources/Events.c **** **     Returns     : Nothing
+ 396:../Sources/Events.c **** ** ===================================================================
+ 397:../Sources/Events.c **** */
+ 398:../Sources/Events.c **** void Servo_Video1_OnEnd(void)
+ 399:../Sources/Events.c **** {
+ 1668              		.loc 1 399 0
+ 1669              		.cfi_startproc
+ 1670 0000 80B5     		push	{r7, lr}
+ 1671              	.LCFI20:
+ 1672              		.cfi_def_cfa_offset 8
+ 1673              		.cfi_offset 7, -8
+ 1674              		.cfi_offset 14, -4
+ 1675 0002 00AF     		add	r7, sp, #0
+ 1676              	.LCFI21:
+ 1677              		.cfi_def_cfa_register 7
+ 400:../Sources/Events.c ****   /* Write your code here ... */
+ 401:../Sources/Events.c **** }
+ 1678              		.loc 1 401 0
+ 1679 0004 BD46     		mov	sp, r7
+ 1680              		@ sp needed for prologue
+ 1681 0006 80BD     		pop	{r7, pc}
+ 1682              		.cfi_endproc
+ 1683              	.LFE7:
+ 1685              		.text
+ 1686              	.Letext0:
+ 1687              		.file 2 "C:/Freescale/CW MCU v10.3/MCU/ARM_GCC_Support/ewl/EWL_C/include/cstdint"
+ 1688              		.file 3 "C:/workspace/USBDM/Generated_Code/PE_Types.h"
+ 1689              		.file 4 "C:/workspace/USBDM/Generated_Code/PE_LDD.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 Events.c
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:22     .bss.SpeedL_Counter:00000000 SpeedL_Counter
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:19     .bss.SpeedL_Counter:00000000 $d
+                            *COM*:00000004 SpeedL_Edges
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:30     .bss.SpeedR_Counter:00000000 SpeedR_Counter
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:27     .bss.SpeedR_Counter:00000000 $d
+                            *COM*:00000004 SpeedR_Edges
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:38     .bss.SpeedL_Integral:00000000 SpeedL_Integral
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:35     .bss.SpeedL_Integral:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:45     .bss.SpeedR_Integral:00000000 SpeedR_Integral
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:42     .bss.SpeedR_Integral:00000000 $d
+                            *COM*:00000020 SpeedL_Correct_Buff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:53     .bss.SpeedL_Correct_Pointer:00000000 SpeedL_Correct_Pointer
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:50     .bss.SpeedL_Correct_Pointer:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:60     .bss.SpeedL_Correct_Counter:00000000 SpeedL_Correct_Counter
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:57     .bss.SpeedL_Correct_Counter:00000000 $d
+                            *COM*:00000020 SpeedR_Correct_Buff
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:68     .bss.SpeedR_Correct_Pointer:00000000 SpeedR_Correct_Pointer
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:65     .bss.SpeedR_Correct_Pointer:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:75     .bss.SpeedR_Correct_Counter:00000000 SpeedR_Correct_Counter
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:72     .bss.SpeedR_Correct_Counter:00000000 $d
+                            *COM*:00000002 AAC_Z_ADC
+                            *COM*:00000002 AR2_ADC
+                            *COM*:0000000e ADC_Measured
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:85     .data.CCD_TW:00000000 CCD_TW
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:82     .data.CCD_TW:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:92     .bss.CCD_TW_Counter:00000000 CCD_TW_Counter
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:89     .bss.CCD_TW_Counter:00000000 $d
+                            *COM*:00000200 AAC_E
+                            *COM*:00000200 AAC_E2
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:101    .bss.Integral_AAC_E:00000000 Integral_AAC_E
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:98     .bss.Integral_AAC_E:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:108    .bss.Integral_AAC_E2:00000000 Integral_AAC_E2
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:105    .bss.Integral_AAC_E2:00000000 $d
+                            *COM*:00000004 Motor_Speed
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:116    .bss.Sag_Temp1:00000000 Sag_Temp1
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:113    .bss.Sag_Temp1:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:123    .bss.Sag_Temp2:00000000 Sag_Temp2
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:120    .bss.Sag_Temp2:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:130    .bss.Sag_Temp3:00000000 Sag_Temp3
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:127    .bss.Sag_Temp3:00000000 $d
+                            *COM*:00000004 Temp1
+                            *COM*:00000004 Temp2
+                            *COM*:00000004 DebugI
+                            *COM*:00000004 DebugI2
+                            *COM*:00000004 Motor_Speed_PWM
+                            *COM*:00000004 Motor_Speed_PWM2
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:143    .bss.MotorControlL:00000000 MotorControlL
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:140    .bss.MotorControlL:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:150    .bss.MotorControlR:00000000 MotorControlR
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:147    .bss.MotorControlR:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:157    .bss.Motor_Controler:00000000 Motor_Controler
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:154    .bss.Motor_Controler:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:164    .data.Mono:00000000 Mono
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:161    .data.Mono:00000000 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:173    .text.TU2_OnCounterRestart_Old:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:178    .text.TU2_OnCounterRestart_Old:00000000 TU2_OnCounterRestart_Old
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:672    .text.TU2_OnCounterRestart_Old:00000370 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:705    .text.TU2_OnCounterRestart_Old:000003ec $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:847    .text.TU2_OnCounterRestart_Old:000004f8 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:864    .text.I2C2_OnMasterBlockSent:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:869    .text.I2C2_OnMasterBlockSent:00000000 I2C2_OnMasterBlockSent
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:897    .text.I2C2_OnMasterBlockSent:00000014 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:902    .text.I2C2_OnMasterBlockReceived:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:907    .text.I2C2_OnMasterBlockReceived:00000000 I2C2_OnMasterBlockReceived
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:935    .text.I2C2_OnMasterBlockReceived:00000014 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:940    .text.I2C2_OnError:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:945    .text.I2C2_OnError:00000000 I2C2_OnError
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:970    .text.EInt1_OnInterrupt:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:975    .text.EInt1_OnInterrupt:00000000 EInt1_OnInterrupt
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1000   .text.EInt1_OnInterrupt:00000014 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1005   .text.EInt2_OnInterrupt:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1010   .text.EInt2_OnInterrupt:00000000 EInt2_OnInterrupt
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1035   .text.EInt2_OnInterrupt:00000014 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1042   .text.TU3_OnCounterRestart:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1047   .text.TU3_OnCounterRestart:00000000 TU3_OnCounterRestart
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1500   .text.TU3_OnCounterRestart:00000320 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1537   .text.TU3_OnCounterRestart:000003ac $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1648   .text.TU3_OnCounterRestart:00000464 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1661   .text.Servo_Video1_OnEnd:00000000 $t
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:1666   .text.Servo_Video1_OnEnd:00000000 Servo_Video1_OnEnd
+                     .debug_frame:00000010 $d
+C:\DOCUME~1\chenty\LOCALS~1\Temp\cchlw5Mf.s:863    .text.TU2_OnCounterRestart_Old:0000052c $t
+
+UNDEFINED SYMBOLS
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_d2iz
+__aeabi_dsub
+__aeabi_idivmod
+__aeabi_dadd
+BitIoLdd1_GetVal
+Correction_Start
+Correction_End
+Set_Motors_Mono
+PE_LDD_DeviceDataList
+Correction_Before_Stand_Up
+NotStand_Up
+Set_Motors
+DataTransmittedFlg
+DataReceivedFlg
+__aeabi_ui2d
+__aeabi_dcmpgt
+CCD_Init
+PE_AD1_Measure
+AD1_GetValue16
+BitsIoLdd2_PutVal
+Counter
+MaxTrackL
+CCD_SagL_Diff
+TrackL
+Last_TrackL
+TrackL_Diff
+MaxTrackR
+CCD_SagR_Diff
+TrackR
+Last_TrackR
+TrackR_Diff
+CCD_SagL
+CCD_SagR
+TrackL_Finsh
+TrackR_Finsh
+AR2_Correct
+AAC_Z_Correct
+Pixels
+Pixels_Diff

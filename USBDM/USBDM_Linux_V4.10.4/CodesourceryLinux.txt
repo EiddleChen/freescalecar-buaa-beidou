@@ -1,0 +1,10 @@
+Codesourcery with USBDM
+=================================
+Manually copy the various gdb servers (e.g.usbdm-arm-gdbServer) to the bin directory
+of the appropriate Codesource installation.
+
+There is a tutorial in the documentation that explains the setup for windows.  A very similar
+process may be followed for linux.
+
+bye
+
